@@ -12,20 +12,21 @@ const routes: Routes = [
     children: [
       {
         path: '',
+        loadChildren: () => import('./authentication/authnetication.module').then((m) => m.AuthenticationModule)
       }
     ]
   },
-  {
-    path: '',
-    component: FullComponent,
-    // canActivate: [AuthGuard],
-    data: { type: ['routing']},
-    children: [
-      {
-        path: 'app',   
-      }
-    ]
-  }
+  // {
+  //   path: '',
+  //   component: FullComponent,
+  //   // canActivate: [AuthGuard],
+  //   data: { type: ['routing']},
+  //   children: [
+  //     {
+  //       path: 'app',   
+  //     }
+  //   ]
+  // }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
