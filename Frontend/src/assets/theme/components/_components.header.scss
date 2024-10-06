@@ -1,0 +1,22 @@
+.header {
+
+    &__container {
+        display: flex !important;
+        flex-direction: row !important;
+        background-color: $blue;
+        height: 75px;
+        
+        &--background {
+            color: $white;
+            background: transparent;
+        }
+    
+        &__app-name {
+            padding-left: 0px;
+        }
+
+        &__tab-name {
+            padding-left: 10px;
+        }
+    }
+}

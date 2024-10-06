@@ -1,0 +1,7 @@
+.full-component {
+
+    &__page {
+        overflow: auto; 
+        height: calc(100vh - 115px);
+    }
+}

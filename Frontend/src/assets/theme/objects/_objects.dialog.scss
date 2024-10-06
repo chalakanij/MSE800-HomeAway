@@ -1,0 +1,15 @@
+.pm-dialog{
+
+    &--title {
+        color: #720f11; 
+        font-weight: 900 !important; 
+        text-align: center;
+    }
+
+    &--label {
+        width: 80%; 
+        align-content: center;
+        align-items: flex-end;       
+    }
+
+}
