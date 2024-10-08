@@ -1,0 +1,207 @@
+<div class="blank-component__page page-layout--all-center sign-in">
+    <div class="sign-in__container" style="height: inherit;">
+        <div class="sign-in__container__ceb-logo"></div>
+
+        <!-- web view -->
+        <div class="sign-in__container__main sign-in__center no-show-login">
+            <div class="row sign-in__container__main__div mat-elevation-z4 sign-in__center">
+                <div class="col-6 sign-in__container__main__div__left">
+                    <div class="sign-in__container__main__div__left__layer">
+                        <div class="sign-in__center sign-in__container__main__div__left__layer__logo">
+                            <img src="/assets/png/logo.png" style="height:90px;" />
+                        </div>
+                        <div>
+                            <h1 class="sign-in__container__main__div__left__layer__title">Home Away</h1>
+                        </div>
+                        <div>
+                            <h3 class="sign-in__container__main__div__left__layer__region">PROJECT MANAGEMENT</h3>
+                        </div>
+
+                        <div class="sign-in__container__main__div__left__layer__content">
+                            Description text with options list
+                        </div>
+                        <div class="sign-in__container__main__div__left__layer__bullets">
+                            <ul>
+                                <li style="margin: 10px;">Option 1</li>
+                                <li style="margin: 10px;">Option 2</li>
+                                <li style="margin: 10px;">Option 3</li>
+                                <li style="margin: 10px;">Option 4</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 sign-in__container__main__div__right no-show-login">
+                    <div class="sign-in__center" style="height: inherit;">
+                        <form [formGroup]="signinForm" (ngSubmit)="onSubmit()"
+                            class="pm-card__form pm-card--all-center">
+                            <h1 class="sign-in__title-login">Login</h1>
+                            <span class="sign-in__sub-title">
+                                <p class="sign-in__sub-title">Project Management Sub Title
+                                </p>
+                            </span>
+                            <div class="pm-card__form__field-container" style="margin-top: 15px;">
+                                <div>
+                                    <mat-label class="sign-in__sub-title">Username</mat-label>
+                                    <div class="pm-form-field__square pm-form-field__square__background-white"
+                                        *ngIf="signinForm.controls.username as username"
+                                        [ngClass]="{ invalid: (username.hasError('required') && username.touched) || username.hasError('invalid') }">
+
+                                        <input autocomplete="username" formControlName="username" id="username"
+                                            placeholder="username" />
+                                        <span class="pm-error" *ngIf="username.hasError('required')">Username is
+                                            required</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <mat-label class="sign-in__sub-title">Password</mat-label>
+                                    <div class="pm-form-field__square pm-form-field__square__background-white"
+                                        *ngIf="signinForm.controls.password as password"
+                                        [ngClass]="{ invalid: (password.hasError('required') && password.touched) || password.hasError('invalid') }">
+
+                                        <input formControlName="password" placeholder="Password"
+                                            [type]="hide ? 'password' : 'text'" />
+                                        <span class="pm-error"
+                                            *ngIf="password.hasError('required') && password.touched">Password is
+                                            required</span>
+
+                                        <button mat-icon-button class="pm-form-field__suffix" (click)="hide = !hide">
+                                            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <button matRipple type="submit"
+                                        class="pm-btn__btn-block pm-btn__btn-block--primary pm-card__bottom__btn">
+                                        Login
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- mobile view -->
+        <!-- <div class="sign-in__center login-mobile">
+            <div class="sign-in__center" style="width: 100%; padding-bottom: 40px;">
+                <img src="/assets/png/ceb_logo.svg" style="height:100px;" />
+            </div>
+            <div>
+                <h1 class="sign-in__title-login" style="text-align: center; align-self: center;">ASSEST MANAGEMENT</h1>
+            </div>
+            <div>
+                <h3 class="sign-in__region">Western Province South 1</h3>
+            </div>
+            <div>
+                <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="pm-card__form pm-card--all-center"
+                    style="padding-top: 0 !important;">
+                    <h1 class="sign-in__title-login">Login</h1>
+                    <span class="sign-in__sub-title">
+                        <p class="sign-in__sub-title">Asset Management System of Ceylon Electricity Board Western
+                            Province South 1
+                        </p>
+                    </span>
+                    <div class="pm-card__form__field-container" style="margin-top: 15px;">
+                        <div>
+                            <mat-label class="sign-in__sub-title">Username</mat-label>
+                            <div class="pm-form-field__square pm-form-field__square__background-white"
+                                *ngIf="signinForm.controls.username as username"
+                                [ngClass]="{ invalid: (username.hasError('required') && username.touched) || username.hasError('invalid') }">
+
+                                <input autocomplete="username" formControlName="username" id="username"
+                                    placeholder="username" />
+                                <span class="pm-error" *ngIf="username.hasError('required')">Username is
+                                    required</span>
+                            </div>
+                        </div>
+                        <div>
+                            <mat-label class="sign-in__sub-title">Password</mat-label>
+                            <div class="pm-form-field__square pm-form-field__square__background-white"
+                                *ngIf="signinForm.controls.password as password"
+                                [ngClass]="{ invalid: (password.hasError('required') && password.touched) || password.hasError('invalid') }">
+
+                                <input formControlName="password" placeholder="Password"
+                                    [type]="hide ? 'password' : 'text'" />
+                                <span class="pm-error"
+                                    *ngIf="password.hasError('required') && password.touched">Password is
+                                    required</span>
+
+                                <button mat-icon-button class="pm-form-field__suffix" (click)="hide = !hide">
+                                    <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <button matRipple type="submit"
+                                class="pm-btn__btn-block pm-btn__btn-block--primary pm-card__bottom__btn">
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div> -->
+
+
+
+    </div>
+</div>
+
+<!-- <div class="blank-component__page page-layout--all-center sign-in">
+    <div class="sign-in__ceb-logo"></div>
+    <div class="row sign-in__main">
+        <div class="col sign-in__split-screen__left pm-card--all-center">
+            <div><h1 class="sign-in__title">ASSEST MANAGEMENT</h1></div>
+            <div><h3 class="sign-in__region">Region Four</h3></div>
+            <div>
+                <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="pm-card__form">
+                    <div class="pm-card__form__field-container">
+                        <div class="pm-form-field__square pm-form-field__square__background-white"
+                        *ngIf="signinForm.controls.username as username"
+                        [ngClass]="{ invalid: (username.hasError('required') && username.touched) || username.hasError('invalid') }">
+                            <input autocomplete="username" formControlName="username" id="username"
+                                placeholder="username" />
+                            <span class="pm-error" *ngIf="username.hasError('required')">Username is required</span>
+                        </div>
+
+                        <div class="pm-form-field__square pm-form-field__square__background-white"
+                        *ngIf="signinForm.controls.password as password"
+                        [ngClass]="{ invalid: (password.hasError('required') && password.touched) || password.hasError('invalid') }">
+                            <input formControlName="password" placeholder="Password" [type]="hide ? 'password' : 'text'"/>
+                            <span class="pm-error" *ngIf="password.hasError('required') && password.touched">Password is required</span>
+
+                            <button mat-icon-button class="pm-form-field__suffix" (click)="hide = !hide">
+                                <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+                            </button>
+                        </div>
+
+                         <div class="pm-signin__checkbox">
+                            <mat-checkbox formControlName="is_non_expiry">Remember me
+                            </mat-checkbox>
+                        </div> -->
+<!-- </div>
+
+                    <div class="pm-card__center-card__bottom">
+                        <button matRipple type="submit"
+                            class="pm-btn__btn-block pm-btn__btn-block--primary pm-card__bottom__btn">
+                            Login
+                        </button>
+                        <div class="pm-card__center-card__bottom__txt__container">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col sign-in__split-screen__right pm-card--all-center d-none d-md-flex">
+            <img src="/assets/svgs/ledger_book.svg" style="height:170px; margin-bottom: 10%;"/>
+            <div class="sign-in__description">
+                <Span >Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                    Nunc et semper diam, ut dapibus nunc. Cras orci dolor, tempor sed hendrerit sed, pharetra at turpis.</Span>
+            </div>
+        </div>
+    </div>
+</div> -->

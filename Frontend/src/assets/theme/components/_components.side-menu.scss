@@ -1,0 +1,38 @@
+.side-menu {
+    background-color: $blue;
+    height: calc(100vh - 40px);
+    width: 230px !important;
+    opacity: 97%;
+
+    &--all-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top:20px !important;
+    }
+
+    &--nav-list {
+        width: 100%;
+
+        &--item {
+            color: $white !important;
+            padding: 8px 0;
+            display: flex;
+            width: auto;
+        }
+
+        &--icon {
+            margin-right: 10px;
+        }
+
+        .mat-list-item {
+            background-color: $blue !important;
+        }
+    }
+}
+
+.disabled {
+    opacity: 0.5;
+}
+

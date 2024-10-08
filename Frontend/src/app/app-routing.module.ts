@@ -16,17 +16,18 @@ const routes: Routes = [
       }
     ]
   },
-  // {
-  //   path: '',
-  //   component: FullComponent,
-  //   // canActivate: [AuthGuard],
-  //   data: { type: ['routing']},
-  //   children: [
-  //     {
-  //       path: 'app',   
-  //     }
-  //   ]
-  // }
+  {
+    path: '',
+    component: FullComponent,
+    // canActivate: [AuthGuard],
+    data: { type: ['routing']},
+    children: [
+      {
+        path: 'app',   
+        loadChildren: () => import('./pages/pages.module').then((m) => m.PagesComponentsModule) 
+      }
+    ]
+  }
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

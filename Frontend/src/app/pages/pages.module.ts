@@ -1,0 +1,69 @@
+import { NgModule } from '@angular/core';
+
+import { MatCardModule } from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatIconModule} from '@angular/material/icon';
+
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
+import {MatListModule} from '@angular/material/list';
+import {MatSelectModule} from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatTableModule} from '@angular/material/table';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatRippleModule} from '@angular/material/core';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatChipsModule} from '@angular/material/chips';
+
+import { PagesRoutingModule } from './pages.routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { SharedComponentsModule } from '../shared-components/shared-components.module';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatStepperModule} from '@angular/material/stepper';
+import { DashboardComponent } from './dashboard/dashboard.component';
+
+@NgModule({
+  declarations: [DashboardComponent,],
+  imports: [
+    PagesRoutingModule,
+    MatCardModule,
+    MatFormFieldModule, 
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatListModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatPaginatorModule,
+    CommonModule,
+    SharedComponentsModule,
+    MatTableModule,
+    MatExpansionModule,
+    MatDialogModule,
+    MatStepperModule,
+    MatSnackBarModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
+    MatProgressBarModule,
+    MatRippleModule,
+    MatAutocompleteModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatChipsModule  
+  ],
+  
+  exports: []
+})
+export class PagesComponentsModule { }

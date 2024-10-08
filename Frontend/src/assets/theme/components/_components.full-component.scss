@@ -1,7 +1,8 @@
 .full-component {
 
     &__page {
-        overflow: auto; 
-        height: calc(100vh - 115px);
+        height: calc(100vh - 115px) !important;
+        overflow: auto; /* Allow scrolling if content overflows */
+        box-sizing: border-box;
     }
 }

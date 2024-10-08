@@ -1,1 +1,14 @@
-<p>full works!</p>
+<div>
+    <mat-sidenav-container class="mat-sidenav-container">
+        <mat-sidenav #drawer mode="side" class="side-menu">
+            <app-side-menu></app-side-menu>
+        </mat-sidenav>
+        <div>
+            <app-header (toggled)="drawer.toggle()" class="header__container"></app-header>
+            <div class="full-component__page">
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </mat-sidenav-container>
+    <app-footer style="width: 100%;"></app-footer>
+</div>
