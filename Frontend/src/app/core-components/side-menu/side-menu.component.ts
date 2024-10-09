@@ -25,50 +25,20 @@ export class SideMenuComponent {
       route: '',
     },
     {
-      displayName: 'User',
-      iconName: 'perm_identity',
-      route: 'user',
+      displayName: 'Projects',
+      iconName: 'category',
+      route: 'projects'
     },
     {
-      displayName: 'Unit',
-      iconName: 'mediation',
-      route: 'unit'
+      displayName: 'Time Logs',
+      iconName: 'timelapse',
+      route: 'time-logs',
     },
     {
-      displayName: 'Asset',
-      iconName: 'important_devices',
-      route: 'manage-asset',
+      displayName: 'Employers',
+      iconName: 'engineering',
+      route: 'employers',
     },
-    {
-      displayName: 'Master Module',
-      iconName: 'admin_panel_settings',
-      route: 'master',
-    },
-    {
-      displayName: 'Asset Repair',
-      iconName: 'build',
-      route: 'asset-repair',
-    },
-    {
-      displayName: 'Asset Maintenance',
-      iconName: 'construction',
-      route: 'asset-maintenance',
-    },
-    {
-      displayName: 'Asset Transfer',
-      iconName: 'swap_horiz',
-      route: 'asset-transfer',
-    },
-    {
-      displayName: 'Asset Disposal',
-      iconName: 'delete_forever',
-      route: 'asset-disposal',
-    },
-    {
-      displayName: 'Reports',
-      iconName: 'assignment',
-      route: 'manage-reports',
-    }
   ];
 
   // mouseenter() {

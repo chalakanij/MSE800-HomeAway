@@ -4,7 +4,7 @@
 import 'zone.js/dist/zone-error';
 
 const baseUrl = 'http://localhost:4200/';
-const apiUrl = 'http://localhost:8080';
+const apiUrl = 'http://localhost:8000';
 
 export const environment = {
   production: false,

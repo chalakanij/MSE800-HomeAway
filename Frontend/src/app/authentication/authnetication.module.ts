@@ -9,9 +9,15 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
 import { AuthenticationRoutingModule } from "./authentication-routing.module";
+import { SignupComponent } from './signup/signup.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
+import { MatInputModule } from '@angular/material/input';
+import { LandingComponent } from './landing/landing.component';
+
 
 @NgModule({
-    declarations: [SigninComponent],
+    declarations: [SigninComponent, SignupComponent, LandingComponent],
     imports: [
       CommonModule,
       AuthenticationRoutingModule,
@@ -22,7 +28,10 @@ import { AuthenticationRoutingModule } from "./authentication-routing.module";
       MatIconModule,
       SharedComponentsModule,
       MatCheckboxModule,
-      MatButtonModule
+      MatButtonModule,
+      MatSelectModule,
+      MatOptionModule,
+      MatInputModule
     ]
   })
   export class AuthenticationModule { }
