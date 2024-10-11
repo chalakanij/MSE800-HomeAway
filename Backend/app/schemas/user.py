@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr
 
-class EmployeeCreate(BaseModel):
+class AdminCreate(BaseModel):
     title: str
     first_name: str
     last_name: str
@@ -8,11 +8,11 @@ class EmployeeCreate(BaseModel):
     phone_number: str
     password: str
 
-class EmployerCreate(EmployeeCreate):
+class EmployerCreate(AdminCreate):
     company_name: str
     
-class AdminCreate(EmployeeCreate):
-    pass
+class EmployeeCreate(AdminCreate):
+    employer_code: str
 
 class User(BaseModel):
     id: int
@@ -25,6 +25,7 @@ class User(BaseModel):
     phone_number: str
     hashed_password: str
     role: str
+    parent_user_id: int
     
     class Config:
         orm_mode = True
