@@ -25,6 +25,7 @@ class User(Base):
     first_name = Column(String(50))
     last_name = Column(String(50))
     company_name = Column(String(100))
+    employer_code = Column(String(40))
     email = Column(String(100), unique=True)
     phone_number = Column(String(20))
     hashed_password = Column(String(200))
