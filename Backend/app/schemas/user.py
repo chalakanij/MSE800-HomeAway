@@ -20,6 +20,7 @@ class User(BaseModel):
     first_name: str
     last_name: str
     company_name: str
+    employer_code: str
     email: EmailStr
     phone_number: str
     hashed_password: str

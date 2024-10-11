@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
-from app.services.user_service import create_employer, authenticate_user, get_users
-from app.schemas.user import EmployerCreate, User
+from app.services.user_service import create_employer, authenticate_user, get_users, create_employee
+from app.schemas.user import EmployerCreate, User, EmployeeCreate
 from app.schemas.token import Token
 from app.auth.jwt import create_access_token, verify_token
 from app.db import SessionLocal
@@ -38,6 +38,11 @@ def register(user: EmployerCreate, db: Session = Depends(get_db)):
     db_user = create_employer(db, user)
     return db_user
 
+@router.post("/employee_register", response_model=User)
+def register(user: EmployeeCreate, db: Session = Depends(get_db)):
+    db_user = create_employee(db, user)
+    return db_user
+
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(db, form_data.username, form_data.password) 
@@ -47,7 +52,9 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = create_access_token(data={"sub": user.email})
+
+    access_token = create_access_token(data={"email": user.email, "first_name": user.first_name,
+                                             "title":user.title, "last_name":user.last_name, "role":user.role.value})
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/employees", response_model=list[User])
