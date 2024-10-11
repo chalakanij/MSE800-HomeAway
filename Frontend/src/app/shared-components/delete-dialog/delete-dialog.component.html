@@ -1,0 +1,10 @@
+<div class="pm-card__dialog-box-container" style="min-width: 250px;">
+  <h2 mat-dialog-title>Confirm delete?</h2>
+  <mat-dialog-content>
+    {{message}}
+  </mat-dialog-content>
+  <mat-dialog-actions style="justify-content: flex-end;">
+    <button mat-button mat-dialog-close tabindex="-1" class="pm-card__delete-dialog__action">{{cancelButtonText}}</button>
+    <button mat-button (click)="onConfirmClick()" class="pm-card__delete-dialog__action">{{confirmButtonText}}</button>
+  </mat-dialog-actions>
+</div>

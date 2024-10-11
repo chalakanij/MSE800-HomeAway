@@ -29,7 +29,7 @@ import { SharedComponentsModule } from '../shared-components/shared-components.m
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatStepperModule} from '@angular/material/stepper';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { EmployerComponent } from './employer-module/employer/employer/employer.component';
+import { EmployeeComponent } from './employee-module/employee/employee/employee.component';
 import { AddProjectComponent } from './project-module/add-project/add-project/add-project.component';
 import { UpdateProjectComponent } from './project-module/update-project/update-project/update-project.component';
 import { DeleteProjectComponent } from './project-module/delete-project/delete-project/delete-project.component';
@@ -40,13 +40,13 @@ import { UpdateTimeLogsComponent } from './time-logs-module/update-time-logs/upd
 import { DeleteTimeLogsComponent } from './time-logs-module/delete-time-logs/delete-time-logs/delete-time-logs.component';
 
 @NgModule({
-  declarations: [DashboardComponent, EmployerComponent, AddProjectComponent, UpdateProjectComponent, DeleteProjectComponent,
+  declarations: [DashboardComponent, EmployeeComponent, AddProjectComponent, UpdateProjectComponent, DeleteProjectComponent,
     ProjectsComponent, TimeLogsComponent, AddTimeLogsComponent, UpdateTimeLogsComponent, DeleteTimeLogsComponent
   ],
   imports: [
     PagesRoutingModule,
     MatCardModule,
-    MatFormFieldModule, 
+    MatFormFieldModule,
     MatIconModule,
     MatToolbarModule,
     MatMenuModule,
@@ -72,9 +72,9 @@ import { DeleteTimeLogsComponent } from './time-logs-module/delete-time-logs/del
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatChipsModule  
+    MatChipsModule
   ],
-  
+
   exports: []
 })
 export class PagesComponentsModule { }

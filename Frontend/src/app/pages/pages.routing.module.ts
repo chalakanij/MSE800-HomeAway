@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ProjectsComponent } from './project-module/project/projects/projects.component';
-import { EmployerComponent } from './employer-module/employer/employer/employer.component';
 import { TimeLogsComponent } from './time-logs-module/time-logs/time-logs/time-logs.component';
+import { EmployeeComponent } from './employee-module/employee/employee/employee.component';
 
 
 const routes: Routes = [
@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'employers',
-    component: EmployerComponent
+    component: EmployeeComponent
   },
   {
     path: 'time-logs',

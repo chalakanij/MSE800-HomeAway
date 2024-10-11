@@ -7,9 +7,12 @@ import { MatIconModule } from "@angular/material/icon";
 import { RouterModule } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
 import {MatDividerModule} from '@angular/material/divider';
+import { DeleteDialogComponent } from "./delete-dialog/delete-dialog.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import { SearchBarComponent } from "./search-bar/search-bar.component";
 
 @NgModule({
-    declarations: [FooterComponent],
+    declarations: [FooterComponent,DeleteDialogComponent, SearchBarComponent],
     imports: [
       CommonModule,
     MatCardModule,
@@ -18,9 +21,9 @@ import {MatDividerModule} from '@angular/material/divider';
     RouterModule,
     MatDividerModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
     ],
-    exports: [FooterComponent],
+    exports: [FooterComponent, SearchBarComponent],
   })
   export class SharedComponentsModule { }
-  
