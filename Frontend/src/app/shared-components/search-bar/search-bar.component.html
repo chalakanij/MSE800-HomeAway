@@ -1,0 +1,17 @@
+<div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 20px;">
+    <input matInput placeholder="Search here" style="color: #4286D2; width: 200px; height: 40px;
+    font-size: 17px; border: 1px solid #4286D2 ; border-radius: 4px;" #searchField (keyup.enter)="search(searchField.value)">
+    <button class="search--icon-width" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="search(searchField.value)">
+        <mat-icon style="font-size: 35px;">search</mat-icon>
+    </button>
+    <button class="search--icon-width" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="create()">
+        <mat-icon style="font-size: 35px;">add_circle</mat-icon>
+    </button>
+    <!-- <button class="search--icon-width" *ngIf="item == 'request-history' && role == 'admin'" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="showNotification('request-history')">
+        <mat-icon style="font-size: 35px;">notifications</mat-icon>
+    </button>
+    <button class="search--icon-width" *ngIf="item == 'transfer-req' && role == 'admin'" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="showRequest('transfer-req')">
+        <mat-icon style="font-size: 35px;">social_distance</mat-icon>
+    </button> -->
+</div>
+<mat-divider style="margin-top: 15px; margin-bottom: 25px; border-top-width: 1px"></mat-divider>

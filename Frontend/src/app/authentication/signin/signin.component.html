@@ -1,0 +1,50 @@
+<!-- <div class="col-6 sign-in__container__main__div__right no-show-login">
+    <div class="sign-in__center" style="height: inherit;"> -->
+        <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="pm-card__form pm-card--all-center">
+            <h1 class="sign-in__title-login">Login</h1>
+            <span class="sign-in__sub-title">
+                <p class="sign-in__sub-title">Project Management Sub Title
+                </p>
+            </span>
+            <div class="pm-card__form__field-container" style="margin-top: 15px;">
+                <div>
+                    <mat-label class="sign-in__sub-title">Username</mat-label>
+                    <div class="pm-form-field__square pm-form-field__square__background-white"
+                        *ngIf="signinForm.controls.username as username"
+                        [ngClass]="{ invalid: (username.hasError('required') && username.touched) || username.hasError('invalid') }">
+
+                        <input autocomplete="username" formControlName="username" id="username"
+                            placeholder="username" />
+                        <span class="pm-error" *ngIf="username.hasError('required')">Username is
+                            required</span>
+                    </div>
+                </div>
+                <div>
+                    <mat-label class="sign-in__sub-title">Password</mat-label>
+                    <div class="pm-form-field__square pm-form-field__square__background-white"
+                        *ngIf="signinForm.controls.password as password"
+                        [ngClass]="{ invalid: (password.hasError('required') && password.touched) || password.hasError('invalid') }">
+
+                        <input formControlName="password" placeholder="Password" [type]="hide ? 'password' : 'text'" />
+                        <span class="pm-error" *ngIf="password.hasError('required') && password.touched">Password is
+                            required</span>
+
+                        <button mat-icon-button class="pm-form-field__suffix" (click)="hide = !hide">
+                            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <button matRipple type="submit"
+                        class="pm-btn__btn-block pm-btn__btn-block--primary pm-card__bottom__btn">
+                        Sign In
+                    </button>
+                </div>
+            </div>
+            <span style="padding-top: 3px;font-size: small;text-align: left;">Need an Account? <a routerlink="/sign-up"
+                    style="color: #007bff; text-decoration: underline; cursor: pointer;" (click)="showSignup()">Sign
+                    Up</a></span>
+        </form>
+    <!-- </div>
+</div> -->

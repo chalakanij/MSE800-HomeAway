@@ -1,0 +1,16 @@
+.footer {
+    background-color: $grey;
+    font-size: small;
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+    // position: relative;
+    left: 0;
+
+    &--all-center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+}
