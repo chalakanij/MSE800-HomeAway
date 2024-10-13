@@ -17,3 +17,13 @@ export interface RegisterUserData {
     phoneNumber: string;    
     companyName: string;     
 }
+
+export interface RegisterEmployeeData {
+  title: string;            
+  firstName: string;      
+  lastName: string;       
+  email: string;           
+  password: string;       
+  phoneNumber: string;    
+  employerCode: string;     
+}

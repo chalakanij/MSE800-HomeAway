@@ -14,6 +14,8 @@ export class LandingComponent implements OnInit {
   isLoading = false;
   hide = true;
   showSignupForm : boolean = false;
+  isEmployee: boolean = false;  
+  employerCode: string = ''; 
 
   constructor(
     private route: ActivatedRoute,
@@ -22,45 +24,29 @@ export class LandingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.signinForm = new FormGroup({
-    //   username: new FormControl(null, [Validators.required]),
-    //   password: new FormControl(null, [Validators.required])
-    // });
-
     this.route.queryParams.subscribe(params => {
       const formType = params['form'];
-      this.showSignupForm = formType === 'signup';
+      this.showSignupForm = formType === 'signup'; 
+      this.isEmployee = formType === 'signupEmployee'; 
+      this.employerCode = params['employerCode'] || ''; 
     });
   }
-  // onSubmit() {
-  //   this.signinForm.markAsPristine();
-  //   this.isLoading = true;
-  //   console.log("test1")
-  //   // this.router.navigate(['/app']);
-  //   this.auth_service.loginUser({ ...this.signinForm.value }).subscribe((response) => {
-  //       if (response.error) {
-  //         console.log(response.error)
-  //         this.isLoading = false;
-  //         this.signinForm.reset();
-  //         this.signinForm.controls.password.setErrors({ invalid: true });
-  //         this.signinForm.controls.username.setErrors({ invalid: true });
-  //       } else {
-  //         console.log(response)
-  //         this.auth_service.setToken(response.token).then((res) => {
-  //           this.router.navigate(['/app']);
-  //         });
-  //       }
-  //     }
-  //   );
-  // }
 
   showSignup() {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: { form: 'signup' },
-      queryParamsHandling: 'merge', 
+      queryParamsHandling: 'merge',
     });
   }
+
+  // showSignupEmployee() {
+  //   this.router.navigate([], {
+  //     relativeTo: this.route,
+  //     queryParams: { form: 'signupEmployee', employerCode: this.employerCode },
+  //     queryParamsHandling: 'merge',
+  //   });
+  // }
 
   showSignin() {
     this.router.navigate([], {
@@ -69,5 +55,4 @@ export class LandingComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
-
 }

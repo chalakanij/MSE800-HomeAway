@@ -1,9 +1,8 @@
 export interface JwtTokenInterface {
-    sub: String;
-    name: String,
-    authorities: {
-        authority: String
-    }[],
-    iat: number,
+    first_name: String,
+    last_name: String,
+    email: String,
+    role: String,
+    title: String,
     exp: number
 }

@@ -29,9 +29,10 @@
                         <span class="pm-error" *ngIf="password.hasError('required') && password.touched">Password is
                             required</span>
 
-                        <button mat-icon-button class="pm-form-field__suffix" (click)="hide = !hide">
-                            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
-                        </button>
+                            <button mat-icon-button type="button" class="pm-form-field__suffix" (click)="hide = !hide">
+                                <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+                            </button>
+                            
                     </div>
                 </div>
 

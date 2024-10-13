@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { LoginUserData, RegisterUserData } from 'src/app/interface/auth.interfaces';
+import { LoginUserData, RegisterEmployeeData, RegisterUserData } from 'src/app/interface/auth.interfaces';
 import jwt_decode from "jwt-decode";
 import { JwtTokenInterface } from 'src/app/interface/common.interfaces';
 
@@ -21,7 +21,7 @@ export class AuthService {
     private employeeId!: String;
     private name!: String;
     private token!: String;
-    private roles!: String[];
+    private roles!: String;
     private authStatusListener = new Subject<boolean>();
 
     constructor(private http: HttpClient) { }
@@ -51,6 +51,11 @@ export class AuthService {
         return this.http.post(endpointUrl, data, httpOptions);
     }
 
+    registerEmployee(data: RegisterEmployeeData): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/employee_register`;
+        return this.http.post(endpointUrl, data, httpOptions);
+    }
+
     // logout the user
     logoutUser() {
         this.clearAuthLocal();
@@ -64,11 +69,11 @@ export class AuthService {
         return new Promise((resolve, reject) => {
             this.saveAuthLocal(token);
             this.token = token;
-            // const decodeToken: JwtTokenInterface = this.decodeToken(token);
-            // this.employeeId = decodeToken.sub;
-            // this.name = decodeToken.name;
-            // this.roles = decodeToken.authorities.map(authority => authority.authority);
-            // this.isAuthenticated = true;
+            const decodeToken: JwtTokenInterface = this.decodeToken(token);
+            console.log(decodeToken)
+            this.name = decodeToken.first_name + ' ' + decodeToken.last_name;
+            this.roles = decodeToken.role;
+            this.isAuthenticated = true;
             this.authStatusListener.next(true);
             console.log("111")
             if (this.token === token) {
@@ -135,11 +140,8 @@ export class AuthService {
     getIsAuthenticated() {
         this.autoAuthUser()
         let decodedToken: JwtTokenInterface = this.decodeToken(this.token);
-        this.employeeId = decodedToken.sub;
-        this.name = decodedToken.name;
-        this.roles = decodedToken.authorities?.map(authority => {
-            return authority.authority
-        });
+        this.name =  decodedToken.first_name + ' ' + decodedToken.last_name;
+        this.roles = decodedToken.role
         if (decodedToken.exp * 1000 > Date.now()) {
             this.isAuthenticated = true;
         } else {
@@ -150,11 +152,8 @@ export class AuthService {
         } else {
             if (this.getAuthLocal()?.token != null) {
                 let decodedToken: JwtTokenInterface = this.decodeToken(this.token);
-                this.employeeId = decodedToken.sub;
-                this.name = decodedToken.name;
-                this.roles = decodedToken.authorities?.map(authority => {
-                    return authority.authority
-                });
+                this.name = decodedToken.first_name + ' ' + decodedToken.last_name;
+                this.roles = decodedToken.role
                 if (decodedToken.exp * 1000 > Date.now()) {
                     this.isAuthenticated = true;
                 } else {
@@ -177,10 +176,11 @@ export class AuthService {
             return jwt_decode(token?.toString());
         } catch (error) {
             return {
-                sub: '',
-                name: '',
-                authorities: [],
-                iat: 0,
+                first_name: '',
+                last_name: '',
+                role: '',
+                title: '',
+                email: '',
                 exp: 0
             }
         }

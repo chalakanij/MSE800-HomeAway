@@ -2,6 +2,9 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
+import { throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-signin',
@@ -18,7 +21,8 @@ export class SigninComponent  implements OnInit {
 
   constructor(
     private router: Router,
-    private auth_service: AuthService
+    private auth_service: AuthService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -35,7 +39,16 @@ export class SigninComponent  implements OnInit {
   onSubmit() {
     this.signinForm.markAsPristine();
     this.isLoading = true;
-    this.auth_service.loginUser({ ...this.signinForm.value }).subscribe((response) => {
+    this.auth_service.loginUser({ ...this.signinForm.value }).pipe(
+      catchError((error) => {
+        this.snackBar.open(error.error.detail || 'An error occurred', '', {
+          duration: 2000,
+        });
+        this.isLoading = false;
+        return throwError(error);
+      })
+    )
+    .subscribe((response) => {
         if (response.error) {
           this.isLoading = false;
           this.signinForm.reset();
