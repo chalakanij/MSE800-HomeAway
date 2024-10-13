@@ -2,11 +2,13 @@ from datetime import datetime
 import re
 
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 from app.db.models import User, UserRole
 from app.schemas.user import EmployerCreate, EmployeeCreate, AdminCreate
 from app.utils.hashing import hash_password, verify_password
 from fastapi import HTTPException
-
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 def _generate_company_code(company_name):
     COMPANY_CODE_LENGTH = 8
@@ -44,7 +46,6 @@ def create_employee(db: Session, user: EmployeeCreate):
     hashed_password = hash_password(user.password)
     user_input = user.dict()
     employer = _get_employer_by_code(db, user_input['employer_code'])
-    print (employer)
     if employer is None:
         raise HTTPException(status_code=404, detail="Invalid Employer Code!")
     del user_input['password']
@@ -77,5 +78,6 @@ def authenticate_user(db: Session, email: str, password: str):
         return user
     return None
 
-def get_users(db: Session, current_user):
-    return db.query(User).filter(User.parent_user_id == current_user.id).all()
+def get_users(db: Session, current_user, params):
+    users_data = select(User).filter(User.parent_user_id == current_user.id)
+    return paginate(db, users_data, params)
