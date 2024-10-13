@@ -29,3 +29,17 @@ class User(BaseModel):
     
     class Config:
         orm_mode = True
+
+
+class EmployeeOutput(BaseModel):
+    id: int
+    title: str
+    first_name: str
+    last_name: str
+    email: EmailStr
+    phone_number: str
+    role: str
+    parent_user_id: int
+
+    class Config:
+        from_attribute = True

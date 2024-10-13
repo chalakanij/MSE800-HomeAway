@@ -1,25 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_pagination import Params, add_pagination
+from fastapi_pagination.iterables import LimitOffsetPage
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from app.services.user_service import create_employer, authenticate_user, get_users, create_employee
-from app.schemas.user import EmployerCreate, User, EmployeeCreate
+from app.schemas.user import EmployerCreate, User, EmployeeCreate, EmployeeOutput
 from app.schemas.token import Token
 from app.auth.jwt import create_access_token, verify_token
 from app.db import SessionLocal
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from app.db.models import User as UserModel
+from fastapi_pagination import Page
+from app.api.dependencies import get_db
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 router = APIRouter()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     credentials_exception = HTTPException(
@@ -57,6 +54,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
                                              "title":user.title, "last_name":user.last_name, "role":user.role.value})
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/employees", response_model=list[User])
-def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    return get_users(db, current_user)
+@router.get("/employees", response_model=Page[EmployeeOutput])
+def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
+               page:int | None = 1, size:int |None = 10):
+    param = Params(page=page, size=size)
+    return get_users(db, current_user, param)
