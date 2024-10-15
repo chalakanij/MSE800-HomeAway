@@ -74,6 +74,6 @@ import { DeleteTimeLogsComponent } from './time-logs-module/delete-time-logs/del
     MatChipsModule
   ],
 
-  exports: []
+  exports: [EmployeeComponent]
 })
 export class PagesComponentsModule { }

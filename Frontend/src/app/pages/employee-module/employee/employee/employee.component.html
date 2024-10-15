@@ -6,68 +6,59 @@
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
         <mat-accordion style="width: 98%;">
             <mat-expansion-panel hideToggle disabled class="expansion-header">
-                <!-- Header Row -->
                 <mat-expansion-panel-header>
-                    <mat-panel-title class="row">
-                        <div class="col-1 expansion-header--column">
-                            <!-- action -->
-                        </div>
-                        <div class="col-3 expansion-header--column">Name</div>
-                        <div class="col-8" style="width: 100%;">
-                            <div class="row">
-                                <div class="col-4 expansion-header--column">Email</div>
-                                <div class="col-4 expansion-header--column">Mobile Number</div>
-                                <div class="col-4 expansion-header--column">Role</div>
-                            </div>
-                        </div>
-                    </mat-panel-title>
+                  <mat-panel-title class="row">
+                    <div class="col-1 expansion-header--column">
+                      <!-- action -->
+                    </div>
+                    <div class="col-3 expansion-header--column">Name</div>
+                    <div class="col-8 expansion-header--column">
+                      <div class="row">
+                        <div class="col-4 expansion-header--column">Email</div>
+                        <div class="col-4 expansion-header--column">Mobile Number</div>
+                        <div class="col-4 expansion-header--column">Role</div>
+                      </div>
+                    </div>
+                  </mat-panel-title>
                 </mat-expansion-panel-header>
-            </mat-expansion-panel>
+              </mat-expansion-panel>
 
             <!-- Detail Rows -->
             <mat-expansion-panel #panel *ngFor="let element of selectedResults">
                 <mat-expansion-panel-header>
-                    <div class="row" style="width: 100% !important;">
-                        <div class="col-2 col-md-1">
-                            <mat-panel-title [ngClass]="{'first-div': panel.expanded}">
-                                <!--Checkbox Column -->
-                                <div class="expansion-detail" style="text-align: left;">
-                                    <mat-checkbox (click)="$event.stopPropagation()"
+                  <div class="row" style="width: 100% !important;">
+                    <div class="col-1 col-md-1">
+                      <mat-panel-title>
+                        <div class="expansion-detail">
+                          <mat-checkbox (click)="$event.stopPropagation()"
                                         (change)="$event ? selection.toggle(element) : null"
-                                        [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
-                                    </mat-checkbox>
-                                </div>
-                            </mat-panel-title>
+                                        [checked]="selection.isSelected(element)"
+                                        [aria-label]="checkboxLabel(element)">
+                          </mat-checkbox>
                         </div>
-
-                        <div class="col-8 col-md-3">
-                            <mat-panel-title [ngClass]="{'first-div': panel.expanded}">
-                                <!--Name Column -->
-                                <div class="expansion-detail" style="text-align: left;">
-                                    <label>{{element.title + element.first_name + element.last_name}} </label>
-                                </div>
-                            </mat-panel-title>
-                        </div>
-
-                        <div class="col-1 col-md-8 no-show">
-                            <mat-panel-title class="row" style="width: 100%;" *ngIf="!panel.expanded">
-
-                                <!--email Column -->
-                                <div class="col-4 expansion-detail">
-                                    <label>{{element.email}} </label>
-                                </div>
-                                <!--MobileNumber Column -->
-                                <div class="col-4 expansion-detail">
-                                    <label>{{element.phone_number}} </label>
-                                </div>
-                                <!--role Column -->
-                                <div class="col-3 expansion-detail">
-                                    <label>{{element.role}} </label>
-                                </div>
-
-                            </mat-panel-title>
-                        </div>
+                      </mat-panel-title>
                     </div>
+                    <div class="col-3 col-md-3">
+                      <mat-panel-title>
+                        <div class="expansion-detail">
+                          <label>{{ element.title }} {{ element.first_name }} {{ element.last_name }}</label>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                    <div class="col-8 col-md-8">
+                      <mat-panel-title class="row" style="width: 100%;" *ngIf="!panel.expanded">
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.email }}</label>
+                        </div>
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.phone_number }}</label>
+                        </div>
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.role }}</label>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                  </div>
                 </mat-expansion-panel-header>
 
                 <!-- Expansion Row Web-->
@@ -94,22 +85,8 @@
                     <div class="row">
                         <div class="col-3 expansion-detail" style="text-align: left;">
                             <label class="expansion-detail--label">Company: </label>
-                            <label class="expansion-detail--label--value">{{element.company_name}} </label>
+                            <label class="expansion-detail--label--value">Kaleris </label>
                         </div>
-                        <!-- <div class="col-3 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Unit: </label>
-                            <label class="expansion-detail--label--value">{{element.unit ? element.unit.name : ""}}
-                            </label>
-                        </div>
-                        <div class="col-3 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Sub Unit: </label>
-                            <label class="expansion-detail--label--value">{{element.sub_unit ? element.sub_unit.name : ""}}
-                            </label>
-                        </div>
-                        <div class="col-3 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Role: </label>
-                            <label class="expansion-detail--label--value">{{element.role[0].name}} </label>
-                        </div> -->
                     </div>
                 </div>
 

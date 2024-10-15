@@ -8,4 +8,5 @@ export interface CreateEmployeeData {
     phone_number: string;
     hashed_password: string;
     role: string;
+    parent_user_id: number
 }

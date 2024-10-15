@@ -82,6 +82,7 @@ export class SideMenuComponent {
       this.isDisabledEmployer = true;
     } else if (this.auth_service.getRoles().includes('EMPLOYEE')){
       this.isDisabledEmployee = true
+      this.isDisabledEmployer = true;
     } else {
       this.isDisabledEmployer = false;
       this.isDisabledEmployee = false

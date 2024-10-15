@@ -10,6 +10,8 @@ import { StateService } from 'src/app/services/common-service/state-service';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { CreateEmployeeData } from 'src/app/interface/employer.interface';
 import { EmployeeService } from 'src/app/services/employee-service/employee.service';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-employee',
@@ -51,7 +53,7 @@ export class EmployeeComponent implements OnInit {
     });
     this.loading = true;
     this.pageSize = 10;
-    this.getUserData(this.searchKey, 0, this.pageSize);
+    this.getUserData(this.searchKey, 1, this.pageSize);
   }
 
   setUserData(content: any) {
@@ -60,22 +62,32 @@ export class EmployeeComponent implements OnInit {
       this.snackBar.open('No User found', '', {
         duration: 2000,
       });
-      this.getUserData("", 0, this.pageSize);
+      this.getUserData("", 1, this.pageSize);
     }
   }
 
   getUserData(searchKey: String, pageIndex: number, pageSize: number) {
-    this.employee_service.getEmployees(searchKey, pageIndex, pageSize).subscribe((res: { error: any; body: any; }) => {
-      if (!res.error) {
-        this.page = res.body;
-        this.setUserData(this.page.content);
-        this.dataLength = this.page.totalElements;
+    this.employee_service.getEmployees(pageIndex, pageSize).pipe(
+      catchError((error) => {
+        this.snackBar.open(error.error.detail || 'An error occurred', '', {
+          duration: 2000,
+        });
         this.loading = false;
+        return throwError(error);
+      })
+    )
+    .subscribe((res: Page<any>) => { 
+      console.log(res);
+      this.loading = false; 
+    
+      if (res && res.items && res.items.length > 0) {
+        this.page = res;
+        this.setUserData(this.page.items);
+        this.dataLength = this.page.total;
       } else {
         this.snackBar.open('No Users found', '', {
           duration: 2000,
         });
-        this.loading = false;
       }
     });
   }
@@ -132,7 +144,7 @@ export class EmployeeComponent implements OnInit {
             });
             this.loading = true;
             this.pageSize = 10;
-            this.getUserData(this.searchKey, 0, this.pageSize);
+            this.getUserData(this.searchKey, 1, this.pageSize);
           }
         });
       }
@@ -167,7 +179,7 @@ export class EmployeeComponent implements OnInit {
             });
             this.loading = true;
             this.pageSize = 10;
-            this.getUserData(this.searchKey, 0, this.pageSize);
+            this.getUserData(this.searchKey, 1, this.pageSize);
             this.selection.clear();
           }
         });
@@ -178,12 +190,12 @@ export class EmployeeComponent implements OnInit {
   onSearch(searchKey: String) {
     this.searchKey = searchKey;
     this.loading = true;
-    this.getUserData(this.searchKey, 0, this.pageSize);
+    this.getUserData(this.searchKey, 1, this.pageSize);
   }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.page?.numberOfElements;
+    const numRows = this.page?.size;
     return numSelected === numRows;
   }
 
