@@ -20,12 +20,11 @@ export class EmployeeService {
 
 
     //find user
-    getEmployees(searchKey: String, pageNo: number, pageSize: number): Observable<any> {
+    getEmployees(page: number, size: number): Observable<any> {
         const endpointUrl = `${environment.apiUrl}/employees`;
         httpOptions.params = {
-            search_key: searchKey,
-            page_no: pageNo,
-            page_size: pageSize
+            page: page,
+            size: size
         };
         return this.http.get(endpointUrl, httpOptions);
     }

@@ -14,10 +14,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatInputModule } from '@angular/material/input';
 import { LandingComponent } from './landing/landing.component';
+import { SignupEmployeeComponent } from "./signup-employee/signup-employee.component";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 
 @NgModule({
-    declarations: [SigninComponent, SignupComponent, LandingComponent],
+    declarations: [SigninComponent, SignupComponent, SignupEmployeeComponent, LandingComponent],
     imports: [
       CommonModule,
       AuthenticationRoutingModule,
@@ -31,7 +33,8 @@ import { LandingComponent } from './landing/landing.component';
       MatButtonModule,
       MatSelectModule,
       MatOptionModule,
-      MatInputModule
+      MatInputModule,
+      MatSnackBarModule
     ]
   })
   export class AuthenticationModule { }

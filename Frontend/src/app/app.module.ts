@@ -13,7 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { CoreComponentsModule } from './core-components/core-components.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpInterceptorService } from './services/http-interceptor/http-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,11 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpInterceptorService,
+    multi: true,
+}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

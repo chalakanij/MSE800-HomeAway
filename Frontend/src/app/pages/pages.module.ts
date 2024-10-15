@@ -63,7 +63,6 @@ import { DeleteTimeLogsComponent } from './time-logs-module/delete-time-logs/del
     MatExpansionModule,
     MatDialogModule,
     MatStepperModule,
-    MatSnackBarModule,
     MatProgressBarModule,
     MatSnackBarModule,
     MatProgressBarModule,
@@ -75,6 +74,6 @@ import { DeleteTimeLogsComponent } from './time-logs-module/delete-time-logs/del
     MatChipsModule
   ],
 
-  exports: []
+  exports: [EmployeeComponent]
 })
 export class PagesComponentsModule { }

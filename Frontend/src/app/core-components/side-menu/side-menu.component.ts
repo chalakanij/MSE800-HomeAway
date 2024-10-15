@@ -15,7 +15,8 @@ export class SideMenuComponent {
   // expanded = false;
   showSubmenu: boolean = false;
   isShowing = false;
-  isDisabled!: boolean;
+  isDisabledEmployer!: boolean;
+  isDisabledEmployee!: boolean;
   @Input() item!: NavItem;
 
   navItems: NavItem[] = [
@@ -36,6 +37,11 @@ export class SideMenuComponent {
     },
     {
       displayName: 'Employers',
+      iconName: 'supervisor_account',
+      route: 'employers',
+    },
+    {
+      displayName: 'Employees',
       iconName: 'engineering',
       route: 'employers',
     },
@@ -70,13 +76,17 @@ export class SideMenuComponent {
   }
 
   checkRole() {
-    this.isDisabled = false;
-    // if (this.auth_service.getRoles().includes('ROLE_ADMIN') || this.auth_service.getRoles().includes('ROLE_UNIT_ADMIN') ||
-    //  this.auth_service.getRoles().includes('ROLE_SUB_UNIT_ADMIN')) {
-    //   this.isDisabled = false;
-    // } else {
-    //   this.isDisabled = true;
-    // }
+    this.isDisabledEmployer = false;
+    this.isDisabledEmployee = false
+    if (this.auth_service.getRoles().includes('EMPLOYER')) {
+      this.isDisabledEmployer = true;
+    } else if (this.auth_service.getRoles().includes('EMPLOYEE')){
+      this.isDisabledEmployee = true
+      this.isDisabledEmployer = true;
+    } else {
+      this.isDisabledEmployer = false;
+      this.isDisabledEmployee = false
+    }
   }
 
 }
