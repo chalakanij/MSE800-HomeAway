@@ -1,0 +1,88 @@
+<div class="sign-in__center" style="height: inherit;">
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+    <h1 class="sign-in__title-login" style="padding-top: 20px;">Sign Up</h1>
+    <span class="sign-in__sub-title">
+      <p class="sign-in__sub-title">Sign up to Home - Away</p>
+    </span>
+    <div class="form-container">
+      <div class="column">
+        <mat-form-field appearance="outline">
+          <mat-label>Title</mat-label>
+          <mat-select formControlName="title">
+            <mat-option *ngFor="let option of titleOptions" [value]="option">{{ option }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Last Name</mat-label>
+          <input matInput formControlName="last_name" required />
+          <mat-error *ngIf="signupForm.get('last_name')?.hasError('required')">
+            Last name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Phone Number</mat-label>
+          <input matInput formControlName="phone_number" required />
+          <mat-error *ngIf="signupForm.get('phone_number')?.hasError('required')">
+            Phone number is required
+          </mat-error>
+          <mat-error *ngIf="signupForm.get('phone_number')?.hasError('pattern')">
+            Phone number must be 10 digits
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" required />
+          <mat-error *ngIf="signupForm.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="column" style="padding-right: 5x;">
+
+        <mat-form-field appearance="outline">
+          <mat-label>First Name</mat-label>
+          <input matInput formControlName="first_name" required />
+          <mat-error *ngIf="signupForm.get('first_name')?.hasError('required')">
+            First name is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" required email />
+          <mat-error *ngIf="signupForm.get('email')?.hasError('required')">Email is required</mat-error>
+          <mat-error *ngIf="signupForm.get('email')?.hasError('email')">Invalid email format</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Employer Code</mat-label>
+          <input matInput formControlName="employer_code" readonly />
+          <mat-error *ngIf="signupForm.get('employer_code')?.hasError('required')">
+            Employer Code is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="password" formControlName="confirm_password" required />
+          <mat-error *ngIf="signupForm.get('confirm_password')?.hasError('required')">
+            Confirm Password is required
+          </mat-error>
+          <mat-error *ngIf="signupForm.get('confirm_password')?.hasError('passwordMismatch')">
+            Passwords do not match
+          </mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <button matRipple type="submit" class="pm-btn__btn-block pm-btn__btn-block--primary pm-card__bottom__btn">
+      Sign Up</button>
+    <span style="padding-top: 3px;font-size: small;">Already have an Account? <a routerlink="/login"
+        style="color: #007bff; text-decoration: underline; cursor: pointer;" (click)="showSignin()">Sign In</a></span>
+  </form>
+</div>
