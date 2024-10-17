@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, DateTime, Text
+from sqlalchemy import Column, Integer, String, Enum, DateTime, Text, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from enum import Enum as BaseEnum
 import datetime
@@ -37,7 +37,7 @@ class Project(Base):
     __tablename__ = 'projects'
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, index=True, nullable=False) #employer ID
+    user_id = Column(Integer, ForeignKey('users.id'), index=True, nullable=False) #employer ID
     title = Column(String(100))
     description = Column(Text)
     work_hours = Column(Integer, default=0)
@@ -48,19 +48,20 @@ class CheckInOut(Base):
     __tablename__ = 'checkinout'
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, index=True, nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'),  index=True, nullable=False)
     status = Column(Integer, nullable=False)
-    datetime = Column(DateTime)
+    in_time = Column(DateTime, nullable=False)
+    out_time = Column(DateTime, nullable=True, default=None)
     description = Column(Text)
-    project_id = Column(Integer)
+    project_id = Column(Integer, ForeignKey('projects.id'))
+
     
-    
-class user_project(Base):
+class UserProject(Base):
     __tablename__ = 'user_projects'
     
     id = Column(Integer, primary_key=True, index=True)
-    project_id = Column(Integer)
-    user_id = Column(Integer)
+    project_id = Column(Integer, ForeignKey('projects.id'), index=True, nullable=False)
+    employee_id = Column(Integer, ForeignKey('users.id'), index=True, nullable=False)
     created_at = Column(DateTime, default=lambda: datetime.datetime.now())
     
     
