@@ -15,6 +15,7 @@ def get_db():
         )
     except SQLAlchemyError as e:
         # General SQLAlchemy exception
+        print(e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="A database error occurred. Please try again later.",

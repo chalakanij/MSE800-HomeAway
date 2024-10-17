@@ -14,6 +14,7 @@ def on_startup():
     init_db()
 
 app.include_router(routes.user_routes.router)
+app.include_router(routes.project_routes.router)
 
 # Start the app using uvicorn
 # uvicorn app.main:app --reload
