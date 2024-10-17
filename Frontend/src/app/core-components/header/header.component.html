@@ -1,0 +1,41 @@
+<div class="header__container row">
+    <mat-toolbar class="header__container--background col-10">
+        <mat-toolbar-row>
+            <span class="header__container__app-name"></span>
+            <button mat-icon-button (click)="onToggle()">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span>Home - Away</span>
+        </mat-toolbar-row>
+        <mat-toolbar-row>
+            <span class="header__container__tab-name"></span>
+            <span style="color: black;">{{ title }}</span>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    <div class="header__container--background page-layout--all-center row col-2" style="justify-content: flex-end; align-items: center; align-content: center;
+    flex-direction: row; height: 75px;">
+        <div class="col-9" style="text-align:right;right: 15px;">
+            <span>{{username}}</span>
+            <p style="margin: 0 0 0px;">{{employeeId}}</p>
+        </div>
+        <div class="col-3" style="align-items: flex-end;">
+            <button mat-icon-button [matMenuTriggerFor]="menu" style="right: 30px;">
+                <mat-icon style="font-size: 50px;">account_circle</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="logout()">
+                    <!-- <mat-icon>dialpad</mat-icon> -->
+                    <span>Logout</span>
+                </button>
+                <!-- <button mat-menu-item> -->
+                <!-- <mat-icon>voicemail</mat-icon> -->
+                <!-- <span>Check voice mail</span> -->
+                <!-- </button> -->
+                <!-- <button mat-menu-item> -->
+                <!-- <mat-icon>notifications_off</mat-icon> -->
+                <!-- <span>Disable alerts</span> -->
+                <!-- </button> -->
+            </mat-menu>
+        </div>
+    </div>
+</div>

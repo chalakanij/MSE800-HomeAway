@@ -1,0 +1,54 @@
+<div class="blank-component__page page-layout--all-center sign-in">
+    <div class="sign-in__container" style="height: inherit;">
+        <div class="sign-in__container__ceb-logo"></div>
+
+        <!-- web view -->
+        <div class="sign-in__container__main sign-in__center no-show-login">
+            <div class="row sign-in__container__main__div mat-elevation-z4 sign-in__center">
+                <div class="col-6 sign-in__container__main__div__left">
+                    <div class="sign-in__container__main__div__left__layer">
+                        <div class="sign-in__center sign-in__container__main__div__left__layer__logo">
+                            <img src="/assets/png/logo.png" style="height:90px;" />
+                        </div>
+                        <div>
+                            <h1 class="sign-in__container__main__div__left__layer__title">Home Away</h1>
+                        </div>
+                        <div>
+                            <h3 class="sign-in__container__main__div__left__layer__region">PROJECT MANAGEMENT</h3>
+                        </div>
+
+                        <div class="sign-in__container__main__div__left__layer__content">
+                            Description text with options list
+                        </div>
+                        <div class="sign-in__container__main__div__left__layer__bullets">
+                            <ul>
+                                <li style="margin: 10px;">Option 1</li>
+                                <li style="margin: 10px;">Option 2</li>
+                                <li style="margin: 10px;">Option 3</li>
+                                <li style="margin: 10px;">Option 4</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 sign-in__container__main__div__right no-show-login" *ngIf="!showSignupForm && !isEmployee">
+                    <div class="sign-in__center" style="height: inherit;">
+                    <app-signin (switchToSignup)="showSignup()"></app-signin>
+                </div>
+                </div>
+
+                <div class="col-6 sign-in__container__main__div__right no-show-login" *ngIf="showSignupForm">
+                    <div class="sign-in__center" style="height: inherit;">
+                    <app-signup (switchToSignin)="showSignin()"></app-signup> 
+                    </div>
+                </div>
+
+                <div class="col-6 sign-in__container__main__div__right no-show-login" *ngIf="isEmployee">
+                    <div class="sign-in__center" style="height: inherit;">
+                    <app-signup-employee [employerCode]="employerCode" (switchToSignin)="showSignin()"></app-signup-employee> 
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

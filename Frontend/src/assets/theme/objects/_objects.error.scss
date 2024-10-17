@@ -1,0 +1,43 @@
+.pm-error {
+    color: $primary-red;
+    font-size: 10px;
+    position: absolute;
+    bottom: -20px;
+    left: 8px;
+    -webkit-animation: slit-in-horizontal 0.45s ease-out both;
+    animation: slit-in-horizontal 0.45s ease-out both;
+}
+
+@-webkit-keyframes slit-in-horizontal {
+    0% {
+        -webkit-transform: translateZ(-800px) rotateX(90deg);
+        transform: translateZ(-800px) rotateX(90deg);
+        opacity: 0;
+    }
+    54% {
+        -webkit-transform: translateZ(-160px) rotateX(87deg);
+        transform: translateZ(-160px) rotateX(87deg);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: translateZ(0) rotateX(0);
+        transform: translateZ(0) rotateX(0);
+    }
+}
+
+@keyframes slit-in-horizontal {
+    0% {
+        -webkit-transform: translateZ(-800px) rotateX(90deg);
+        transform: translateZ(-800px) rotateX(90deg);
+        opacity: 0;
+    }
+    54% {
+        -webkit-transform: translateZ(-160px) rotateX(87deg);
+        transform: translateZ(-160px) rotateX(87deg);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform: translateZ(0) rotateX(0);
+        transform: translateZ(0) rotateX(0);
+    }
+}

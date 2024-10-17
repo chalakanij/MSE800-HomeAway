@@ -1,0 +1,47 @@
+.pm-card {
+    &--all-center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    &__form {
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 25px;
+
+        &__field-container {
+            height: 50%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+        }
+    }
+
+    &__dialog-box-container {
+        @media (min-width: 700px) {
+            min-width: 500px;
+        }
+    }
+
+    &__bottom {
+        &__btn {
+            min-width: 180px;
+        }
+    }
+
+    &__delete-dialog {
+        
+        &__action {
+            background-color: $blue; 
+            color: white; 
+            width: 80px; 
+            margin-right: 10px;           
+        }
+    }
+}

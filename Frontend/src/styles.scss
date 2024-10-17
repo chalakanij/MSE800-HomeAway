@@ -1,1 +1,83 @@
-/* You can add global styles to this file, and also import other style files */
+@import "https://fonts.googleapis.com/icon?family=Material+Icons";
+@import "~@angular/material/theming";
+ 
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: "Segoe UI";
+}
+ 
+$pm-blue: (
+    50: #e5f2fc,
+    100: #b8dbf7,
+    200: #85c4f2,
+    300: #52aeee,
+    400: #2f98e9,
+    500: #4286d2, // Base color
+    600: #3d7ec3,
+    700: #3773b0,
+    800: #31699e,
+    900: #285483,
+    A100: #F3F3F3, 
+    A200: #dcdcdc, 
+    A400: #c2c2c2,
+    A700: #aaaaaa, 
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #000000,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+ 
+$pm-red: (
+    50: #fce6e0,
+    100: #f6c1b3,
+    200: #f19880,
+    300: #eb6f4d,
+    400: #e65026,
+    500: #e23100,
+    600: #df2c00,
+    700: #da2500,
+    800: #d61f00,
+    900: #cf1300,
+    A100: #fff7f6,
+    A200: #ffc6c3,
+    A400: #ff9590,
+    A700: #ff7d77,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #ffffff,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+ 
+$primary: mat-palette($pm-blue);
+$accent: mat-palette($pm-blue);
+$warn: mat-palette($pm-red);
+ 
+$pm-theme: mat-light-theme($primary, $accent, $warn);
+ 
+@include angular-material-theme($pm-theme);
