@@ -3,8 +3,8 @@ from fastapi_pagination import Params, add_pagination
 from fastapi_pagination.iterables import LimitOffsetPage
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
-from app.services.user_service import create_employer, authenticate_user, get_users, create_employee
-from app.schemas.user import EmployerCreate, User, EmployeeCreate, EmployeeOutput
+from app.services.user_service import create_employer, authenticate_user, get_users, create_employee, deactivate_users, update_profile
+from app.schemas.user import EmployerCreate, User, EmployeeCreate, EmployeeOutput, ProfileInput
 from app.schemas.token import Token
 from app.auth.jwt import create_access_token, verify_token
 from app.db import SessionLocal
@@ -13,6 +13,7 @@ from fastapi.security import OAuth2PasswordBearer
 from app.db.models import User as UserModel
 from fastapi_pagination import Page
 from app.api.dependencies import get_db
+from typing import List
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -59,3 +60,15 @@ def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_c
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
     return get_users(db, current_user, param)
+
+@router.delete("/employees")
+def deactivate_users_list(users: List[int], db:Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    return deactivate_users(db, users)
+
+@router.get("/profile",  response_model=EmployeeOutput)
+def read_profile(db: Session = Depends(get_db), current_user: EmployeeOutput = Depends(get_current_user)):
+    return current_user
+
+@router.put("/profile", response_model=EmployeeOutput)
+def update_profile_request(user_profile: ProfileInput ,db: Session = Depends(get_db), current_user: EmployeeOutput = Depends(get_current_user)):
+    return update_profile(db, current_user, user_profile)

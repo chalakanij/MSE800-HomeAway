@@ -1,6 +1,6 @@
 /Backend/.idea/*
 /Backend/.venv/*
 /Backend/.env
-/Backend/*pycache*
+/Backend/__pycache__/
 
 __pycache__/

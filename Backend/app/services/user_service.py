@@ -1,10 +1,10 @@
 from datetime import datetime
 import re
 
-from sqlalchemy.orm import Session
-from sqlalchemy import select
+from sqlalchemy.orm import Session, aliased
+from sqlalchemy import select, update
 from app.db.models import User, UserRole
-from app.schemas.user import EmployerCreate, EmployeeCreate, AdminCreate
+from app.schemas.user import EmployerCreate, EmployeeCreate, AdminCreate, EmployeeOutput, ProfileInput
 from app.utils.hashing import hash_password, verify_password
 from fastapi import HTTPException
 from fastapi_pagination import Page
@@ -79,5 +79,61 @@ def authenticate_user(db: Session, email: str, password: str):
     return None
 
 def get_users(db: Session, current_user, params):
-    users_data = select(User).filter(User.parent_user_id == current_user.id)
-    return paginate(db, users_data, params)
+    #due to get the company_name from parent record, table need to join and get correct fields only
+    ParentUser = aliased(User)
+    users_query = (
+        select(User, ParentUser.company_name)
+        .join(ParentUser, User.parent_user_id == ParentUser.id)
+        .filter(User.parent_user_id == current_user.id)
+        .order_by(User.id)
+    )
+
+    paginated_data = paginate(db, users_query, params)
+
+    # Convert results to Pydantic model instances
+    response = [
+        EmployeeOutput(
+            id=user.id,
+            title=user.title,
+            first_name=user.first_name,
+            last_name=user.last_name,
+            email=user.email,
+            phone_number=user.phone_number,
+            role=user.role,
+            active=user.active,
+            parent_user_id=user.parent_user_id,
+            company_name=parent_user_company_name
+        )
+        for user, parent_user_company_name in paginated_data.items
+    ]
+
+    return {
+        "items": response,
+        "total": paginated_data.total,
+        "page": paginated_data.page,
+        "size": paginated_data.size
+    }
+
+def deactivate_users(db: Session, users: list):
+    db.query(User).filter(User.id.in_(users)).update({"active": 0}, synchronize_session=False)
+    db.commit()
+    return {"message": f"Updated {len(users)} users."}
+
+
+def update_profile(db: Session, current_user: User, profile_update: ProfileInput):
+
+    user = db.query(User).filter(User.id == current_user.id).first()
+
+    if profile_update.title is not None:
+        user.title = profile_update.title
+    if profile_update.first_name is not None:
+        user.first_name = profile_update.first_name
+    if profile_update.last_name is not None:
+        user.last_name = profile_update.last_name
+    if profile_update.phone_number is not None:
+        user.phone_number = profile_update.phone_number
+    if profile_update.company_name is not None:
+        user.company_name = profile_update.company_name
+    db.commit()
+    db.refresh(user)
+    return user
