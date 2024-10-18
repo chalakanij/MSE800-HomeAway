@@ -16,6 +16,8 @@ export class SearchBarComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log(this.item)
+    console.log(this.role)
   }
 
   create() {
