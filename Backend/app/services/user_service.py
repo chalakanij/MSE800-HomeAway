@@ -4,7 +4,8 @@ import re
 from sqlalchemy.orm import Session, aliased
 from sqlalchemy import select, update
 from app.db.models import User, UserRole
-from app.schemas.user import EmployerCreate, EmployeeCreate, AdminCreate, EmployeeOutput, ProfileInput
+from app.schemas.user import (EmployerCreate, EmployeeCreate, AdminCreate, EmployeeOutput,
+                              ProfileInput, UserDeactivateRequest)
 from app.utils.hashing import hash_password, verify_password
 from fastapi import HTTPException
 from fastapi_pagination import Page
@@ -78,7 +79,7 @@ def authenticate_user(db: Session, email: str, password: str):
         return user
     return None
 
-def get_users(db: Session, current_user, params):
+def get_employees(db: Session, current_user, params):
     #due to get the company_name from parent record, table need to join and get correct fields only
     ParentUser = aliased(User)
     users_query = (
@@ -114,10 +115,13 @@ def get_users(db: Session, current_user, params):
         "size": paginated_data.size
     }
 
-def deactivate_users(db: Session, users: list):
-    db.query(User).filter(User.id.in_(users)).update({"active": 0}, synchronize_session=False)
+def get_employers(db: Session, current_user, params):
+    return paginate(db, select(User).filter(User.role == UserRole.EMPLOYER).filter(User.Active == 1), params)
+
+def deactivate_users(db: Session, users: UserDeactivateRequest):
+    affected_rows = db.query(User).filter(User.id.in_(users.user_id)).update({"active": 0}, synchronize_session=False)
     db.commit()
-    return {"message": f"Updated {len(users)} users."}
+    return {"message": f"Updated {affected_rows} users."}
 
 
 def update_profile(db: Session, current_user: User, profile_update: ProfileInput):

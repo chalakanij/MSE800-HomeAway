@@ -23,3 +23,7 @@ Project endpoint created
 Get Projects
 Assign project to employees
 Get project employees
+
+
+Check in/out endpoints added
+note: checkinout table need to be drop before start
