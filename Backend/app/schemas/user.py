@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
 
 class AdminCreate(BaseModel):
     title: str
@@ -57,3 +57,6 @@ class ProfileInput(BaseModel):
     last_name: str
     phone_number: str
     company_name: Optional[str]
+
+class UserDeactivateRequest(BaseModel):
+    user_id : List[int]

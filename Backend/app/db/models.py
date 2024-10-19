@@ -16,6 +16,12 @@ class ProjectStatus(BaseEnum):
     ONGOING = "ONGOING"
     COMPLETED = "COMPLETED"
     HALT = "HALT"
+    DELETED = "DELETED"
+
+class CheckInOutStatus(BaseEnum):
+    INITIAL = 0
+    CHECKIN = 1
+    CHECKOUT = 2
 
 class User(Base):
     __tablename__ = 'users'
@@ -49,7 +55,7 @@ class CheckInOut(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id'),  index=True, nullable=False)
-    status = Column(Integer, nullable=False)
+    status = Column(Enum(CheckInOutStatus), default=CheckInOutStatus.INITIAL)
     in_time = Column(DateTime, nullable=False)
     out_time = Column(DateTime, nullable=True, default=None)
     description = Column(Text)
