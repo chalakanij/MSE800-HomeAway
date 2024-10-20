@@ -57,7 +57,8 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token = create_access_token(data={"email": user.email, "first_name": user.first_name,
-                                             "title":user.title, "last_name":user.last_name, "role":user.role.value})
+                                             "title":user.title, "last_name":user.last_name,
+                                             "role":user.role.value, "code":user.company_code})
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/employees", response_model=Page[EmployeeOutput])
