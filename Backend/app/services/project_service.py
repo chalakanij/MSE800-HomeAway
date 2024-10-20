@@ -37,5 +37,4 @@ def get_assigned_projects(db: Session, project_id, current_user, params):
     users_data = (select(UserProject).join(Project)
                   .filter(UserProject.project_id == project_id)
                   .filter(Project.user_id == current_user.id))
-    print(users_data)
     return paginate(db, users_data, params)

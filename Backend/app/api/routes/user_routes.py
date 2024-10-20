@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Params
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
-from app.services.user_service import (create_employer, authenticate_user, get_employees,
-                                       create_employee, deactivate_users, update_profile, get_employers)
+#from app.services.user_service import (create_employer, authenticate_user, get_employees,
+#                                       create_employee, deactivate_users, update_profile, get_employers)
+from app.services.user_service import UserService
 from app.schemas.user import (EmployerCreate, User, EmployeeCreate, EmployeeOutput, EmployerOutput,
                               AdminOutput, ProfileInput, UserDeactivateRequest)
 from app.schemas.token import Token
@@ -33,17 +34,20 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 
 @router.post("/employer_register", response_model=User)
 def register(user: EmployerCreate, db: Session = Depends(get_db)):
-    db_user = create_employer(db, user)
+    user_service = UserService(db)
+    db_user = user_service.create_employer(user)
     return db_user
 
 @router.post("/employee_register", response_model=User)
 def register(user: EmployeeCreate, db: Session = Depends(get_db)):
-    db_user = create_employee(db, user)
+    user_service = UserService(db)
+    db_user = user_service.create_employee(user)
     return db_user
 
 @router.post("/login", response_model=Token)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    user = authenticate_user(db, form_data.username, form_data.password) 
+    user_service = UserService(db)
+    user = user_service.authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -58,24 +62,27 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
         )
     access_token = create_access_token(data={"email": user.email, "first_name": user.first_name,
                                              "title":user.title, "last_name":user.last_name,
-                                             "role":user.role.value, "code":user.company_code})
+                                             "role":user.role.value, "code":user.employer_code})
     return {"access_token": access_token, "token_type": "bearer"}
 
 @router.get("/employees", response_model=Page[EmployeeOutput])
 def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
-    return get_employees(db, current_user, param)
+    user_service = UserService(db)
+    return user_service.get_employees(current_user, param)
 
 @router.get("/employers", response_model=Page[EmployerOutput])
 def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
-    return get_employers(db, current_user, param)
+    user_service = UserService(db)
+    return user_service.get_employers(current_user, param)
 
 @router.delete("/employees")
 def deactivate_users_list(users: UserDeactivateRequest, db:Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    return deactivate_users(db, users)
+    user_service = UserService(db)
+    return user_service.deactivate_users(users)
 
 @router.get("/profile",  response_model=EmployeeOutput)
 def read_profile(db: Session = Depends(get_db), current_user: EmployeeOutput = Depends(get_current_user)):
@@ -83,4 +90,5 @@ def read_profile(db: Session = Depends(get_db), current_user: EmployeeOutput = D
 
 @router.put("/profile", response_model=EmployeeOutput)
 def update_profile_request(user_profile: ProfileInput ,db: Session = Depends(get_db), current_user: EmployeeOutput = Depends(get_current_user)):
-    return update_profile(db, current_user, user_profile)
+    user_service = UserService(db)
+    return user_service.update_profile(current_user, user_profile)
