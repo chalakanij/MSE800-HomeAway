@@ -30,3 +30,10 @@ class CheckInOutGetRequest(BaseModel):
     description: Optional[str]
     user_id: Optional[int]
     project_id: Optional[int]
+
+class CheckinUpdateRequest(BaseModel):
+    id: int
+    in_time: Optional[datetime]
+    out_time: Optional[datetime]
+    description: Optional[str]
+    project_id: Optional[int]
