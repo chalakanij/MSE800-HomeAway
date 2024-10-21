@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import re
 
 from sqlalchemy.orm import Session
@@ -8,7 +8,7 @@ from app.schemas.checkinout import CheckinUpdateRequest
 from fastapi import HTTPException
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
-from starlette.status import HTTP_404_NOT_FOUND
+from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
 
 
 class CheckInOutService:
@@ -25,6 +25,15 @@ class CheckInOutService:
         self.db.refresh(db_checkinout)
         return db_checkinout
 
+    def _validate_checkout(self, in_time:datetime, out_time:datetime):
+        if in_time.tzinfo is None:
+            in_time = in_time.replace(tzinfo=timezone.utc)
+        if out_time.tzinfo is None:
+            out_time = out_time.replace(tzinfo=timezone.utc)
+
+        if in_time > out_time:
+            raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail=f"check out date must be after {out_time}")
+
     def get_current_checkin(self, user):
         checkinout = self.db.query(CheckInOut).filter(CheckInOut.user_id == user.id).order_by(desc(CheckInOut.id)).first()
         if checkinout is not None:
@@ -35,6 +44,7 @@ class CheckInOutService:
         current_chekinout = self.get_current_checkin(user)
         if current_chekinout is None:
             raise HTTPException(status_code=404, detail="No checkin found!")
+        self._validate_checkout(current_chekinout.in_time, checkout_request.out_time)
         current_chekinout.out_time = checkout_request.out_time
         current_chekinout.description = checkout_request.description
         current_chekinout.status = CheckInOutStatus.CHECKOUT
@@ -61,6 +71,7 @@ class CheckInOutService:
                 checkin.description = checkin_request.description
             if checkin_request.project_id is not None:
                 checkin.project_id = checkin_request.project_id
+            self._validate_checkout(checkin.in_time, checkin.out_time)
             self.db.commit()
             self.db.refresh(checkin)
             return checkin
