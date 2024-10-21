@@ -1,0 +1,32 @@
+<div class="pm-card__dialog-box-container">
+    <h1 class="pm-dialog--title">{{title}}</h1>
+    <mat-dialog-content class="mat-typography">
+        <form [formGroup]="projectDetailsGroup">
+            <div class="form-layout--all-center">
+                <label class="col-4 form-layout--label" style="max-width: none;">Title: </label>
+                <input class="col-8 form-layout--form" id="name" formControlName="title" placeholder="Enter Project Title">
+            </div>
+
+            <div class="form-layout--all-center">
+                <label class="col-4 form-layout--label">Description: </label>
+                <input class="col-8 form-layout--form" id="description" formControlName="description" placeholder="Enter Description">
+            </div>
+            <div class="form-layout--all-center">
+                <label class="col-4 form-layout--label">Work Hours: </label>
+                <input class="col-8 form-layout--form" id="hours" formControlName="hours" placeholder="Enter Work Hours">
+            </div>
+            <!-- <mat-error *ngIf="projectDetailsGroup.get('hours')?.errors?.pattern">Only numbers are allowed for work hours.</mat-error> -->
+        </form>
+        <div class="row">
+            <div class="col-4"> <span class="pm-error" *ngIf="projectDetailsGroup.get('hours')?.errors?.pattern" style="bottom: 0px;">Invalid value for work hours</span></div>
+            <div class="col-8" style="display: flex; justify-content: flex-end;">
+                <!-- <div *ngIf="projectDetailsGroup.get('hours')?.invalid && projectDetailsGroup.get('hours')?.touched" >
+                    <span class="pm-error" *ngIf="projectDetailsGroup.get('hours')?.errors?.pattern">Only numbers are allowed for work hours.</span>
+                  </div> -->
+                <span class="pm-error" *ngIf="isInvalidForm" style="bottom: 0px;">Please fill all the Details</span>
+            <button mat-button style="background-color: #4286D2; color: white; width: 80px;"
+                (click)="onSubmit();">Submit</button>
+        </div>
+    </div>
+    </mat-dialog-content>
+</div>

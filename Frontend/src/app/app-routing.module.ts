@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BlankComponent } from './scaffoldings/blank/blank.component';
 import { FullComponent } from './scaffoldings/full/full.component';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: BlankComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     data: { type: ['login']},
     children: [
       {
@@ -19,7 +20,7 @@ const routes: Routes = [
   {
     path: '',
     component: FullComponent,
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     data: { type: ['routing']},
     children: [
       {

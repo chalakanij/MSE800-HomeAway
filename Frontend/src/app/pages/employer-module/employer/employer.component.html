@@ -1,6 +1,6 @@
 <div class="page-layout page-layout--module-all-center">
     <div style="width: 90%;">
-        <app-search-bar [item]="projects" [role]="isEmployer" (searchEvent)="onSearch($event)" (createEvent)="openCreateDialog()"></app-search-bar>
+        <app-search-bar (searchEvent)="onSearch($event)" (createEvent)="openCreateDialog()"></app-search-bar>
     </div>
     <div style="width: 90%;">
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
@@ -11,12 +11,12 @@
                     <div class="col-1 expansion-header--column">
                       <!-- action -->
                     </div>
-                    <div class="col-3 expansion-header--column">Title</div>
+                    <div class="col-3 expansion-header--column">Name</div>
                     <div class="col-8 expansion-header--column">
                       <div class="row">
-                        <div class="col-4 expansion-header--column">Description</div>
-                        <div class="col-4 expansion-header--column">Work Hours</div>
-                        <div class="col-4 expansion-header--column">Status</div>
+                        <div class="col-4 expansion-header--column">Email</div>
+                        <div class="col-4 expansion-header--column">Mobile Number</div>
+                        <div class="col-4 expansion-header--column">Role</div>
                       </div>
                     </div>
                   </mat-panel-title>
@@ -41,20 +41,20 @@
                     <div class="col-3 col-md-3">
                       <mat-panel-title>
                         <div class="expansion-detail">
-                          <label>{{ element.title }}</label>
+                          <label>{{ element.title }} {{ element.first_name }} {{ element.last_name }}</label>
                         </div>
                       </mat-panel-title>
                     </div>
                     <div class="col-8 col-md-8">
                       <mat-panel-title class="row" style="width: 100%;" *ngIf="!panel.expanded">
                         <div class="col-4 expansion-detail">
-                          <label>{{ element.description }}</label>
+                          <label>{{ element.email }}</label>
                         </div>
                         <div class="col-4 expansion-detail">
-                          <label>{{ element.work_hours }}</label>
+                          <label>{{ element.phone_number }}</label>
                         </div>
                         <div class="col-4 expansion-detail">
-                          <label>{{ element.status }}</label>
+                          <label>{{ element.role }}</label>
                         </div>
                       </mat-panel-title>
                     </div>
@@ -65,38 +65,30 @@
                 <div class="no-show">
                     <div class="row">
                         <div class="col-3 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Title: </label>
-                            <label class="expansion-detail--label--value">{{element.title}} </label>
+                            <label class="expansion-detail--label">Email: </label>
+                            <label class="expansion-detail--label--value">{{element.email}} </label>
                         </div>
                         <div class="col-3 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Description: </label>
-                            <label class="expansion-detail--label--value">{{element.description}} </label>
+                            <label class="expansion-detail--label">Mobile Number: </label>
+                            <label class="expansion-detail--label--value">{{element.phone_number}} </label>
                         </div>
                         <div class="col-3 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Work Hours: </label>
-                            <label class="expansion-detail--label--value">{{element.work_hours}} </label>
+                            <label class="expansion-detail--label">Email: </label>
+                            <label class="expansion-detail--label--value">{{element.email}} </label>
                         </div>
                         <div class="col-3 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Status: </label>
-                            <label class="expansion-detail--label--value">{{element.status}} </label>
+                            <label class="expansion-detail--label">Designation: </label>
+                            <label class="expansion-detail--label--value">{{element.role}} </label>
                         </div>
                     </div>
+
                 </div>
 
                 <!-- Action Row -->
                 <mat-action-row style="padding:0px; padding-right: 15px;">
-                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
-                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickViewEmployeeDialog(element)">
-                      <mat-icon style="font-size: 30px;">groups</mat-icon>
-                  </button>
-                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
-                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickAssignDialog(element)">
-                      <mat-icon style="font-size: 30px;">person_add</mat-icon>
-                  </button>
-                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
-                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onEditDialog(element)">
-                      <mat-icon style="font-size: 30px;">edit</mat-icon>
-                  </button>
+                    <!-- <button mat-icon-button (click)="onEditDialog(element)" class="pm-btn--expansion-action--edit">
+                        <mat-icon>edit</mat-icon>
+                    </button> -->
                     <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
                         <mat-icon>delete</mat-icon>
                     </button>

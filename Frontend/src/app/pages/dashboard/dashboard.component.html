@@ -1,87 +1,25 @@
-<!-- <div class="page-layout page-layout--module-all-center">
-    <div style="width: 90%;"> -->
+<div class="page-layout page-layout--module-all-center">
+    <div style="width: 90%;">
+
+        <!-- For Employers -->
+        <div class="row justify-content-around" style="margin-top: 25px;" *ngIf="isEmployer">
+            <mat-card>
+                <mat-card-title-group>
+                    <mat-card-subtitle>Employee Register URL</mat-card-subtitle>
+                </mat-card-title-group>
+                <mat-card-content>
+                    <div class="url-display">
+                        <span>{{ employeeRegisterUrl }}</span>
+                        <button mat-icon-button (click)="copyUrl()">
+                            <mat-icon>content_copy</mat-icon>
+                        </button>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <mat-divider style="margin-bottom: 35px;margin-top: 35px;border-top-width: 1px;height: 25px;"></mat-divider>
         <!-- For all users -->
-        <!-- <div class="row justify-content-around" style="margin-top: 35px;">
-            <mat-card class="col-3">
-                <mat-card-title-group class="row">
-                    <div class="col-6">
-                        <img mat-card-sm-image src="../../../assets/png/user.png">
-                    </div>
-                    <div class="col-6">
-                        <mat-card-title style="text-align: right;">Users</mat-card-title>
-                        <mat-card-subtitle style="text-align: right;font-size: 20px;">{{initialDetails.active_users_count}}/{{initialDetails.all_users_count}}
-                        </mat-card-subtitle>
-                    </div>
-                </mat-card-title-group>
-            </mat-card>
-            <mat-card class="col-3">
-                <mat-card-title-group class="row">
-                    <div class="col-6">
-                        <img mat-card-sm-image src="../../../assets/png/responsive.png">
-                    </div>
-                    <div class="col-6">
-                        <mat-card-title style="text-align: right;">Assets</mat-card-title>
-                        <mat-card-subtitle style="text-align: right; font-size: 20px;">{{initialDetails.active_assets_count}}/{{initialDetails.all_assets_count}}
-                        </mat-card-subtitle>
-                    </div>
-                </mat-card-title-group>
-            </mat-card>
-
-            <mat-card class="col-3">
-                <mat-card-title-group class="row">
-                    <div class="col-6">
-                        <img mat-card-sm-image src="../../../assets/png/branch.png">
-                    </div>
-                    <div class="col-6">
-                        <mat-card-title style="text-align: right;">Units</mat-card-title>
-                        <mat-card-subtitle style="text-align: right;font-size: 20px;">{{initialDetails.active_units_count}}/{{initialDetails.all_units_count}}
-                        </mat-card-subtitle>
-                    </div>
-                </mat-card-title-group>
-            </mat-card>
-        </div>
-
-        <mat-divider style="margin-bottom: 35px;margin-top: 35px;border-top-width: 1px;height: 25px;"></mat-divider> -->
-
-        <!-- For admin and unit head -->
-        <!-- <div class="row justify-content-around" style="margin-top: 25px;">
-            <mat-card class="col-3">
-                <mat-card-title-group style="margin-bottom:30px">
-                    <mat-card-title>My Transfer Requests</mat-card-title>
-                </mat-card-title-group>
-                <p>Pending : {{initialDetails.pending_asset_transfer_requests_user}}</p>
-                <p>Approved : {{initialDetails.accepted_asset_transfer_requests_user}}</p>
-                <p>Cancel : {{initialDetails.canceled_asset_transfer_requests_user}}</p>
-                <p>Rejected : {{initialDetails.rejected_asset_transfer_requests_user}}</p>
-                <p>All : {{initialDetails.all_asset_transfer_requests_user}}</p>
-                <mat-card-content>
-                </mat-card-content>
-            </mat-card>
-            <mat-card class="col-3" *ngIf="isUnit">
-                <mat-card-title-group style="margin-bottom:30px">
-                    <mat-card-title>All Transfer Requests-Unit</mat-card-title>
-                </mat-card-title-group>
-                <mat-card-content>
-                    <p>Pending : {{initialDetails.pending_asset_transfer_requests_unit}}</p>
-                    <p>Approved : {{initialDetails.accepted_asset_transfer_requests_unit}}</p>
-                    <p>Cancel : {{initialDetails.canceled_asset_transfer_requests_unit}}</p>
-                    <p>Rejected : {{initialDetails.rejected_asset_transfer_requests_unit}}</p>
-                    <p>All : {{initialDetails.all_asset_transfer_requests_unit}}</p>
-                </mat-card-content>
-            </mat-card>
-
-            <mat-card class="col-3" *ngIf="isAdmin">
-                <mat-card-title-group style="margin-bottom:30px">
-                    <mat-card-title>All Transfer Requests</mat-card-title>
-                </mat-card-title-group>
-                <mat-card-content>
-                    <p>Pending : {{initialDetails.pending_asset_transfer_requests_admin}}</p>
-                    <p>Approved : {{initialDetails.accepted_asset_transfer_requests_admin}}</p>
-                    <p>Cancel : {{initialDetails.canceled_asset_transfer_requests_admin}}</p>
-                    <p>Rejected : {{initialDetails.rejected_asset_transfer_requests_admin}}</p>
-                    <p>All : {{initialDetails.all_asset_transfer_requests_admin}}</p>
-                </mat-card-content>
-            </mat-card>
-        </div>
+        <div class="row justify-content-around" style="margin-top: 35px;">
+        </div>     
     </div>
-</div> -->
+</div>

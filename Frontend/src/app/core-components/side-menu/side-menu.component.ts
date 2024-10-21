@@ -18,6 +18,7 @@ export class SideMenuComponent {
   isDisabledEmployer!: boolean;
   isDisabledEmployee!: boolean;
   @Input() item!: NavItem;
+  role!:string;
 
   navItems: NavItem[] = [
     {
@@ -43,7 +44,7 @@ export class SideMenuComponent {
     {
       displayName: 'Employees',
       iconName: 'engineering',
-      route: 'employers',
+      route: 'employees',
     },
   ];
 
@@ -76,17 +77,13 @@ export class SideMenuComponent {
   }
 
   checkRole() {
-    this.isDisabledEmployer = false;
-    this.isDisabledEmployee = false
     if (this.auth_service.getRoles().includes('EMPLOYER')) {
-      this.isDisabledEmployer = true;
+      this.role = 'Employer'
     } else if (this.auth_service.getRoles().includes('EMPLOYEE')){
-      this.isDisabledEmployee = true
-      this.isDisabledEmployer = true;
-    } else {
-      this.isDisabledEmployer = false;
-      this.isDisabledEmployee = false
-    }
+      this.role = 'Employee'
+    } if (this.auth_service.getRoles().includes('ADMIN')){
+      this.role = 'Admin'
+    } 
   }
 
 }
