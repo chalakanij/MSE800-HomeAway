@@ -16,6 +16,7 @@ def on_startup():
 app.include_router(routes.user_routes.router)
 app.include_router(routes.project_routes.router)
 app.include_router(routes.checkinout_routes.router)
+app.include_router(routes.dashboard_routes.router)
 
 # Start the app using uvicorn
 # uvicorn app.main:app --reload

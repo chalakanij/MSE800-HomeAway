@@ -3,7 +3,7 @@ from fastapi_pagination import Params, add_pagination
 from fastapi_pagination.iterables import LimitOffsetPage
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
-from app.services.project_service import create_project, get_employer_projects, assign_employees, get_assigned_projects
+from app.services.project_service import ProjectService
 from app.schemas.user import User
 from app.schemas.project import Project, ProjectCreate, ProjectOutput, ProjectEmployeeCreate, ProjectEmployeeOutput
 from app.schemas.token import Token
