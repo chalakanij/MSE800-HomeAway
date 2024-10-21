@@ -1,36 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Params
 from sqlalchemy.orm import Session
-from fastapi.security import OAuth2PasswordRequestForm
-#from app.services.user_service import (create_employer, authenticate_user, get_employees,
-#                                       create_employee, deactivate_users, update_profile, get_employers)
 from app.services.user_service import UserService
 from app.schemas.user import (EmployerCreate, User, EmployeeCreate, EmployeeOutput, EmployerOutput,
                               AdminOutput, ProfileInput, UserDeactivateRequest)
 from app.schemas.token import Token
 from app.auth.jwt import create_access_token, verify_token
 from fastapi import Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer
-from app.db.models import User as UserModel
+from fastapi.security import OAuth2PasswordRequestForm
 from fastapi_pagination import Page
-from app.api.dependencies import get_db
-from typing import List
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
+from app.api.dependencies import get_db, get_current_user
+from app.api.dependencies import role_required
+from app.db.models import UserRole
 
 router = APIRouter()
-
-def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    token_data = verify_token(token, credentials_exception)
-    user = db.query(UserModel).filter(UserModel.email == token_data.email).first()
-    if user is None:
-        raise credentials_exception
-    return user
 
 @router.post("/employer_register", response_model=User)
 def register(user: EmployerCreate, db: Session = Depends(get_db)):
@@ -65,21 +48,21 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
                                              "role":user.role.value, "code":user.employer_code})
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/employees", response_model=Page[EmployeeOutput])
+@router.get("/employees", response_model=Page[EmployeeOutput], dependencies=[Depends(role_required([UserRole.EMPLOYER]))])
 def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
     user_service = UserService(db)
     return user_service.get_employees(current_user, param)
 
-@router.get("/employers", response_model=Page[EmployerOutput])
+@router.get("/employers", response_model=Page[EmployerOutput], dependencies=[Depends(role_required([UserRole.ADMIN]))])
 def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
     user_service = UserService(db)
     return user_service.get_employers(current_user, param)
 
-@router.delete("/employees")
+@router.delete("/employees", dependencies=[Depends(role_required([UserRole.EMPLOYER, UserRole.ADMIN]))])
 def deactivate_users_list(users: UserDeactivateRequest, db:Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     user_service = UserService(db)
     return user_service.deactivate_users(users)
