@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 from app.services.project_service import ProjectService
 from app.schemas.user import User
-from app.schemas.project import Project, ProjectCreate, ProjectOutput, ProjectEmployeeCreate, ProjectEmployeeOutput
+from app.schemas.project import (Project, ProjectCreate, ProjectOutput, ProjectEmployeeCreate,
+                                 ProjectEmployeeOutput, ProjectUpdateRequest)
 from app.schemas.token import Token
 from app.auth.jwt import create_access_token, verify_token
 from app.db import SessionLocal
@@ -15,32 +16,42 @@ from app.db.models import User as UserModel
 from fastapi_pagination import Page
 from app.api.dependencies import get_db
 from app.api.routes.user_routes import get_current_user
-from typing import Annotated
+from typing import Annotated, List
 
 
 router = APIRouter()
 
 
 @router.post("/projects", response_model=Project)
-def register(project: ProjectCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
-    db_project = create_project(db, project, current_user)
+def create_project(project: ProjectCreate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    project_service = ProjectService(db)
+    db_project = project_service.create_project(project, current_user)
     return db_project
 
 @router.get("/projects", response_model=Page[ProjectOutput])
 def get_projects(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
-    return get_employer_projects(db, current_user, param)
+    project_service = ProjectService(db)
+    return project_service.get_employer_projects(current_user, param)
 
-@router.post("/projects/users/{project_id}", response_model=ProjectEmployeeOutput)
+@router.post("/projects/users/{project_id}")
 def assign_employees_to_project(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
              employees: ProjectEmployeeCreate = None,
              project_id: int = Path()):
-    db_project = assign_employees(db, project_id, employees, current_user)
+    project_service = ProjectService(db)
+    db_project = project_service.assign_employees(project_id, employees, current_user)
     return db_project
 
-@router.get("/projects/users/{project_id}", response_model=Page[ProjectEmployeeOutput])
-def get_employees_in_project(db: Session = Depends(get_db), project_id: int = Path(), current_user: User = Depends(get_current_user),
-               page:int | None = 1, size:int |None = 10):
-    param = Params(page=page, size=size)
-    return get_assigned_projects(db, project_id, current_user, param)
+@router.get("/projects/users/{project_id}", response_model=List[ProjectEmployeeOutput])
+def get_employees_in_project(db: Session = Depends(get_db), project_id: int = Path(),
+                             current_user: User = Depends(get_current_user)):
+    project_service = ProjectService(db)
+    return project_service.get_assigned_projects(project_id)
+
+@router.post("/projects/update_status")
+def assign_employees_to_project(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
+             update_request: ProjectUpdateRequest = None):
+    project_service = ProjectService(db)
+    db_project = project_service.update_status(update_request, current_user)
+    return db_project
