@@ -123,7 +123,7 @@ class UserService:
         }
 
     def get_employers(self, current_user, params):
-        return paginate(self.db, select(User).filter(User.role == UserRole.EMPLOYER).filter(User.Active == 1), params)
+        return paginate(self.db, select(User).filter(User.role == UserRole.EMPLOYER).filter(User.active == 1), params)
 
     def deactivate_users(self, users: UserDeactivateRequest):
         affected_rows = self.db.query(User).filter(User.id.in_(users.user_id)).update({"active": 0},
