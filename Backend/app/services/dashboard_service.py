@@ -18,21 +18,21 @@ class DashboardService:
 
         last_checkin = self.db.query(CheckInOut).filter(CheckInOut.user_id == user.id).order_by(desc(CheckInOut.id)).first()
         if last_checkin is None:
-            last_checkin = None
+            last_checkin_time = None
         else:
-            last_checkin = last_checkin.in_time
+            last_checkin_time = last_checkin.in_time
         # if out_time is available, then last_checkout is this record
         if last_checkin.out_time is not None:
-            last_checkout = last_checkin.out_time
+            last_checkout_time = last_checkin.out_time
         else:
             # otherwise need to get the record with last out_time
             last_checkout = (self.db.query(CheckInOut).filter(CheckInOut.user_id == user.id).filter(CheckInOut.out_time != None).
                             order_by(desc(CheckInOut.id)).first())
             if last_checkout is None:
-                last_checkout = None
+                last_checkout_time = None
             else:
-                last_checkout = last_checkout.out_time
-        return {"projects": project_status_counts, "last_checkin": last_checkin, "last_checkout": last_checkout}
+                last_checkout_time = last_checkout.out_time
+        return {"projects": project_status_counts, "last_checkin": last_checkin_time, "last_checkout": last_checkout_time}
 
     def get_employer_dashboard(self, user):
         employees = (self.db.query(User.active, func.count(User.id).label('count')).filter(User.parent_user_id == user.id).
