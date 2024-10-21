@@ -33,7 +33,7 @@ class CheckInOutService:
 
     def create_checkout(self , user, checkout_request):
         current_chekinout = self.get_current_checkin(user)
-        if current_chekinout is not CheckInOut:
+        if current_chekinout is None:
             raise HTTPException(status_code=404, detail="No checkin found!")
         current_chekinout.out_time = checkout_request.out_time
         current_chekinout.description = checkout_request.description
@@ -66,3 +66,23 @@ class CheckInOutService:
             return checkin
         else:
             raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="No chckin record found!")
+
+    # calculate working hours based on criteria
+    def calculate_hours(self, employee_id:int| None=None, project_id: int| None=None,
+                        from_date:datetime | None=None, to_date:datetime | None=None):
+        query = select(CheckInOut)
+        if employee_id is not None:
+            query = query.filter(CheckInOut.user_id == employee_id)
+        if project_id is not None:
+            query = query.filter(CheckInOut.project_id == project_id)
+        if from_date is not None:
+            query = query.filter(CheckInOut.in_time >= from_date)
+        if to_date is not None:
+            query = query.filter(CheckInOut.out_time <= to_date)
+        result = self.db.execute(query).scalars().all()
+        total_seconds = 0
+        for row in result:
+            if row.out_time is not None:
+                time_difference = row.out_time - row.in_time
+                total_seconds += time_difference.total_seconds()
+        return total_seconds/60/60
