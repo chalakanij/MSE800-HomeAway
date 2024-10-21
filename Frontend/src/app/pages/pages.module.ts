@@ -29,7 +29,7 @@ import { SharedComponentsModule } from '../shared-components/shared-components.m
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatStepperModule} from '@angular/material/stepper';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { EmployeeComponent } from './employee-module/employee/employee/employee.component';
+import { EmployeeComponent } from './employee-module/employee/employee.component';
 import { AddProjectComponent } from './project-module/add-project/add-project/add-project.component';
 import { UpdateProjectComponent } from './project-module/update-project/update-project/update-project.component';
 import { DeleteProjectComponent } from './project-module/delete-project/delete-project/delete-project.component';
@@ -38,10 +38,15 @@ import { TimeLogsComponent } from './time-logs-module/time-logs/time-logs/time-l
 import { AddTimeLogsComponent } from './time-logs-module/add-time-logs/add-time-logs/add-time-logs.component';
 import { UpdateTimeLogsComponent } from './time-logs-module/update-time-logs/update-time-logs/update-time-logs.component';
 import { DeleteTimeLogsComponent } from './time-logs-module/delete-time-logs/delete-time-logs/delete-time-logs.component';
+import { AssignProjectComponent } from './project-module/assign-project/assign-project/assign-project.component';
+import { EditProjectComponent } from './project-module/edit-project/edit-project/edit-project.component';
+import { EmployerComponent } from './employer-module/employer/employer.component';
+import { ViewProjectEmployeeComponent } from './project-module/view-project-employee/view-project-employee.component';
 
 @NgModule({
   declarations: [DashboardComponent, EmployeeComponent, AddProjectComponent, UpdateProjectComponent, DeleteProjectComponent,
-    ProjectsComponent, TimeLogsComponent, AddTimeLogsComponent, UpdateTimeLogsComponent, DeleteTimeLogsComponent
+    ProjectsComponent, TimeLogsComponent, AddTimeLogsComponent, UpdateTimeLogsComponent, DeleteTimeLogsComponent, 
+    AssignProjectComponent, EditProjectComponent, EmployerComponent, ViewProjectEmployeeComponent
   ],
   imports: [
     PagesRoutingModule,
@@ -71,7 +76,8 @@ import { DeleteTimeLogsComponent } from './time-logs-module/delete-time-logs/del
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatChipsModule
+    MatChipsModule,
+    MatSelectModule
   ],
 
   exports: [EmployeeComponent]

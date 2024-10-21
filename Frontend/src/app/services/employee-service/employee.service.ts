@@ -35,6 +35,16 @@ export class EmployeeService {
         return this.http.put(endpointUrl, data, httpOptions);
     }
 
+    //find user
+    getEmployers(page: number, size: number): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/employers`;
+        httpOptions.params = {
+            page: page,
+            size: size
+        };
+        return this.http.get(endpointUrl, httpOptions);
+    }
+
     //edit user
     // editUser(data: CreateEmployerData): Observable<any> {
     //     httpOptions.params = {}

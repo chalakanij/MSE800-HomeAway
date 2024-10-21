@@ -18,7 +18,7 @@ const httpOptions = {
 export class AuthService {
 
     private isAuthenticated = false;
-    private employeeId!: String;
+    private email!: String;
     private name!: String;
     private token!: String;
     private roles!: String;
@@ -115,9 +115,9 @@ export class AuthService {
         return this.token;
     }
 
-    // get the epf number
-    getEmployeeId() {
-        return this.employeeId;
+    // get the employee number
+    getEmail() {
+        return this.email;
     }
     
     // get the name
@@ -142,6 +142,7 @@ export class AuthService {
         let decodedToken: JwtTokenInterface = this.decodeToken(this.token);
         this.name =  decodedToken.first_name + ' ' + decodedToken.last_name;
         this.roles = decodedToken.role
+        this.email = decodedToken.email
         if (decodedToken.exp * 1000 > Date.now()) {
             this.isAuthenticated = true;
         } else {

@@ -48,7 +48,7 @@ export class HeaderComponent implements OnInit {
 
   getUsernameAndEmployeeId() {
     this.username = this.authService.getName();
-    this.employeeId = this.authService.getEmployeeId();
+    // this.employeeId = this.authService.getEmployeeId();
   }
 
 }

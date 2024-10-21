@@ -4,7 +4,8 @@
     <button class="search--icon-width" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="search(searchField.value)">
         <mat-icon style="font-size: 35px;">search</mat-icon>
     </button>
-    <button class="search--icon-width" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="create()">
+    <button class="search--icon-width" *ngIf="(item == 'projects' || item == 'time-log') && 
+    (role == 'employer' || role == 'admin')" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="create()">
         <mat-icon style="font-size: 35px;">add_circle</mat-icon>
     </button>
     <!-- <button class="search--icon-width" *ngIf="item == 'request-history' && role == 'admin'" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="showNotification('request-history')">
