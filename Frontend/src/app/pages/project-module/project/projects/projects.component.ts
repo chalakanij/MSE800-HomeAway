@@ -13,6 +13,9 @@ import { StateService } from 'src/app/services/common-service/state-service';
 import { ProjectService } from 'src/app/services/project-service/project.service';
 import { DeleteDialogComponent } from 'src/app/shared-components/delete-dialog/delete-dialog.component';
 import { AddProjectComponent } from '../../add-project/add-project/add-project.component';
+import { AssignProjectComponent } from '../../assign-project/assign-project/assign-project.component';
+import { EditProjectComponent } from '../../edit-project/edit-project/edit-project.component';
+import { ViewProjectEmployeeComponent } from '../../view-project-employee/view-project-employee.component';
 
 @Component({
   selector: 'app-projects',
@@ -104,27 +107,27 @@ export class ProjectsComponent implements OnInit {
       if (confirmed) {
         this.loading = true;
         this.pageSize = 10;
-        this.getProjectData(this.searchKey, 0, this.pageSize);
+        this.getProjectData(this.searchKey, 1, this.pageSize);
       }
     });
   }
 
-  // onEditDialog(user: CreateEmployerData) {
-  //   const dialogRef = this.dialog.open(CreateUserComponent, {
-  //     data: {
-  //       type: UserDialogBoxEnum.EDIT_USER,
-  //       message: "",
-  //       data: user
-  //     }
-  //   });
-  //   dialogRef.afterClosed().subscribe((confirmed) => {
-  //     if (confirmed) {
-  //       this.loading = true;
-  //       this.pageSize = 10;
-  //       this.getUserData(this.searchKey, 0, this.pageSize);
-  //     }
-  //   });
-  // }
+  onEditDialog(project: CreateProjectData) {
+    const dialogRef = this.dialog.open(EditProjectComponent, {
+      data: {
+        type: 'EDIT_PROJECT',
+        message: "",
+        data: project
+      }
+    });
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.loading = true;
+        this.pageSize = 10;
+        this.getProjectData(this.searchKey, 1, this.pageSize);
+      }
+    });
+  }
 
   openDeleteDialog(project: CreateProjectData) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
@@ -137,30 +140,30 @@ export class ProjectsComponent implements OnInit {
       }
     });
 
-    // dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-    //   if (confirmed) {
-    //     this.project_service.deleteProject([project.id]).subscribe((res: { error: any; }) => {
-    //       if (!res.error) {
-    //         this.snackBar.open(project.title + ' deleted', '', {
-    //           duration: 2000,
-    //         });
-    //         this.loading = true;
-    //         this.pageSize = 10;
-    //         this.getProjectData(this.searchKey, 1, this.pageSize);
-    //       }
-    //     });
-    //   }
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.project_service.deleteProject([project.id]).subscribe((res: { error: any; }) => {
+          if (!res.error) {
+            this.snackBar.open(project.title + ' deleted', '', {
+              duration: 2000,
+            });
+            this.loading = true;
+            this.pageSize = 10;
+            this.getProjectData(this.searchKey, 1, this.pageSize);
+          }
+        });
+      }
 
-    // });
+    });
   }
 
   openBulkDeleteDialog() {
 
     let deleteProjects = this.selection.selected;
     let deleteUnits: Number[] = [];
-    // deleteProjects.forEach(project => {
-    //   deleteUnits.push(project.id);
-    // });
+    deleteProjects.forEach(project => {
+      deleteUnits.push(project.id);
+    });
 
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
@@ -232,5 +235,35 @@ export class ProjectsComponent implements OnInit {
     } else {
       this.isEmployer = 'employee'
     }
+  }
+
+  onClickAssignDialog(projectData: CreateProjectData) {
+    const dialogRef = this.dialog.open(AssignProjectComponent, {
+      data: {
+        type: "ASSIGN_PROJECT",
+        data: projectData
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      this.loading = true;
+      this.pageSize = 10;
+      this.getProjectData(this.searchKey, 1, this.pageSize);
+    });
+  }
+
+  onClickViewEmployeeDialog(projectData: CreateProjectData) {
+    const dialogRef = this.dialog.open(ViewProjectEmployeeComponent, {
+      data: {
+        type: "VIEW_PROJECT_EMPLOYEE",
+        data: projectData
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      this.loading = true;
+      this.pageSize = 10;
+      this.getProjectData(this.searchKey, 1, this.pageSize);
+    });
   }
 }
