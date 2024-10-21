@@ -39,6 +39,7 @@ class AdminOutput(BaseModel):
     email: EmailStr
     phone_number: str
     role: str
+    active: int
 
     class Config:
         from_attribute = True
