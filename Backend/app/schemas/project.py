@@ -34,11 +34,13 @@ class ProjectEmployeeCreate(BaseModel):
         orm_mode = True
 
 
-class ProjectEmployeeOutput(ProjectEmployeeCreate):
+class ProjectEmployeeOutput(BaseModel):
+    employee_id: int
     project_id: int
 
     class Config:
-        from_attribute = True
+        orm_mode = True
+        from_attributes = True
 
 
 class ProjectUpdateRequest(BaseModel):
