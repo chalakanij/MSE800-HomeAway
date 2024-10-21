@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import select, func, desc
 from app.db.models import Project, User, CheckInOut, UserProject, UserRole
 from app.schemas.project import ProjectStatusCount
+from app.services.checkinout_service import CheckInOutService
 
 class DashboardService:
     def __init__(self, db:Session):
@@ -47,8 +48,9 @@ class DashboardService:
 
         employee_projects = self.db.query(Project).filter(Project.user_id == user.id).all()
         project_hours = []
+        check_io_service = CheckInOutService(self.db)
         for row in employee_projects:
-            calculated_hours = 0 # to be implemented from CheckInOutService class by Medhaka
+            calculated_hours = check_io_service.calculate_hours(project_id=row.id)
             project_hours.append({"project_id":row.id,"work_hours":row.work_hours, "calculated":calculated_hours})
 
         return {"employees":user_status_counts, "project_status": project_status_counts, "project_hours":project_hours}
