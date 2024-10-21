@@ -23,9 +23,9 @@ class ProjectService:
         self.db.refresh(db_project)
         return db_project
 
-    def get_employer_projects(self, user):
+    def get_employer_projects(self, user, param):
         project_data = select(Project).filter(Project.user_id == user.id)
-        return self.db.execute(project_data).scalars().all()
+        return paginate(self.db, project_data, param)
 
 
     def assign_employees(self, project_id, project_employee: ProjectEmployeeCreate, current_user: User):
