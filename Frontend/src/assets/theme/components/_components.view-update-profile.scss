@@ -1,0 +1,35 @@
+form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: auto;
+}
+label {
+  font-weight: bold;
+  margin-top: 10px;
+}
+input[readonly] {
+  background-color: $blue;
+}
+button {
+  margin-top: 15px;
+}
+
+input, mat-select {
+  cursor: text;
+}
+
+input.editable, mat-select.editable {
+  cursor: pointer;
+}
+
+.form-layout--form-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-error {
+  color: red; 
+  font-size: 12px; 
+  margin-top: 5px; 
+}

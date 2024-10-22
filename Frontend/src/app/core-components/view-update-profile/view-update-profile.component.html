@@ -1,0 +1,77 @@
+<div class="pm-card__dialog-box-container">
+    <h1 class="pm-dialog--title"> {{title}} </h1>
+    <form [formGroup]="profileForm" class="profile-form">
+      <div class="form-layout--all-center">
+        <label class="col-4 form-layout--label" style="max-width: none;">Title</label>
+        <div class="col-8 form-layout--form-wrapper">
+        <mat-select class="form-layout--form" formControlName="title">
+          <mat-option *ngFor="let option of titleOptions" [value]="option">{{ option }}</mat-option>
+        </mat-select>
+    </div>
+      </div>
+  
+      <div class="form-layout--all-center">
+        <label class="col-4 form-layout--label" style="max-width: none;">First Name</label>
+        <div class="col-8 form-layout--form-wrapper">
+          <input class="form-layout--form" required [ngClass]="{ 'editable': isEditing }" formControlName="first_name" />
+          <mat-error *ngIf="profileForm.get('first_name')?.hasError('required')">
+            First name is required
+          </mat-error>
+        </div>
+      </div>
+  
+      <div class="form-layout--all-center">
+        <label class="col-4 form-layout--label" style="max-width: none;">Last Name</label>
+        <div class="col-8 form-layout--form-wrapper">
+          <input class="form-layout--form" required [ngClass]="{ 'editable': isEditing }" formControlName="last_name" />
+          <mat-error *ngIf="profileForm.get('last_name')?.hasError('required')">
+            Last name is required
+          </mat-error>
+        </div>
+      </div>
+  
+      <div class="form-layout--all-center">
+        <label class="col-4 form-layout--label" style="max-width: none;">Phone Number</label>
+        <div class="col-8 form-layout--form-wrapper">
+          <input class="form-layout--form" required [ngClass]="{ 'editable': isEditing }" formControlName="phone_number" />
+          <mat-error *ngIf="profileForm.get('phone_number')?.hasError('required')">
+            Phone Number is required
+          </mat-error>
+        </div>
+      </div>
+  
+      <div class="form-layout--all-center">
+        <label class="col-4 form-layout--label" style="max-width: none;">Email</label>
+        <div class="col-8 form-layout--form-wrapper">
+          <input class="form-layout--form" required formControlName="email" />
+        </div>
+      </div>
+  
+      <div class="form-layout--all-center" *ngIf="role == 'EMPLOYER'">
+        <label class="col-4 form-layout--label" style="max-width: none;">Company Name</label>
+        <div class="col-8 form-layout--form-wrapper">
+          <input class="form-layout--form" required [ngClass]="{ 'editable': isEditing }" formControlName="company_name" />
+          <mat-error *ngIf="profileForm.get('company_name')?.hasError('required')">
+            Company Name is required
+          </mat-error>
+        </div>
+      </div>
+  
+      <div class="form-layout--all-center">
+        <label class="col-4 form-layout--label" style="max-width: none;">Role</label>
+        <div class="col-8 form-layout--form-wrapper">
+          <input class="form-layout--form" required formControlName="role" />
+        </div>
+      </div>
+  
+      <div class="form-layout--all-center">
+        <button mat-raised-button color="primary" *ngIf="!isEditing" (click)="enableEditing()">
+          Update
+        </button>
+        <button mat-raised-button color="accent" *ngIf="isEditing" (click)="saveProfile()">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+  

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { StateService } from 'src/app/services/common-service/state-service';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ViewUpdateProfileComponent } from '../view-update-profile/view-update-profile.component';
 
 @Component({
   selector: 'app-header',
@@ -21,7 +23,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private data: StateService
+    private data: StateService,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -51,4 +54,18 @@ export class HeaderComponent implements OnInit {
     // this.employeeId = this.authService.getEmployeeId();
   }
 
+  viewUpdateprofile(){
+    const dialogRef = this.dialog.open(ViewUpdateProfileComponent, {
+      // data: {
+      //   type: "VIEW_UPDATE_PROFILE",
+      //   data: projectData
+      // }
+    });
+
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      // this.loading = true;
+      // this.pageSize = 10;
+      // this.getProjectData(this.searchKey, 1, this.pageSize);
+    });
+  }
 }

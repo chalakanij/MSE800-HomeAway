@@ -11,7 +11,7 @@ import { StateService } from 'src/app/services/common-service/state-service';
 export class DashboardComponent implements OnInit {
 
   isAdmin: boolean = false
-  employerCode!: string; 
+  employerCode!: String; 
   employeeRegisterUrl: string = '';
   isEmployer!: boolean;
 
@@ -24,10 +24,13 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.data.changeTitle("Dashboard");
-    if (this.employerCode) {
+    this.checkRole()
+    this.employerCode = this.auth_service.getCompanyCode();
+    console.log(this.employerCode)
+    if (this.isEmployer && this.employerCode) {
+      console.log("lll")
       this.employeeRegisterUrl = `http://localhost:4200/login?form=signupEmployee&employerCode=${this.employerCode}`;
     }
-    this.checkRole()
   }
 
   copyUrl() {

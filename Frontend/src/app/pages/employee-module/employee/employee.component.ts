@@ -125,6 +125,9 @@ export class EmployeeComponent implements OnInit {
   // }
 
   openDeleteDialog(user: CreateEmployeeData) {
+    const delete_data = {
+      user_id: [user.id] // Wrap the ID in an array as expected by the API
+  };
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
         message: user.email + ' will be deleted permanently.',
@@ -137,7 +140,7 @@ export class EmployeeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.employee_service.deleteEmployee([user.email]).subscribe((res: { error: any; }) => {
+        this.employee_service.deleteEmployee(delete_data).subscribe((res: { error: any; }) => {
           if (!res.error) {
             this.snackBar.open(user.email + ' deleted', '', {
               duration: 2000,
@@ -155,14 +158,19 @@ export class EmployeeComponent implements OnInit {
   openBulkDeleteDialog() {
 
     let deleteUsers = this.selection.selected;
-    let deleteUnits: String[] = [];
+    let deleteEmployees: number[] = [];
+    let deleteEmployeesEmail: string[] = [];
     deleteUsers.forEach(user => {
-      deleteUnits.push(user.email);
+      deleteEmployees.push(user.id);
+      deleteEmployeesEmail.push(user.email)
     });
 
+    const body = {
+      user_id: deleteEmployees
+    }
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
-        message: deleteUnits.join(', ') + ' will be deleted permanently.',
+        message: deleteEmployeesEmail.join(', ') + ' will be deleted permanently.',
         buttonText: {
           ok: 'Delete',
           cancel: 'Cancel'
@@ -172,9 +180,9 @@ export class EmployeeComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.employee_service.deleteEmployee(deleteUnits).subscribe((res) => {
+        this.employee_service.deleteEmployee(body).subscribe((res) => {
           if (!res.error) {
-            this.snackBar.open(deleteUnits.join(", ") + ' deleted', '', {
+            this.snackBar.open(deleteEmployeesEmail.join(", ") + ' deleted', '', {
               duration: 2000,
             });
             this.loading = true;

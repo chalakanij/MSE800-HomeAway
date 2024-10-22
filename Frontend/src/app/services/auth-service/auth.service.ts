@@ -22,6 +22,7 @@ export class AuthService {
     private name!: String;
     private token!: String;
     private roles!: String;
+    private companyCode!: String;
     private authStatusListener = new Subject<boolean>();
 
     constructor(private http: HttpClient) { }
@@ -73,6 +74,7 @@ export class AuthService {
             console.log(decodeToken)
             this.name = decodeToken.first_name + ' ' + decodeToken.last_name;
             this.roles = decodeToken.role;
+            this.companyCode = decodeToken.code;
             this.isAuthenticated = true;
             this.authStatusListener.next(true);
             console.log("111")
@@ -130,6 +132,10 @@ export class AuthService {
         return this.roles;
     }
 
+    getCompanyCode() {
+        return this.companyCode;
+    }
+
     // clear local storage
     private clearAuthLocal() {
         localStorage.removeItem('token');
@@ -181,6 +187,7 @@ export class AuthService {
                 last_name: '',
                 role: '',
                 title: '',
+                code: '',
                 email: '',
                 exp: 0
             }

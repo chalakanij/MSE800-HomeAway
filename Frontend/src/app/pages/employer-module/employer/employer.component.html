@@ -1,6 +1,6 @@
 <div class="page-layout page-layout--module-all-center">
     <div style="width: 90%;">
-        <app-search-bar (searchEvent)="onSearch($event)" (createEvent)="openCreateDialog()"></app-search-bar>
+        <app-search-bar (searchEvent)="onSearch($event)"></app-search-bar>
     </div>
     <div style="width: 90%;">
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
@@ -89,9 +89,9 @@
                     <!-- <button mat-icon-button (click)="onEditDialog(element)" class="pm-btn--expansion-action--edit">
                         <mat-icon>edit</mat-icon>
                     </button> -->
-                    <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
+                    <!-- <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
                         <mat-icon>delete</mat-icon>
-                    </button>
+                    </button> -->
                 </mat-action-row>
             </mat-expansion-panel>
         </mat-accordion>
@@ -99,7 +99,7 @@
         <!-- Paginator/Delete -->
         <mat-toolbar>
             <mat-toolbar-row class="row pm-toolbar">
-                <div class="col-5" style="margin-left: 7px;">
+                <!-- <div class="col-5" style="margin-left: 7px;">
                     <div class="row">
                     <mat-checkbox (change)="$event ? masterToggle() : null" class="col-1"
                         [checked]="selection.hasValue() && isAllSelected()"
@@ -111,7 +111,7 @@
                         Delete
                     </button>
                 </div>
-                </div>
+                </div> -->
                 <div class="col-6">
                 <mat-paginator #paginator class="pm-toolbar--action--paginator" [length]="dataLength" (page)="pageEvent($event)"
                     [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"></mat-paginator>
