@@ -29,10 +29,24 @@ export class EmployeeService {
         return this.http.get(endpointUrl, httpOptions);
     }
 
-    // /delete user
-    deleteEmployee(data: String[]): Observable<any> {
-        const endpointUrl = `${environment.apiUrl}/employees/delete`;
-        return this.http.put(endpointUrl, data, httpOptions);
+    // /delete employee
+    deleteEmployee(data: { user_id: number[] }): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/employees`;
+        const options = {
+            ...httpOptions,
+            body: data // Attach the data to the body property
+        };
+        return this.http.delete(endpointUrl, options);
+    }
+
+    //find user
+    getEmployers(page: number, size: number): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/employers`;
+        httpOptions.params = {
+            page: page,
+            size: size
+        };
+        return this.http.get(endpointUrl, httpOptions);
     }
 
     //edit user
@@ -41,5 +55,15 @@ export class EmployeeService {
     //     const endpointUrl = `${environment.apiUrl}/v1/employees`;
     //     return this.http.put(endpointUrl, data, httpOptions);
     // }
+
+    getProfile(): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/profile`
+        return this.http.get<any>(endpointUrl, httpOptions);
+      }
+    
+      updateProfile(profileData: any): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/profile`
+        return this.http.put<any>(endpointUrl, profileData, httpOptions);
+      }
 
 }

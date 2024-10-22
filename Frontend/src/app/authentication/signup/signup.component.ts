@@ -17,6 +17,7 @@ export class SignupComponent {
   showSigninForm!: boolean;
   @Output() switchToSignin: EventEmitter<void> = new EventEmitter();
   isLoading = false;
+  employerCode: string = ''
   
 
 
@@ -67,6 +68,7 @@ export class SignupComponent {
       )
       .subscribe(
         (response) => {
+          console.log(response)
           if (response.error) {
             this.isLoading = false;
             this.snackBar.open(response.error, '', {
@@ -74,9 +76,10 @@ export class SignupComponent {
             });
             this.signupForm.reset();
           } else {
-            this.auth_service.setToken(response.token).then((res) => {
-              this.router.navigate(['/login']);
-            });
+            this.employerCode = response.employer_code;
+            console.log(this.employerCode)
+            this.router.navigate(['/login']);
+   
           }
         }
       );

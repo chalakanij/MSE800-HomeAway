@@ -1,0 +1,130 @@
+<div class="page-layout page-layout--module-all-center">
+    <div style="width: 90%;">
+        <app-search-bar [item]="projects" [role]="isEmployer" (searchEvent)="onSearch($event)" (createEvent)="openCreateDialog()"></app-search-bar>
+    </div>
+    <div style="width: 90%;">
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+        <mat-accordion style="width: 98%;">
+            <mat-expansion-panel hideToggle disabled class="expansion-header">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="row">
+                    <div class="col-1 expansion-header--column">
+                      <!-- action -->
+                    </div>
+                    <div class="col-3 expansion-header--column">Title</div>
+                    <div class="col-8 expansion-header--column">
+                      <div class="row">
+                        <div class="col-4 expansion-header--column">Description</div>
+                        <div class="col-4 expansion-header--column">Work Hours</div>
+                        <div class="col-4 expansion-header--column">Status</div>
+                      </div>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+              </mat-expansion-panel>
+
+            <!-- Detail Rows -->
+            <mat-expansion-panel #panel *ngFor="let element of selectedResults">
+                <mat-expansion-panel-header>
+                  <div class="row" style="width: 100% !important;">
+                    <div class="col-1 col-md-1">
+                      <mat-panel-title>
+                        <div class="expansion-detail">
+                          <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(element) : null"
+                                        [checked]="selection.isSelected(element)"
+                                        [aria-label]="checkboxLabel(element)">
+                          </mat-checkbox>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                    <div class="col-3 col-md-3">
+                      <mat-panel-title>
+                        <div class="expansion-detail">
+                          <label>{{ element.title }}</label>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                    <div class="col-8 col-md-8">
+                      <mat-panel-title class="row" style="width: 100%;" *ngIf="!panel.expanded">
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.description }}</label>
+                        </div>
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.work_hours }}</label>
+                        </div>
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.status }}</label>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                  </div>
+                </mat-expansion-panel-header>
+
+                <!-- Expansion Row Web-->
+                <div class="no-show">
+                    <div class="row">
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Title: </label>
+                            <label class="expansion-detail--label--value">{{element.title}} </label>
+                        </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Description: </label>
+                            <label class="expansion-detail--label--value">{{element.description}} </label>
+                        </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Work Hours: </label>
+                            <label class="expansion-detail--label--value">{{element.work_hours}} </label>
+                        </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Status: </label>
+                            <label class="expansion-detail--label--value">{{element.status}} </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Row -->
+                <mat-action-row style="padding:0px; padding-right: 15px;">
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickViewEmployeeDialog(element)">
+                      <mat-icon style="font-size: 30px;">groups</mat-icon>
+                  </button>
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickAssignDialog(element)">
+                      <mat-icon style="font-size: 30px;">person_add</mat-icon>
+                  </button>
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onEditDialog(element)">
+                      <mat-icon style="font-size: 30px;">edit</mat-icon>
+                  </button>
+                    <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-action-row>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <!-- Paginator/Delete -->
+        <mat-toolbar>
+            <mat-toolbar-row class="row pm-toolbar">
+                <div class="col-5" style="margin-left: 7px;">
+                    <div class="row">
+                    <mat-checkbox (change)="$event ? masterToggle() : null" class="col-1"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()"
+                        style="margin-right: 30px;">
+                    </mat-checkbox>
+                    <button matRipple *ngIf="selection.hasValue() || isAllSelected()"
+                        (click)="openBulkDeleteDialog()" class="col-6 pm-toolbar--action--delete">
+                        Delete
+                    </button>
+                </div>
+                </div>
+                <div class="col-6">
+                <mat-paginator #paginator class="pm-toolbar--action--paginator" [length]="dataLength" (page)="pageEvent($event)"
+                    [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"></mat-paginator>
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+</div>

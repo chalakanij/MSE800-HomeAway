@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional, List
 
 class AdminCreate(BaseModel):
     title: str
@@ -30,8 +31,7 @@ class User(BaseModel):
     class Config:
         orm_mode = True
 
-
-class EmployeeOutput(BaseModel):
+class AdminOutput(BaseModel):
     id: int
     title: str
     first_name: str
@@ -39,7 +39,25 @@ class EmployeeOutput(BaseModel):
     email: EmailStr
     phone_number: str
     role: str
-    parent_user_id: int
+    active: int
 
     class Config:
         from_attribute = True
+
+
+class EmployeeOutput(AdminOutput):
+    parent_user_id: Optional[int]
+    company_name: str
+
+class EmployerOutput(EmployeeOutput):
+    pass
+
+class ProfileInput(BaseModel):
+    title: str
+    first_name: str
+    last_name: str
+    phone_number: str
+    company_name: Optional[str]
+
+class UserDeactivateRequest(BaseModel):
+    user_id : List[int]

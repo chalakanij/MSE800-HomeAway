@@ -18,10 +18,11 @@ const httpOptions = {
 export class AuthService {
 
     private isAuthenticated = false;
-    private employeeId!: String;
+    private email!: String;
     private name!: String;
     private token!: String;
     private roles!: String;
+    private companyCode!: String;
     private authStatusListener = new Subject<boolean>();
 
     constructor(private http: HttpClient) { }
@@ -73,6 +74,7 @@ export class AuthService {
             console.log(decodeToken)
             this.name = decodeToken.first_name + ' ' + decodeToken.last_name;
             this.roles = decodeToken.role;
+            this.companyCode = decodeToken.code;
             this.isAuthenticated = true;
             this.authStatusListener.next(true);
             console.log("111")
@@ -115,9 +117,9 @@ export class AuthService {
         return this.token;
     }
 
-    // get the epf number
-    getEmployeeId() {
-        return this.employeeId;
+    // get the employee number
+    getEmail() {
+        return this.email;
     }
     
     // get the name
@@ -128,6 +130,10 @@ export class AuthService {
     // get the login token
     getRoles() {
         return this.roles;
+    }
+
+    getCompanyCode() {
+        return this.companyCode;
     }
 
     // clear local storage
@@ -142,6 +148,7 @@ export class AuthService {
         let decodedToken: JwtTokenInterface = this.decodeToken(this.token);
         this.name =  decodedToken.first_name + ' ' + decodedToken.last_name;
         this.roles = decodedToken.role
+        this.email = decodedToken.email
         if (decodedToken.exp * 1000 > Date.now()) {
             this.isAuthenticated = true;
         } else {
@@ -180,6 +187,7 @@ export class AuthService {
                 last_name: '',
                 role: '',
                 title: '',
+                code: '',
                 email: '',
                 exp: 0
             }

@@ -19,3 +19,11 @@ JWT token updated with below object
 
 Employer code field is used for create employee
 
+Project endpoint created
+Get Projects
+Assign project to employees
+Get project employees
+
+
+Check in/out endpoints added
+note: checkinout table need to be drop before start

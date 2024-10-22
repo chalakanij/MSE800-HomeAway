@@ -1,6 +1,6 @@
 <div class="page-layout page-layout--module-all-center">
     <div style="width: 90%;">
-        <app-search-bar (searchEvent)="onSearch($event)" (createEvent)="openCreateDialog()"></app-search-bar>
+        <app-search-bar (searchEvent)="onSearch($event)"></app-search-bar>
     </div>
     <div style="width: 90%;">
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
@@ -82,70 +82,16 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-3 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Company: </label>
-                            <label class="expansion-detail--label--value">Kaleris </label>
-                        </div>
-                    </div>
                 </div>
-
-                <!-- Expansion Row Mobile-->
-                <!-- <div class="expansion-mobile">
-                    <div class="row">
-                        <div class="col-6 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">EPF Number: </label>
-                            <label class="expansion-detail--label--value">{{element.epf_number}} </label>
-                        </div>
-                        <div class="col-6 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Mobile Number: </label>
-                            <label class="expansion-detail--label--value">{{element.mobile_number}} </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Email: </label>
-                            <label class="expansion-detail--label--value">{{element.email}} </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Designation: </label>
-                            <label class="expansion-detail--label--value">{{element.designation.name}} </label>
-                        </div>
-                        <div class="col-6 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">NIC: </label>
-                            <label class="expansion-detail--label--value">{{element.nic}} </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Unit: </label>
-                            <label class="expansion-detail--label--value">{{element.unit ? element.unit.name : ""}}
-                            </label>
-                        </div>
-                        <div class="col-6 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Sub Unit: </label>
-                            <label class="expansion-detail--label--value">{{element.sub_unit ? element.sub_unit.name : ""}}
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 expansion-detail" style="text-align: left;">
-                            <label class="expansion-detail--label">Role: </label>
-                            <label class="expansion-detail--label--value">{{element.role[0].name}} </label>
-                        </div>
-                    </div>
-                </div> -->
 
                 <!-- Action Row -->
                 <mat-action-row style="padding:0px; padding-right: 15px;">
                     <!-- <button mat-icon-button (click)="onEditDialog(element)" class="pm-btn--expansion-action--edit">
                         <mat-icon>edit</mat-icon>
                     </button> -->
-                    <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
+                    <!-- <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
                         <mat-icon>delete</mat-icon>
-                    </button>
+                    </button> -->
                 </mat-action-row>
             </mat-expansion-panel>
         </mat-accordion>
@@ -153,7 +99,7 @@
         <!-- Paginator/Delete -->
         <mat-toolbar>
             <mat-toolbar-row class="row pm-toolbar">
-                <div class="col-5" style="margin-left: 7px;">
+                <!-- <div class="col-5" style="margin-left: 7px;">
                     <div class="row">
                     <mat-checkbox (change)="$event ? masterToggle() : null" class="col-1"
                         [checked]="selection.hasValue() && isAllSelected()"
@@ -165,7 +111,7 @@
                         Delete
                     </button>
                 </div>
-                </div>
+                </div> -->
                 <div class="col-6">
                 <mat-paginator #paginator class="pm-toolbar--action--paginator" [length]="dataLength" (page)="pageEvent($event)"
                     [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"></mat-paginator>

@@ -1,0 +1,57 @@
+<div class="pm-card__dialog-box-container">
+    <h1 class="pm-dialog--title">{{ title }}</h1>
+    <mat-dialog-content class="mat-typography">
+        <form [formGroup]="projectDetailsGroup" style="margin-bottom: 10px;">
+            <!-- <div class="form-layout--all-center">
+                <label class="col-4 form-layout--label" style="max-width: none;">Title: </label>
+                <input matInput readonly formControlName="title" />
+            </div> -->
+
+            <div class="form-layout--all-center">
+                <label class="col-4 form-layout--label">Employee List: </label>
+                <input class="col-8 form-layout--form" placeholder="Search by name or email" [formControl]="searchControl" />
+            </div>
+            <!-- <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar> -->
+            <div class="form-layout--all-center" style="padding-top: 10px;">
+                <table mat-table [dataSource]="filteredResults" class="col-12 mat-elevation-z8">
+                    <!-- Checkbox Column -->
+                    <!-- <ng-container matColumnDef="select">
+                        <th mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                          [checked]="isAllSelected()" [indeterminate]="isIndeterminate()"></mat-checkbox>
+                        </th>
+                        <td mat-cell *matCellDef="let row">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                          (change)="$event ? toggleSelection(row) : null"
+                                          [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                        </td>
+                    </ng-container> -->
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Name </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.title }} {{ element.first_name }} {{ element.last_name }} </td>
+                    </ng-container>
+
+                    <!-- Email Column -->
+                    <ng-container matColumnDef="email">
+                        <th mat-header-cell *matHeaderCellDef> Email </th>
+                        <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </div>
+        </form>
+        <!-- <div class="row">
+            <div class="col-4"></div>
+            <div class="col-8" style="display: flex; justify-content: flex-end;">
+                <span class="pm-error" *ngIf="isInvalidForm" style="bottom: 0px;">Please fill all the Details</span>
+                <button mat-button style="background-color: #4286D2; color: white; width: 80px;"
+                        (click)="onSubmit()">Submit</button>
+            </div>
+        </div> -->
+    </mat-dialog-content>
+</div>
