@@ -46,7 +46,7 @@ class AdminOutput(BaseModel):
 
 
 class EmployeeOutput(AdminOutput):
-    parent_user_id: Optional[int]
+    parent_user_id: Optional[int] = None
     company_name: str
 
 class EmployerOutput(EmployeeOutput):
@@ -57,7 +57,7 @@ class ProfileInput(BaseModel):
     first_name: str
     last_name: str
     phone_number: str
-    company_name: Optional[str]
+    company_name: Optional[str] =None
 
 class UserDeactivateRequest(BaseModel):
     user_id : List[int]
