@@ -52,12 +52,12 @@ class CheckInOutService:
         self.db.refresh(current_chekinout)
         return current_chekinout
 
-    def get_checkinout(self, current_user, params, filters):
+    def get_checkinout(self, current_user, params, user_id:int = None, project_id:int = None):
         checkinouts = select(CheckInOut).filter(CheckInOut.user_id == current_user.id)
-        if filters.project_id is not None:
-            checkinouts = checkinouts.filter(CheckInOut.project_id == filters.project_id)
-        if filters.user_id is not None:
-            checkinouts = checkinouts.filter(CheckInOut.user_id == filters.user_id)
+        if project_id is not None:
+            checkinouts = checkinouts.filter(CheckInOut.project_id == project_id)
+        if user_id is not None:
+            checkinouts = checkinouts.filter(CheckInOut.user_id == user_id)
         return paginate(self.db, checkinouts, params)
 
     def update_checkin(self, user, checkin_request: CheckinUpdateRequest):
