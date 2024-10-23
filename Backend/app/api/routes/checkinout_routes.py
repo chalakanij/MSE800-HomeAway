@@ -31,11 +31,11 @@ def create_checkout_record(checkout: CheckOutRequest, db: Session = Depends(get_
     return ch_service.create_checkout(current_user, checkout)
 
 @router.get("/checkinout", response_model=Page[CheckInOut], dependencies=[Depends(role_required([UserRole.EMPLOYER]))])
-def get_checkinout_records( filters: CheckInOutGetRequest, db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
-               page:int | None = 1, size:int |None = 10):
+def get_checkinout_records( db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
+               page:int | None = 1, size:int |None = 10, user_id:int = None, project_id:int = None):
     param = Params(page=page, size=size)
     ch_service = CheckInOutService(db)
-    return ch_service.get_checkinout(current_user, param, filters)
+    return ch_service.get_checkinout(current_user, param, user_id, project_id)
 
 @router.put("/checkinout", response_model=Optional[CheckInOut], dependencies=[Depends(role_required([UserRole.EMPLOYER, UserRole.EMPLOYEE]))])
 def update_checkinout_record(checkin_update: CheckinUpdateRequest, db: Session = Depends(get_db),
