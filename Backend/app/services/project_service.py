@@ -50,6 +50,17 @@ class ProjectService:
 
         return [ProjectEmployeeOutput.from_orm(user_project) for user_project in result]
 
+    def get_assigned_users(self, user_id: int) -> List[ProjectEmployeeOutput]:
+        users_data = (
+            select(UserProject)
+            .join(Project, UserProject.project_id == Project.id)
+            .filter(UserProject.employee_id == user_id)
+        )
+
+        result = self.db.execute(users_data).scalars().all()
+
+        return [ProjectEmployeeOutput.from_orm(user_project) for user_project in result]
+
 
     def update_status(self, update_request, user):
         project = self.db.query(Project).filter(Project.id == update_request.project_id).first()
