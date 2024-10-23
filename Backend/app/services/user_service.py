@@ -93,6 +93,7 @@ class UserService:
             select(User, ParentUser.company_name)
             .join(ParentUser, User.parent_user_id == ParentUser.id)
             .filter(User.parent_user_id == current_user.id)
+            .filter(User.active == 1)
             .order_by(User.id)
         )
 
