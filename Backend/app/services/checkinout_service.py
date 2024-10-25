@@ -17,8 +17,11 @@ class CheckInOutService:
 
     def create_checkin(self , user, checkin_request):
         user_input = checkin_request.dict()
-        user_input['user_id'] = user.id
         user_input['status'] = CheckInOutStatus.CHECKIN
+        if checkin_request.out_time is not None:
+            self._validate_checkout(checkin_request.in_time, checkin_request.out_time)
+            user_input["status"] = CheckInOutStatus.CHECKOUT
+        user_input['user_id'] = user.id
         db_checkinout = CheckInOut(**user_input)
         self.db.add(db_checkinout)
         self.db.commit()
