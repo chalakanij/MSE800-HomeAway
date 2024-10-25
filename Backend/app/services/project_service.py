@@ -56,7 +56,6 @@ class ProjectService:
         )
 
         result = self.db.execute(users_data).scalars().all()
-
         return [ProjectEmployeeOutput.from_orm(user_project) for user_project in result]
 
 
