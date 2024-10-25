@@ -29,12 +29,13 @@ def create_project(project: ProjectCreate, db: Session = Depends(get_db), curren
     db_project = project_service.create_project(project, current_user)
     return db_project
 
-@router.get("/projects", response_model=Page[ProjectOutput], dependencies=[Depends(role_required([UserRole.EMPLOYER]))])
+@router.get("/projects", response_model=Page[ProjectOutput],
+            dependencies=[Depends(role_required([UserRole.EMPLOYEE, UserRole.EMPLOYER]))])
 def get_projects(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
     project_service = ProjectService(db)
-    return project_service.get_employer_projects(current_user, param)
+    return project_service.get_user_projects(current_user, param)
 
 @router.post("/projects/users/{project_id}", dependencies=[Depends(role_required([UserRole.EMPLOYER]))])
 def assign_employees_to_project(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
