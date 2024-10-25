@@ -14,12 +14,9 @@ class CheckInOut(BaseModel):
 
 class CheckInRequest(BaseModel):
     in_time: datetime
+    out_time: Optional[datetime] = None
     description: Optional[str] = None
     project_id: int
-
-class CheckOutRequest(BaseModel):
-    out_time: datetime
-    description: Optional[str] = None
 
 class CheckInOutGetRequest(BaseModel):
     id: Optional[int] = None
