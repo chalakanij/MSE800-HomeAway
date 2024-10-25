@@ -45,12 +45,10 @@ def assign_employees_to_project(db: Session = Depends(get_db), current_user: Use
     db_project = project_service.assign_employees(project_id, employees, current_user)
     return db_project
 
-@router.get("/projects/users/{project_id}", response_model=List[ProjectEmployeeOutput],
-            dependencies=[Depends(role_required([UserRole.EMPLOYER]))])
-def get_employees_in_project(db: Session = Depends(get_db), project_id: int = Path(),
-                             current_user: User = Depends(get_current_user)):
+@router.get("/projects/users/{project_id}", response_model=List[ProjectEmployeeOutput])
+def get_employees_in_project(db: Session = Depends(get_db), project_id: int = Path(), current_user: User = Depends(get_current_user)):
     project_service = ProjectService(db)
-    return project_service.get_assigned_projects(project_id)
+    return project_service.get_assigned_projects(project_id=project_id)
 
 @router.post("/projects/update_status", dependencies=[Depends(role_required([UserRole.EMPLOYER]))])
 def assign_employees_to_project(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
