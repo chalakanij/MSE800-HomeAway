@@ -6,7 +6,6 @@ from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI()
 origins = [ "http://localhost:4200" ], # Angular app
 
-app.add_middleware( CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"],)
 
 
 @app.on_event("startup")
@@ -17,6 +16,8 @@ app.include_router(routes.user_routes.router)
 app.include_router(routes.project_routes.router)
 app.include_router(routes.checkinout_routes.router)
 app.include_router(routes.dashboard_routes.router)
+
+app.add_middleware( CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"],)
 
 # Start the app using uvicorn
 # uvicorn app.main:app --reload
