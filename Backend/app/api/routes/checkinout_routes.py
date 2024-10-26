@@ -25,7 +25,8 @@ def create_checkin_record(checkin: CheckInRequest, db: Session = Depends(get_db)
     ch_service = CheckInOutService(db)
     return ch_service.create_checkin(current_user, checkin)
 
-@router.get("/checkinout", response_model=Page[CheckInOut], dependencies=[Depends(role_required([UserRole.EMPLOYER]))])
+@router.get("/checkinout", response_model=Page[CheckInOut], dependencies=[Depends(role_required([UserRole.EMPLOYEE, UserRole.EMPLOYER]))],
+            description="Employee| Employer")
 def get_checkinout_records( db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10, user_id:int = None, project_id:int = None):
     param = Params(page=page, size=size)
