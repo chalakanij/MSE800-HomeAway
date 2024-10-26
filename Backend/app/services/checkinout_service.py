@@ -2,13 +2,14 @@ from datetime import datetime, timezone
 import re
 
 from sqlalchemy.orm import Session
-from sqlalchemy import select, desc
-from app.db.models import User, Project, ProjectStatus, UserProject, CheckInOut, CheckInOutStatus
+from sqlalchemy import select, desc, or_
+from app.db.models import User, Project, ProjectStatus, UserProject, CheckInOut, CheckInOutStatus, UserRole
 from app.schemas.checkinout import CheckinUpdateRequest
 from fastapi import HTTPException
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
+
 
 
 class CheckInOutService:
@@ -56,7 +57,11 @@ class CheckInOutService:
         return current_chekinout
 
     def get_checkinout(self, current_user, params, user_id:int = None, project_id:int = None):
-        checkinouts = select(CheckInOut).filter(CheckInOut.user_id == current_user.id)
+        if current_user.role == UserRole.EMPLOYEE:
+            checkinouts = select(CheckInOut).filter(CheckInOut.user_id == current_user.id)
+        elif current_user.role == UserRole.EMPLOYER:
+            checkinouts = (select(CheckInOut).join(User).
+                           filter(or_(User.parent_user_id == current_user.id, CheckInOut.user_id == current_user.id)))
         if project_id is not None:
             checkinouts = checkinouts.filter(CheckInOut.project_id == project_id)
         if user_id is not None:
