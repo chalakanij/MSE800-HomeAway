@@ -11,6 +11,7 @@ import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { ProjectService } from 'src/app/services/project-service/project.service';
 import { TimeLogService } from 'src/app/services/time-log-service/time-log.service';
 import * as moment from 'moment';
+import 'moment-timezone';
 
 @Component({
   selector: 'app-add-time-logs',
@@ -69,26 +70,28 @@ export class AddTimeLogsComponent implements OnInit {
     } else {
       const inDate = this.timeLogDetailsGroup.value.in_date;
       const inTime = this.timeLogDetailsGroup.value.in_time;
-      let outDate  = moment(this.timeLogDetailsGroup.value.out_date).format('YYYY-MM-DD');
-      if (outDate == 'Invalid date') {
-        outDate = '';
-      }
+      const outDate = this.timeLogDetailsGroup.value.out_date;
+      const outTime = this.timeLogDetailsGroup.value.out_time;
 
-      let outTime  = moment(this.timeLogDetailsGroup.value.out_time).format('HH:mm');
-      if (outTime == 'Invalid Time') {
-        outTime = '';
-      }
-  
-      const inTimeISO = inDate && inTime
-        ? this.parseDate(inDate, inTime)
-        : null;
-  
+      const inTimeISO = inDate && inTime ? this.parseDate(inDate, inTime) : null;
+      const outTimeISO = outDate && outTime ? this.parseDate(outDate, outTime) : null;
+      console.log(outTimeISO)
+      console.log(inTimeISO)
+
       let request: any = {
         project_id: this.timeLogDetailsGroup.value.project.id,
         description: this.timeLogDetailsGroup.value.description,
-        in_time: inTimeISO
+        in_time: inTimeISO,
       };
 
+      if (outTimeISO) {
+        request.out_time = outTimeISO;
+      }
+      console.log(this.timeLogDetailsGroup.value.out_time)
+      console.log(this.timeLogDetailsGroup.value.out_date)
+      console.log(this.timeLogDetailsGroup.value.in_time)
+      console.log(this.timeLogDetailsGroup.value.in_date)
+    
       if (this.data.type === 'CREATE_TIMELOG') {
         this.time_log_service.createTimeLogCheckin(request).subscribe(
           (response) => {
@@ -146,12 +149,20 @@ export class AddTimeLogsComponent implements OnInit {
     }
   }
 
-  parseDate(date: any, time: any) {
-    const inDate = new Date(date);
-    const [hours, minutes] = time.split(':'); 
-    inDate.setHours(parseInt(hours, 10), parseInt(minutes, 10));
-    return inDate.toISOString();
-  }
+  parseDate(date: Date, time: string): string | null {
+    // Format the date part as YYYY-MM-DD
+    const datePart = moment(date).format('YYYY-MM-DD');
 
+    // Combine date and time
+    const combinedDateTime = moment(`${datePart} ${time}`, 'YYYY-MM-DD HH:mm');
+
+    // Check if the parsing is valid
+    if (!combinedDateTime.isValid()) {
+        return null; // Return null if invalid
+    }
+
+    // Return the formatted date without converting to UTC
+    return combinedDateTime.format('YYYY-MM-DDTHH:mm:ss.SSS'); // This will keep it in local time
+  }
 }
 

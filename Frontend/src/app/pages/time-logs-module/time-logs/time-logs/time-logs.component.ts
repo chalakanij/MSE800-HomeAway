@@ -15,6 +15,8 @@ import { AddTimeLogsComponent } from '../../add-time-logs/add-time-logs/add-time
 import { CreateProjectData } from 'src/app/interface/project.interface';
 import { ProjectService } from 'src/app/services/project-service/project.service';
 import * as moment from 'moment';
+import { CreateEmployeeData } from 'src/app/interface/employer.interface';
+import { EmployeeService } from 'src/app/services/employee-service/employee.service';
 
 @Component({
   selector: 'app-time-logs',
@@ -33,12 +35,14 @@ export class TimeLogsComponent implements OnInit {
   searchForm!: FormGroup;
   selectedResults: CreateTimeLogData[] = [];
   selectedProjects: CreateProjectData[] = [];
+  selectedEmployees: CreateEmployeeData[] = [];
   searchKey: String = "";
   page!: Page<any>;
   loading: boolean = false;
   timeLogs: String = 'no';
   isEmployer: String = 'employee';
-  projectId!: number;
+  projectId = undefined;
+  employeeId = undefined;
   selectedResultsWithTitles!: any;
 
   selection = new SelectionModel<CreateTimeLogData>(true, []);
@@ -49,7 +53,8 @@ export class TimeLogsComponent implements OnInit {
     private snackBar: MatSnackBar,
     private data: StateService,
     private authService: AuthService,
-    private project_service: ProjectService
+    private project_service: ProjectService,
+    private employee_service: EmployeeService
   ) { }
 
   ngOnInit(): void {
@@ -61,10 +66,13 @@ export class TimeLogsComponent implements OnInit {
     });
     this.loading = true;
     this.pageSize = 10;
-    console.log("1")
-    this.getProjectData(1, 100)
-    this.getTimeLogData(1, this.pageSize);
-    console.log("2")
+    if (this.isEmployer == 'employer') {
+      this.getProjectData(1, 100);
+      this.getUserData(1, 100);
+      this.getTimeLogData(1, this.pageSize, undefined, undefined);
+    } else {
+      this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
+    }
   }
 
   setTimeLogData(content: any) {
@@ -73,7 +81,11 @@ export class TimeLogsComponent implements OnInit {
       this.snackBar.open('No Time Logs found', '', {
         duration: 2000,
       });
-      this.getTimeLogData(1, this.pageSize);
+      if (this.isEmployer == 'employer') {
+        this.getTimeLogData(1, this.pageSize, undefined, undefined);
+      } else {
+        this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
+      }
     } else {
       this.selectedResultsWithTitles = this.selectedResults.map(timeLog => {
         const project = this.selectedProjects.find(project => project.id === timeLog.project_id);
@@ -87,8 +99,8 @@ export class TimeLogsComponent implements OnInit {
     }
   }
 
-  getTimeLogData(pageIndex: number, pageSize: number) {
-    this.time_log_service.getTimeLogs(pageIndex, pageSize, this.authService.getUserId(), this.projectId).pipe(
+  getTimeLogData(pageIndex: number, pageSize: number, user_id: any, project_id:any) {
+    this.time_log_service.getTimeLogs(pageIndex, pageSize, user_id, project_id).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
           duration: 2000,
@@ -99,7 +111,7 @@ export class TimeLogsComponent implements OnInit {
     )
       .subscribe((res: Page<any>) => {
         this.loading = false;
-
+        console.log(res)
         if (res && res.items && res.items.length > 0) {
           this.page = res;
           this.setTimeLogData(this.page.items);
@@ -108,6 +120,7 @@ export class TimeLogsComponent implements OnInit {
           this.snackBar.open('No Time Logs found', '', {
             duration: 2000,
           });
+          this.selectedResultsWithTitles = [];
         }
       });
   }
@@ -123,22 +136,24 @@ export class TimeLogsComponent implements OnInit {
         this.loading = true;
         this.pageSize = 10;
         this.selectedResultsWithTitles = [];
-        this.getTimeLogData(1, this.pageSize);
+        if (this.isEmployer == 'employer') {
+          this.getTimeLogData(1, this.pageSize, undefined, undefined);
+        } else {
+          this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
+        }
       }
     });
-  }
-
-  onSearch(searchKey: String) {
-    this.searchKey = searchKey;
-    this.loading = true;
-    this.getTimeLogData(1, this.pageSize);
   }
 
   pageEvent(pageEvent: PageEvent) {
     if (pageEvent) {
       this.loading = true
     }
-    this.getTimeLogData(pageEvent.pageIndex + 1, pageEvent.pageSize);
+    if (this.isEmployer == 'employer') {
+      this.getTimeLogData(pageEvent.pageIndex + 1, pageEvent.pageSize, undefined, undefined);
+    } else {
+      this.getTimeLogData(pageEvent.pageIndex + 1, pageEvent.pageSize, this.authService.getUserId(), undefined);
+    }
     return pageEvent;
   }
 
@@ -180,5 +195,50 @@ export class TimeLogsComponent implements OnInit {
           });
         }
       });
+  }
+
+  setUserData(content: any) {
+    this.selectedEmployees = content;
+    if (this.selectedEmployees?.length == 0) {
+      this.snackBar.open('No User found', '', {
+        duration: 2000,
+      });
+    }
+  }
+
+  getUserData(pageIndex: number, pageSize: number) {
+    this.employee_service.getEmployees(pageIndex, pageSize).pipe(
+      catchError((error) => {
+        this.snackBar.open(error.error.detail || 'An error occurred', '', {
+          duration: 2000,
+        });
+        this.loading = false;
+        return throwError(error);
+      })
+    )
+    .subscribe((res: Page<any>) => { 
+      console.log(res);
+      this.loading = false; 
+    
+      if (res && res.items && res.items.length > 0) {
+        this.setUserData(res.items);
+      } else {
+        this.snackBar.open('No Users found', '', {
+          duration: 2000,
+        });
+      }
+    });
+  }
+
+  onSearchProjects(event: any) {
+    this.loading = true;
+    this.projectId = event
+    this.getTimeLogData(1, this.pageSize, this.employeeId , event);
+  }
+
+  onSearchEmployees(event: any) {
+    this.loading = true;
+    this.employeeId = event
+    this.getTimeLogData(1, this.pageSize, event, this.projectId );
   }
 }

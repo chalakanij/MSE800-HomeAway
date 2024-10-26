@@ -1,21 +1,23 @@
 <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 20px;">
 
     <div style="display: flex; align-items: center;">
-        <mat-form-field appearance="outline" *ngIf="item == 'timeLogs'">
+        <mat-form-field appearance="outline" *ngIf="item == 'timeLogs' && role == 'employer'">
             <mat-label>Select the User</mat-label>
             <mat-select style="color: #4286D2;"
-                        (selectionChange)="onSelect($event)">
-                <mat-option *ngFor="let option of projectList" [value]="option.title">{{ option.title }}</mat-option>
+                        (selectionChange)="onSelectEmployee($event)">
+                        <mat-option [value]="undefined">All</mat-option>
+                <mat-option *ngFor="let option of employeeList" [value]="option.id">{{ option.first_name + " " + option.last_name }}</mat-option>
             </mat-select>
         </mat-form-field>
     </div>
 
     <div style="display: flex; align-items: center;margin-left: 10px">
-        <mat-form-field appearance="outline" *ngIf="item == 'timeLogs'">
+        <mat-form-field appearance="outline" *ngIf="item == 'timeLogs' && role == 'employer'">
             <mat-label>Select the Project</mat-label>
             <mat-select style="color: #4286D2;"
-                        (selectionChange)="onSelect($event)">
-                <mat-option *ngFor="let option of projectList" [value]="option.title">{{ option.title }}</mat-option>
+                        (selectionChange)="onSelectProject($event)">
+                        <mat-option [value]="undefined">All</mat-option>
+                <mat-option *ngFor="let option of projectList" [value]="option.id">{{ option.title }}</mat-option>
             </mat-select>
         </mat-form-field>
     </div>

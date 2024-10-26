@@ -2,8 +2,10 @@ import { Output, EventEmitter, Component, OnInit, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { CreateEmployeeData } from 'src/app/interface/employer.interface';
 import { Page } from 'src/app/interface/paginator/page';
 import { CreateProjectData } from 'src/app/interface/project.interface';
+import { EmployeeService } from 'src/app/services/employee-service/employee.service';
 import { ProjectService } from 'src/app/services/project-service/project.service';
 
 @Component({
@@ -15,19 +17,24 @@ export class SearchBarComponent implements OnInit {
 
   @Output() searchEvent = new EventEmitter<String>();
   @Output() createEvent = new EventEmitter<any>();
-  @Output() notificationEvent = new EventEmitter<String>();
+  @Output() employeeEvent = new EventEmitter<String>();
+  @Output() projectEvent = new EventEmitter<String>();
   @Input() item : String = '';
   @Input() role : String = '';
   @Input() projectList : CreateProjectData[] = [];
   selectedResults!: CreateProjectData[];
+  @Input() employeeList : CreateEmployeeData[] = [];
+  selectedEmployees!: CreateEmployeeData[];
   page!: Page<any>;
 
-  constructor(private project_service: ProjectService, private snackBar: MatSnackBar,) { }
+  constructor(private project_service: ProjectService, private snackBar: MatSnackBar,
+    private employee_service: EmployeeService
+  ) { }
 
   ngOnInit(): void {
-    console.log(this.item)
+    // this.project_service.getProjects(1,100)
+    // this.employee_service.getEmployees(1,100)
     console.log(this.role)
-    this.project_service.getProjects(1,100)
   }
 
   create() {
@@ -38,15 +45,11 @@ export class SearchBarComponent implements OnInit {
     this.searchEvent.emit(value);
   }
 
-  showNotification(value: string) {
-    this.notificationEvent.emit(value);
+  onSelectEmployee(event: any) {
+    this.employeeEvent.emit(event.value);
   }
 
-  showRequest(value: string) {
-    this.notificationEvent.emit(value);
-  }
-
-  onSelect(event: any) {
-    console.log('Selected option:', event.value);
+  onSelectProject(event: any) {
+    this.projectEvent.emit(event.value);
   }
 }

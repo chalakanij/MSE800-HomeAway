@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewUpdateProfileComponent } from '../view-update-profile/view-update-profile.component';
+import { ViewEmployeeLinkComponent } from '../Employee-Link/view-employee-link/view-employee-link.component';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,7 @@ export class HeaderComponent implements OnInit {
   subscription!: Subscription;
   username!: String;
   employeeId!: String;
+  isEmployer: boolean = false;
 
   @Output() toggled = new EventEmitter<boolean>();
 
@@ -30,6 +32,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.subscription = this.data.title.subscribe(title => this.title = title);
     this.getUsernameAndEmployeeId();
+    this.getRole();
   }
 
   ngOnDestroy(): void {
@@ -56,16 +59,25 @@ export class HeaderComponent implements OnInit {
 
   viewUpdateprofile(){
     const dialogRef = this.dialog.open(ViewUpdateProfileComponent, {
-      // data: {
-      //   type: "VIEW_UPDATE_PROFILE",
-      //   data: projectData
-      // }
     });
-
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      // this.loading = true;
-      // this.pageSize = 10;
-      // this.getProjectData(this.searchKey, 1, this.pageSize);
+    });
+  }
+
+  getRole() {
+    const role = this.authService.getRoles();
+    console.log(role)
+    if (role == 'EMPLOYER') {
+      this.isEmployer = true;
+    } else {
+      this.isEmployer = false;
+    }
+  }
+
+  joinEmployee() {
+    const dialogRef = this.dialog.open(ViewEmployeeLinkComponent, {
+    });
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
     });
   }
 }

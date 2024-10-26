@@ -30,7 +30,7 @@ export class TimeLogService {
         return this.http.post(endpointUrl, data);
     }
 
-    getTimeLogs(page: number, size: number, user_id: Number, project_id: number): Observable<any> {
+    getTimeLogs(page: number, size: number, user_id: Number, project_id: Number): Observable<any> {
         const endpointUrl = `${environment.apiUrl}/checkinout`;
         if (user_id !== undefined && project_id !== undefined) {
         httpOptions.params = {
