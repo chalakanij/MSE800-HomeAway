@@ -1,0 +1,122 @@
+<div class="page-layout page-layout--module-all-center">
+    <div style="width: 90%;">
+        <app-search-bar [item]="timeLogs" [role]="isEmployer" [projectList]="selectedProjects" (createEvent)="openCreateDialog()"></app-search-bar>
+    </div>
+    <div style="width: 90%;">
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+        <mat-accordion style="width: 98%;">
+            <mat-expansion-panel hideToggle disabled class="expansion-header">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="row">
+                    <div class="col-1 expansion-header--column">
+                      <!-- action -->
+                    </div>
+                    <div class="col-3 expansion-header--column">Project</div>
+                    <div class="col-8 expansion-header--column">
+                      <div class="row">
+                        <div class="col-4 expansion-header--column">Status</div>
+                        <div class="col-4 expansion-header--column">Start Time</div>
+                        <div class="col-4 expansion-header--column">End Time</div>
+                      </div>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+              </mat-expansion-panel>
+
+            <!-- Detail Rows -->
+            <mat-expansion-panel #panel *ngFor="let element of selectedResultsWithTitles">
+                <mat-expansion-panel-header>
+                  <div class="row" style="width: 100% !important;">
+                    <div class="col-1 col-md-1">
+                      <mat-panel-title>
+                        <div class="expansion-detail">
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                    <div class="col-3 col-md-3">
+                      <mat-panel-title>
+                        <div class="expansion-detail">
+                          <label>{{ element.projectTitle }}</label>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                    <div class="col-8 col-md-8">
+                      <mat-panel-title class="row" style="width: 100%;" *ngIf="!panel.expanded">
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.status }}</label>
+                        </div>
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.formattedInTime }}</label>
+                        </div>
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.formattedOutTime }}</label>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                  </div>
+                </mat-expansion-panel-header>
+
+                <!-- Expansion Row Web-->
+                <div class="no-show">
+                    <div class="row">
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Project: </label>
+                            <label class="expansion-detail--label--value">{{element.projectTitle}} </label>
+                        </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                          <label class="expansion-detail--label">Status: </label>
+                          <label class="expansion-detail--label--value">{{element.status}} </label>
+                      </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Start Time: </label>
+                            <label class="expansion-detail--label--value">{{element.formattedInTime}} </label>
+                        </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">End Time: </label>
+                            <label class="expansion-detail--label--value">{{element.formattedOutTime}} </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-3 expansion-detail" style="text-align: left;">
+                        <label class="expansion-detail--label">Description: </label>
+                        <label class="expansion-detail--label--value">{{element.description}} </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Action Row -->
+                <mat-action-row style="padding:0px; padding-right: 15px;">
+                  <!-- <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickViewEmployeeDialog(element)">
+                      <mat-icon style="font-size: 30px;">groups</mat-icon>
+                  </button>
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickAssignDialog(element)">
+                      <mat-icon style="font-size: 30px;">person_add</mat-icon>
+                  </button>
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onEditDialog(element)">
+                      <mat-icon style="font-size: 30px;">edit</mat-icon>
+                  </button> -->
+                    <!-- <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
+                        <mat-icon>delete</mat-icon>
+                    </button> -->
+                </mat-action-row>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <!-- Paginator -->
+        <mat-toolbar>
+            <mat-toolbar-row class="row pm-toolbar">
+                <div class="col-5" style="margin-left: 7px;">
+                    <div class="row">
+                </div>
+                </div>
+                <div class="col-6">
+                <mat-paginator #paginator class="pm-toolbar--action--paginator" [length]="dataLength" (page)="pageEvent($event)"
+                    [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"></mat-paginator>
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+</div>

@@ -1,4 +1,10 @@
 import { Output, EventEmitter, Component, OnInit, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Page } from 'src/app/interface/paginator/page';
+import { CreateProjectData } from 'src/app/interface/project.interface';
+import { ProjectService } from 'src/app/services/project-service/project.service';
 
 @Component({
   selector: 'app-search-bar',
@@ -12,12 +18,16 @@ export class SearchBarComponent implements OnInit {
   @Output() notificationEvent = new EventEmitter<String>();
   @Input() item : String = '';
   @Input() role : String = '';
+  @Input() projectList : CreateProjectData[] = [];
+  selectedResults!: CreateProjectData[];
+  page!: Page<any>;
 
-  constructor() { }
+  constructor(private project_service: ProjectService, private snackBar: MatSnackBar,) { }
 
   ngOnInit(): void {
     console.log(this.item)
     console.log(this.role)
+    this.project_service.getProjects(1,100)
   }
 
   create() {
@@ -36,5 +46,7 @@ export class SearchBarComponent implements OnInit {
     this.notificationEvent.emit(value);
   }
 
-
+  onSelect(event: any) {
+    console.log('Selected option:', event.value);
+  }
 }

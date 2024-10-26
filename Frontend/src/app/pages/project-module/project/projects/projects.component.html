@@ -85,21 +85,18 @@
 
                 <!-- Action Row -->
                 <mat-action-row style="padding:0px; padding-right: 15px;">
-                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple
                   [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickViewEmployeeDialog(element)">
                       <mat-icon style="font-size: 30px;">groups</mat-icon>
                   </button>
-                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple
                   [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickAssignDialog(element)">
                       <mat-icon style="font-size: 30px;">person_add</mat-icon>
                   </button>
-                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple
                   [matRippleCentered]="true" [matRippleRadius]="15" (click)="onEditDialog(element)">
                       <mat-icon style="font-size: 30px;">edit</mat-icon>
                   </button>
-                    <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
-                        <mat-icon>delete</mat-icon>
-                    </button>
                 </mat-action-row>
             </mat-expansion-panel>
         </mat-accordion>

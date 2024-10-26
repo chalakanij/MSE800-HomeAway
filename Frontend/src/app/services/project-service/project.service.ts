@@ -41,9 +41,9 @@ export class ProjectService {
     }
 
     updateProject(data: any): Observable<any> {
-        const endpointUrl = `${environment.apiUrl}/projects/`+ `${data.id}` ;
+        const endpointUrl = `${environment.apiUrl}/projects/update_status` ;
         console.log(endpointUrl)
-        return this.http.put(endpointUrl, data);
+        return this.http.post(endpointUrl, data);
     }
 
     assignProject(data: any, id: any): Observable<any> {
@@ -58,6 +58,15 @@ export class ProjectService {
             page: page,
             size: size
         };
+        return this.http.get(endpointUrl, httpOptions);
+    }
+
+    getProjectsByUser(id: any): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/user_projects`;
+        httpOptions.params = {
+            user_id: id
+        };
+        console.log()
         return this.http.get(endpointUrl, httpOptions);
     }
 

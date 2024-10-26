@@ -35,6 +35,7 @@ export class ViewUpdateProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProfile();
+    console.log(this.profileForm.controls['company_name'].value)
   }
 
   loadProfile(): void {
@@ -60,7 +61,9 @@ export class ViewUpdateProfileComponent implements OnInit {
 
   saveProfile(): void {
     if (this.profileForm.valid) {
-      this.employee_service.updateProfile(this.profileForm.value).subscribe(
+      const profileData = this.profileForm.getRawValue();
+      console.log(profileData)
+      this.employee_service.updateProfile(profileData).subscribe(
         () => {
           this.snackBar.open('Profile updated successfully', '', {
             duration: 2000

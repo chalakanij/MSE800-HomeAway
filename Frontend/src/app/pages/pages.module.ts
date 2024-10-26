@@ -36,7 +36,7 @@ import { DeleteProjectComponent } from './project-module/delete-project/delete-p
 import { ProjectsComponent } from './project-module/project/projects/projects.component';
 import { TimeLogsComponent } from './time-logs-module/time-logs/time-logs/time-logs.component';
 import { AddTimeLogsComponent } from './time-logs-module/add-time-logs/add-time-logs/add-time-logs.component';
-import { UpdateTimeLogsComponent } from './time-logs-module/update-time-logs/update-time-logs/update-time-logs.component';
+// import { UpdateTimeLogsComponent } from './time-logs-module/update-time-logs/update-time-logs/update-time-logs.component';
 import { DeleteTimeLogsComponent } from './time-logs-module/delete-time-logs/delete-time-logs/delete-time-logs.component';
 import { AssignProjectComponent } from './project-module/assign-project/assign-project/assign-project.component';
 import { EditProjectComponent } from './project-module/edit-project/edit-project/edit-project.component';
@@ -45,7 +45,7 @@ import { ViewProjectEmployeeComponent } from './project-module/view-project-empl
 
 @NgModule({
   declarations: [DashboardComponent, EmployeeComponent, AddProjectComponent, UpdateProjectComponent, DeleteProjectComponent,
-    ProjectsComponent, TimeLogsComponent, AddTimeLogsComponent, UpdateTimeLogsComponent, DeleteTimeLogsComponent, 
+    ProjectsComponent, TimeLogsComponent, AddTimeLogsComponent, DeleteTimeLogsComponent, 
     AssignProjectComponent, EditProjectComponent, EmployerComponent, ViewProjectEmployeeComponent
   ],
   imports: [
@@ -77,7 +77,9 @@ import { ViewProjectEmployeeComponent } from './project-module/view-project-empl
     MatDatepickerModule,
     MatNativeDateModule,
     MatChipsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
 
   exports: [EmployeeComponent]

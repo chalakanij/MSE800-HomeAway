@@ -123,7 +123,7 @@ export class EmployerComponent implements OnInit {
     if (pageEvent) {
       this.loading = true
     }
-    this.getUserData(this.searchKey, pageEvent.pageIndex, pageEvent.pageSize);
+    this.getUserData(this.searchKey, pageEvent.pageIndex + 1, pageEvent.pageSize);
     return pageEvent;
   }
 

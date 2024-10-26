@@ -1,7 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -18,6 +19,9 @@ import { ProjectService } from 'src/app/services/project-service/project.service
 })
 export class ViewProjectEmployeeComponent implements OnInit {
 
+  @ViewChild(MatPaginator)
+  paginator!: MatPaginator;
+  
   projectDetailsGroup!: FormGroup;
   page!: Page<any>;
   pageEmployee!: Page<any>;
@@ -33,9 +37,10 @@ export class ViewProjectEmployeeComponent implements OnInit {
   loading: boolean = false;
   displayedColumns: string[] = ['name', 'email'];
   selection = new SelectionModel<any>(true, []);
-  filteredResults: CreateEmployeeData[] = [];
+  filteredResults: Object[] = [];
   originalResults: CreateEmployeeData[] = [];
   searchControl: FormControl = new FormControl('');
+  pageSizeOptions: number[] = [5, 10, 15, 20];
 
   constructor(
     private project_service: ProjectService,
@@ -44,6 +49,7 @@ export class ViewProjectEmployeeComponent implements OnInit {
     private snackBar: MatSnackBar,
     private employee_service: EmployeeService,
     private fb: FormBuilder,
+    private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -57,7 +63,7 @@ export class ViewProjectEmployeeComponent implements OnInit {
       });
     }
     this.getEmployeeData("", 1, this.pageSize);
-    this.getEmployeeByProjectData("", 1, this.pageSize);
+    this.getEmployeeByProjectData(1, this.pageSize);
     this.searchControl.valueChanges.subscribe(searchKey => {
       this.onSearch(searchKey);
     });
@@ -73,7 +79,7 @@ export class ViewProjectEmployeeComponent implements OnInit {
     });
   }
 
-  getEmployeeByProjectData(searchKey: String, pageIndex: number, pageSize: number) {
+  getEmployeeByProjectData(pageIndex: number, pageSize: number) {
     this.project_service.getEmployeeByProjects(this.data.data.id, pageIndex, pageSize).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
@@ -83,53 +89,32 @@ export class ViewProjectEmployeeComponent implements OnInit {
         return throwError(error);
       })
     )
-    .subscribe((res: Page<EmployeeByProjectData>) => { 
-      console.log(res);
+    .subscribe((res: EmployeeByProjectData[]) => { 
       this.loading = false;
-      console.log(this.pageEmployee.items);
-      // Ensure pageEmployee and its items are defined
-      if (this.pageEmployee && this.pageEmployee.items) {
-        if (res && res.items && res.items.length > 0) {
-          this.page = res;
   
-          // Cast the items to the correct type
-          const employees = this.pageEmployee.items as CreateEmployeeData[];
-          const items = res.items as EmployeeByProjectData[];
-  
-          // Filter employees based on matching employee_id
-          const filteredEmployees: CreateEmployeeData[] = employees
-            .filter((employee: CreateEmployeeData) => 
-              items.some((item: EmployeeByProjectData) => item.employee_id === employee.id)
-            );
-  
-          // Save filtered results
+      if (res && res.length > 0) {
+        const employees = this.pageEmployee?.items as CreateEmployeeData[] || [];
+        const filteredEmployees: CreateEmployeeData[] = employees
+          .filter((employee: CreateEmployeeData) => 
+            res.some((item: EmployeeByProjectData) => item.employee_id === employee.id)
+          );
+        
+        if (filteredEmployees.length > 0) {
           this.originalResults = filteredEmployees;
           this.filteredResults = filteredEmployees;
-          this.dataLength = this.page.total;
         } else {
-          this.snackBar.open('No Employees found for this project', '', {
+          this.snackBar.open('No matching employees found for this project', '', {
             duration: 2000,
           });
         }
       } else {
-        this.snackBar.open('Employee data is not loaded', '', {
+        this.snackBar.open('No Employees found for this project', '', {
           duration: 2000,
         });
       }
     });
   }
   
-
-  // setEmployeeByProjectData(content: any) {
-  //   this.selectedResultsByProject = content;
-  //   if (this.selectedResultsByProject?.length == 0 && this.searchKey != "") {
-  //     this.snackBar.open('No Employee found', '', {
-  //       duration: 2000,
-  //     });
-  //     this.getEmployeeByProjectData("", 1, this.pageSize);
-  //   }
-  // }
-
   onSearch(searchKey: string) {
     const searchKeyLower = searchKey.toLowerCase();
     this.filteredResults = this.originalResults.filter(
@@ -159,34 +144,24 @@ export class ViewProjectEmployeeComponent implements OnInit {
     return this.selection.selected.length > 0 && !this.isAllSelected();
   }
 
-  // setEmployeeData(content: any) {
-  //   this.selectedResults = content;
-  //   if (this.selectedResults?.length == 0 && this.searchKey != "") {
-  //     this.snackBar.open('No User found', '', {
-  //       duration: 2000,
-  //     });
-  //     this.getEmployeeData("", 1, this.pageSize);
-  //   }
-  // }
-
   getEmployeeData(searchKey: String, pageIndex: number, pageSize: number) {
     this.employee_service.getEmployees(pageIndex, pageSize).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
           duration: 2000,
         });
-        this.loading = false;
+        this.loading = true;
         return throwError(error);
       })
     )
     .subscribe((res: Page<any>) => { 
-      console.log(res);
-      this.loading = false; 
-    
+      this.loading = true; 
       if (res && res.items && res.items.length > 0) {
         this.pageEmployee = res;
-        // this.setEmployeeData(this.pageEmployee.items);
+        this.filteredResults = res.items;
         this.dataLength = this.pageEmployee.total;
+        this.cdr.detectChanges();
+        this.loading = false;
       } else {
         this.snackBar.open('No Employees found', '', {
           duration: 2000,
@@ -194,4 +169,13 @@ export class ViewProjectEmployeeComponent implements OnInit {
       }
     });
   }
+
+  pageEvent(pageEvent: PageEvent) {
+    if (pageEvent) {
+      this.loading = true
+    }
+    this.getEmployeeByProjectData( pageEvent.pageIndex + 1, pageEvent.pageSize);
+    return pageEvent;
+  }
+
 }

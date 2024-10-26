@@ -5,5 +5,6 @@ export interface JwtTokenInterface {
     code: String,
     role: String,
     title: String,
+    user_id: Number,
     exp: number
 }

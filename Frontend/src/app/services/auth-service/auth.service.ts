@@ -23,6 +23,7 @@ export class AuthService {
     private token!: String;
     private roles!: String;
     private companyCode!: String;
+    private userId!: Number;
     private authStatusListener = new Subject<boolean>();
 
     constructor(private http: HttpClient) { }
@@ -75,9 +76,10 @@ export class AuthService {
             this.name = decodeToken.first_name + ' ' + decodeToken.last_name;
             this.roles = decodeToken.role;
             this.companyCode = decodeToken.code;
+            this.userId = decodeToken.user_id;
             this.isAuthenticated = true;
             this.authStatusListener.next(true);
-            console.log("111")
+            console.log(this.userId)
             if (this.token === token) {
                 resolve('Token saved');
             } else {
@@ -117,9 +119,13 @@ export class AuthService {
         return this.token;
     }
 
-    // get the employee number
+    // get the email
     getEmail() {
         return this.email;
+    }
+
+    getUserId() {
+        return this.userId;
     }
     
     // get the name
@@ -127,7 +133,7 @@ export class AuthService {
         return this.name;
     }
 
-    // get the login token
+    // get roles
     getRoles() {
         return this.roles;
     }
@@ -139,7 +145,6 @@ export class AuthService {
     // clear local storage
     private clearAuthLocal() {
         localStorage.removeItem('token');
-        localStorage.removeItem('epf_number');
     }
 
     // get the authenticated status of the user
@@ -189,6 +194,7 @@ export class AuthService {
                 title: '',
                 code: '',
                 email: '',
+                user_id: 0,
                 exp: 0
             }
         }

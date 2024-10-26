@@ -64,7 +64,7 @@ export class ProjectsComponent implements OnInit {
   setProjectData(content: any) {
     this.selectedResults = content;
     if (this.selectedResults?.length == 0 && this.searchKey != "") {
-      this.snackBar.open('No User found', '', {
+      this.snackBar.open('No Projects found', '', {
         duration: 2000,
       });
       this.getProjectData("", 1, this.pageSize);
@@ -90,7 +90,7 @@ export class ProjectsComponent implements OnInit {
         this.setProjectData(this.page.items);
         this.dataLength = this.page.total;
       } else {
-        this.snackBar.open('No Users found', '', {
+        this.snackBar.open('No Projects found', '', {
           duration: 2000,
         });
       }
@@ -223,7 +223,7 @@ export class ProjectsComponent implements OnInit {
     if (pageEvent) {
       this.loading = true
     }
-    this.getProjectData(this.searchKey, pageEvent.pageIndex, pageEvent.pageSize);
+    this.getProjectData(this.searchKey, pageEvent.pageIndex + 1, pageEvent.pageSize);
     return pageEvent;
   }
 

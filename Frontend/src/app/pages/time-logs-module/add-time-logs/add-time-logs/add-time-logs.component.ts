@@ -1,4 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Page } from 'src/app/interface/paginator/page';
+import { CreateProjectData, EmployeeByProjectData } from 'src/app/interface/project.interface';
+import { CreateTimeLogData } from 'src/app/interface/time-log.interface';
+import { AuthService } from 'src/app/services/auth-service/auth.service';
+import { ProjectService } from 'src/app/services/project-service/project.service';
+import { TimeLogService } from 'src/app/services/time-log-service/time-log.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-add-time-logs',
@@ -7,9 +19,139 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddTimeLogsComponent implements OnInit {
 
-  constructor() { }
+  timeLogDetailsGroup!: FormGroup;
+  page!: Page<any>;
+  title!: String;
+  project!: Number;
+  headLbl!: String;
+  searchKey: String = "";
+  pageSize: number = 10;
+  isInvalidForm!: boolean;
+  projects!: CreateProjectData[];
+  maxDate: Date = new Date();
+
+  constructor(
+    private time_log_service: TimeLogService,
+    private project_service: ProjectService,
+    @Inject(MAT_DIALOG_DATA) private data: any,
+    private dialogRef: MatDialogRef<AddTimeLogsComponent>,
+    private snackBar: MatSnackBar,
+    private auth_service: AuthService
+
+  ) {
+  }
 
   ngOnInit(): void {
+    this.timeLogDetailsGroup = new FormGroup({
+      project: new FormControl('', [Validators.required]),
+      description: new FormControl('', [Validators.required]),
+      in_time: new FormControl(['', Validators.required]),
+      in_date: new FormControl(['', Validators.required]),
+      out_time: new FormControl(['']),
+      out_date: new FormControl(['']),
+    });
+    if (this.data.type === 'CREATE_TIMELOG') {
+      this.title = "Create Time Log";
+    }
+    this.getProjectsByUser();
+  }
+
+  onSubmit() {
+
+    const requiredFields = ['project', 'description', 'in_date', 'in_time'];
+    this.isInvalidForm = requiredFields.some(field =>
+      this.timeLogDetailsGroup.get(field)?.invalid
+    );
+
+    if (this.isInvalidForm) {
+      this.isInvalidForm = true;
+      this.timeLogDetailsGroup.markAllAsTouched();
+    } else {
+      const inDate = this.timeLogDetailsGroup.value.in_date;
+      const inTime = this.timeLogDetailsGroup.value.in_time;
+      let outDate  = moment(this.timeLogDetailsGroup.value.out_date).format('YYYY-MM-DD');
+      if (outDate == 'Invalid date') {
+        outDate = '';
+      }
+
+      let outTime  = moment(this.timeLogDetailsGroup.value.out_time).format('HH:mm');
+      if (outTime == 'Invalid Time') {
+        outTime = '';
+      }
+  
+      const inTimeISO = inDate && inTime
+        ? this.parseDate(inDate, inTime)
+        : null;
+  
+      let request: any = {
+        project_id: this.timeLogDetailsGroup.value.project.id,
+        description: this.timeLogDetailsGroup.value.description,
+        in_time: inTimeISO
+      };
+
+      if (this.data.type === 'CREATE_TIMELOG') {
+        this.time_log_service.createTimeLogCheckin(request).subscribe(
+          (response) => {
+            console.log(response)
+            if (response.error != true) {
+              this.dialogRef.close(true);
+              this.snackBar.open('New time log added to .', '', {
+                duration: 2000,
+              });
+            } else {
+              this.dialogRef.close(false);
+              this.snackBar.open('Time log not added.', '', {
+                duration: 2000,
+              });
+            }
+          },
+          (error) => {
+            this.dialogRef.close(false);
+            this.snackBar.open('Time log not added.', '', {
+              duration: 2000,
+            });
+          }
+        );
+      }
+    }
+  }
+
+  getProjectsByUser() {
+    this.project_service.getProjects(1, 100).pipe(
+      catchError((error) => {
+        this.snackBar.open(error.error.detail || 'An error occurred', '', {
+          duration: 2000,
+        });
+        return throwError(error);
+      })
+    )
+      .subscribe((res: Page<any>) => {
+        if (res && res.items && res.items.length > 0) {
+          this.page = res;
+          this.setProjectData(this.page.items);
+        } else {
+          this.snackBar.open('No Projects found', '', {
+            duration: 2000,
+          });
+        }
+      });
+  }
+
+  setProjectData(content: any) {
+    this.projects = content;
+    if (this.projects?.length == 0) {
+      this.snackBar.open('No Projects found', '', {
+        duration: 2000,
+      });
+    }
+  }
+
+  parseDate(date: any, time: any) {
+    const inDate = new Date(date);
+    const [hours, minutes] = time.split(':'); 
+    inDate.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+    return inDate.toISOString();
   }
 
 }
+
