@@ -29,7 +29,7 @@ class User(BaseModel):
     parent_user_id: int
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class AdminOutput(BaseModel):
     id: int
@@ -42,7 +42,7 @@ class AdminOutput(BaseModel):
     active: int
 
     class Config:
-        from_attribute = True
+        from_attributes = True
 
 
 class EmployeeOutput(AdminOutput):
