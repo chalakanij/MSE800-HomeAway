@@ -48,30 +48,33 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
                                              "role":user.role.value, "code":user.employer_code})
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.get("/employees", response_model=Page[EmployeeOutput], dependencies=[Depends(role_required([UserRole.EMPLOYER]))])
+@router.get("/employees", response_model=Page[EmployeeOutput], dependencies=[Depends(role_required([UserRole.EMPLOYER]))],
+            description="Required: EMPLOYER, get employees under an employer")
 def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
     user_service = UserService(db)
     return user_service.get_employees(current_user, param)
 
-@router.get("/employers", response_model=Page[EmployerOutput], dependencies=[Depends(role_required([UserRole.ADMIN]))])
+@router.get("/employers", response_model=Page[EmployerOutput], dependencies=[Depends(role_required([UserRole.ADMIN]))],
+            description="Required: ADMIN, get all employers")
 def list_users(db: Session = Depends(get_db), current_user: User = Depends(get_current_user),
                page:int | None = 1, size:int |None = 10):
     param = Params(page=page, size=size)
     user_service = UserService(db)
     return user_service.get_employers(current_user, param)
 
-@router.delete("/employees", dependencies=[Depends(role_required([UserRole.EMPLOYER, UserRole.ADMIN]))])
+@router.delete("/employees", dependencies=[Depends(role_required([UserRole.EMPLOYER, UserRole.ADMIN]))],
+               description="Required: EMPLOYER | ADMIN, Deactivate list of employees")
 def deactivate_users_list(users: UserDeactivateRequest, db:Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     user_service = UserService(db)
     return user_service.deactivate_users(users)
 
-@router.get("/profile",  response_model=EmployeeOutput)
+@router.get("/profile",  response_model=EmployeeOutput, description="Get current user's profile")
 def read_profile(db: Session = Depends(get_db), current_user: EmployeeOutput = Depends(get_current_user)):
     return current_user
 
-@router.put("/profile", response_model=EmployeeOutput)
+@router.put("/profile", response_model=EmployeeOutput, description="Update current user's profile")
 def update_profile_request(user_profile: ProfileInput ,db: Session = Depends(get_db), current_user: EmployeeOutput = Depends(get_current_user)):
     user_service = UserService(db)
     return user_service.update_profile(current_user, user_profile)
