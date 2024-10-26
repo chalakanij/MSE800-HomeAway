@@ -24,7 +24,7 @@ class UserService:
             first, second = company_name.upper().rsplit(maxsplit=1)
             code = first[0:3] + second[0:3]
         else:
-            code = company_name[0:5]
+            code = company_name[0:5].upper()
 
         code = code + datetime.now().strftime("%M%S%f")
 
