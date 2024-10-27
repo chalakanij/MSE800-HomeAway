@@ -13,7 +13,7 @@ class DashboardService:
             Project.id.in_(select(UserProject.project_id).filter(UserProject.employee_id == user.id))
         ).group_by(
             Project.status
-        ).all()
+        ).order_by(Project.id).all()
         project_status_counts = [ProjectStatusCount(status=project.status, count=project.count) for project in projects]
 
         last_checkin = self.db.query(CheckInOut).filter(CheckInOut.user_id == user.id).order_by(desc(CheckInOut.id)).first()
@@ -38,20 +38,20 @@ class DashboardService:
         employees = (self.db.query(User.active, func.count(User.id).label('count')).filter(User.parent_user_id == user.id).
                      group_by(User.active)).all()
         user_status_counts = [ProjectStatusCount(status=str(employees.active), count=employees.count) for employees in employees]
-
         projects = self.db.query(Project.status, func.count(Project.id).label("count")).filter(
             Project.user_id == user.id
         ).group_by(
             Project.status
-        ).all()
+        ).order_by(Project.status).order_by(Project.id).all()
         project_status_counts = [ProjectStatusCount(status=project.status, count=project.count) for project in projects]
 
-        employee_projects = self.db.query(Project).filter(Project.user_id == user.id).all()
+        employer_projects = self.db.query(Project).filter(Project.user_id == user.id).all()
         project_hours = []
         check_io_service = CheckInOutService(self.db)
-        for row in employee_projects:
+        for row in employer_projects:
             calculated_hours = check_io_service.calculate_hours(project_id=row.id)
-            project_hours.append({"project_id":row.id,"work_hours":row.work_hours, "calculated":calculated_hours})
+            project_hours.append({"project_id":row.id,"project_title":row.title,"project_status":row.status,
+                                  "work_hours":row.work_hours, "calculated":calculated_hours})
 
         return {"employees":user_status_counts, "project_status": project_status_counts, "project_hours":project_hours}
 
