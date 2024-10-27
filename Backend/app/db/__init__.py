@@ -25,6 +25,7 @@ def init_db():
                 title="Mr",
                 first_name="Admin",
                 last_name="User",
+                phone_number="",
                 role=UserRole.ADMIN,
                 hashed_password=hashed_password
             )
