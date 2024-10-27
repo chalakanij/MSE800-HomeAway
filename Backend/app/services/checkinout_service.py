@@ -27,6 +27,11 @@ class CheckInOutService:
         self.db.add(db_checkinout)
         self.db.commit()
         self.db.refresh(db_checkinout)
+        project = self.db.query(Project).filter(Project.id == user_input['project_id']).first()
+        if project and project.status == ProjectStatus.INITIAL:
+            project.status = ProjectStatus.STARTED
+            self.db.commit()
+
         return db_checkinout
 
     def _validate_checkout(self, in_time:datetime, out_time:datetime):
