@@ -55,8 +55,8 @@ class DashboardService:
 
         return {"employees":user_status_counts, "project_status": project_status_counts, "project_hours":project_hours}
 
-    def get_admin_dashboard(self):
-        employers = self.db.query(User.active, func.count(User.id).lable("count")).filter(
+    def get_admin_dashboard(self, user:User):
+        employers = self.db.query(User.active, func.count(User.id).label("count")).filter(
             User.role == UserRole.EMPLOYER
         ).group_by(User.active).all()
         employer_status_count = [ProjectStatusCount(status=str(employer.active), count=employer.count) for employer in employers]
@@ -70,5 +70,5 @@ class DashboardService:
         ).all()
         project_status_counts = [ProjectStatusCount(status=project.status, count=project.count) for project in projects]
 
-        return {"employers": employer_status_count, "project_status": project_status_counts,
+        return {"employers": employer_status_count, "projects": project_status_counts,
                 "employees": user_status_counts}
