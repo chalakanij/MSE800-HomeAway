@@ -53,7 +53,7 @@ class DashboardService:
             project_hours.append({"project_id":row.id,"project_title":row.title,"project_status":row.status,
                                   "work_hours":row.work_hours, "calculated":calculated_hours})
 
-        return {"employees":user_status_counts, "project_status": project_status_counts, "project_hours":project_hours}
+        return {"employees":user_status_counts, "projects": project_status_counts, "project_hours":project_hours}
 
     def get_admin_dashboard(self, user:User):
         employers = self.db.query(User.active, func.count(User.id).label("count")).filter(
