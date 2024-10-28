@@ -15,13 +15,13 @@ from app.db.models import UserRole
 
 router = APIRouter()
 
-@router.post("/employer_register", response_model=User)
+@router.post("/employer_register", response_model=EmployerOutput)
 def register(user: EmployerCreate, db: Session = Depends(get_db)):
     user_service = UserService(db)
     db_user = user_service.create_employer(user)
     return db_user
 
-@router.post("/employee_register", response_model=User)
+@router.post("/employee_register", response_model=EmployeeOutput)
 def register(user: EmployeeCreate, db: Session = Depends(get_db)):
     user_service = UserService(db)
     db_user = user_service.create_employee(user)
