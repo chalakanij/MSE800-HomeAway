@@ -4,10 +4,10 @@
         <div *ngFor="let item of navItems">
             <mat-list-item (click)="onItemSelected(item)" [disabled]="((role == 'Employer' && item.displayName == 'Employers') || 
             (role == 'Employee' && (item.displayName == 'Employees' || item.displayName == 'Employers' || item.displayName == 'Projects')) ||
-            (role == 'Admin' && (item.displayName == 'Employees' || item.displayName == 'Time Logs')))"
+            (role == 'Admin' && (item.displayName == 'Employees' || item.displayName == 'Time Logs' || item.displayName == 'Projects')))"
                 class="side-menu--nav-list--item" [ngClass]="{'disabled': ((role == 'Employer' && item.displayName == 'Employers') || 
                 (role == 'Employee' && (item.displayName == 'Employees' || item.displayName == 'Employers' || item.displayName == 'Projects')) ||
-                (role == 'Admin' && (item.displayName == 'Employees' || item.displayName == 'Time Logs')))}">
+                (role == 'Admin' && (item.displayName == 'Employees' || item.displayName == 'Time Logs' || item.displayName == 'Projects')))}">
                 <mat-icon mat-list-icon class="side-menu--nav-list--icon">{{item.iconName}}</mat-icon>
                 <span>{{item.displayName}} </span>
             </mat-list-item>            

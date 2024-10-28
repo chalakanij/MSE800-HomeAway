@@ -42,6 +42,7 @@ import { AssignProjectComponent } from './project-module/assign-project/assign-p
 import { EditProjectComponent } from './project-module/edit-project/edit-project/edit-project.component';
 import { EmployerComponent } from './employer-module/employer/employer.component';
 import { ViewProjectEmployeeComponent } from './project-module/view-project-employee/view-project-employee.component';
+import { NgChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [DashboardComponent, EmployeeComponent, AddProjectComponent, UpdateProjectComponent, DeleteProjectComponent,
@@ -79,7 +80,8 @@ import { ViewProjectEmployeeComponent } from './project-module/view-project-empl
     MatChipsModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    NgChartsModule
   ],
 
   exports: [EmployeeComponent]

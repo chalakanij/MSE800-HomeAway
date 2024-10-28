@@ -13,15 +13,17 @@ const httpOptions = {
 @Injectable({
     providedIn: 'root',
 })
-export class DashBoardService {
+export class DashboardService {
 
     constructor(private http: HttpClient) {}
 
-    //get system summary
-    getSummary(): Observable<any> {
-        const endpointUrl = `${environment.apiUrl}/v1/initial`;
-        httpOptions.params = {
-        };
+    getEmployerStats(): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/employer_dashboard`;
+        return this.http.get(endpointUrl, httpOptions);
+    }
+
+    getEmployeeStats(): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/employee_dashboard`;
         return this.http.get(endpointUrl, httpOptions);
     }
 }

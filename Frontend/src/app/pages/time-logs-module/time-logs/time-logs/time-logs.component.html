@@ -43,9 +43,12 @@
                     </div>
                     <div class="col-8 col-md-8">
                       <mat-panel-title class="row" style="width: 100%;" *ngIf="!panel.expanded">
-                        <div class="col-4 expansion-detail">
-                          <label>{{ element.status }}</label>
-                        </div>
+                        <div class="col-4 expansion-detail" style="left: 90px;">
+                          <mat-chip-list>
+                              <mat-chip [style.background-color]="checkStatus(element.status)"
+                              selected>{{element.logStatus}}</mat-chip>
+                          </mat-chip-list>
+                      </div>
                         <div class="col-4 expansion-detail">
                           <label>{{ element.formattedInTime }}</label>
                         </div>
@@ -66,7 +69,7 @@
                         </div>
                         <div class="col-3 expansion-detail" style="text-align: left;">
                           <label class="expansion-detail--label">Status: </label>
-                          <label class="expansion-detail--label--value">{{element.status}} </label>
+                          <label class="expansion-detail--label--value">{{element.logStatus}} </label>
                       </div>
                         <div class="col-3 expansion-detail" style="text-align: left;">
                             <label class="expansion-detail--label">Start Time: </label>

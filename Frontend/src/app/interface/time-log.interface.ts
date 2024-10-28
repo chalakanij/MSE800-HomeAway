@@ -5,7 +5,7 @@ export interface CreateTimeLogData {
     description: string; 
     user_id: number;     
     project_id: number;  
-    status?: number;
+    status: number;
     project_name?: string;
   }
   

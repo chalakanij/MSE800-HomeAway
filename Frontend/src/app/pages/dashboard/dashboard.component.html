@@ -1,0 +1,42 @@
+<div class="charts-container" *ngIf="employerProjectChartData && employerProjectChartData.datasets[0].data.length">
+    
+    <div style="display: block; width: 400px;">
+      <h3>Employer Project Status</h3>
+      <div class="row">
+      <canvas baseChart class="col-6"
+              [data]="employerProjectChartData"
+              [type]="'pie'"
+              [options]="pieChartOptions">
+      </canvas>
+      </div>
+    </div>
+</div>
+
+    <div class="charts-container" *ngIf="employerEmployeeChartData && employerEmployeeChartData.datasets[0].data.length">
+        <div style="display: block; width: 400px;">
+          <h3>Employee Stats</h3>
+          <div class="row">
+          <canvas baseChart class="col-6"
+                  [data]="employerEmployeeChartData"
+                  [type]="'pie'"
+                  [options]="pieChartOptions">
+          </canvas>
+          </div>
+        </div>
+    </div>
+
+        <div class="charts-container" *ngIf="employerProjectHoursChartData && employerProjectHoursChartData.datasets[0].data.length">
+                <div style="display: block; width: 400px;">
+                  <h3>Employer Project Hours</h3>
+                  <div class="row">
+                  <canvas baseChart class="col-6"
+                          [data]="employerProjectHoursChartData"
+                          [type]="'pie'"
+                          [options]="pieChartOptions">
+                  </canvas>
+                  </div>
+                </div>
+        </div>
+    
+ 
+  

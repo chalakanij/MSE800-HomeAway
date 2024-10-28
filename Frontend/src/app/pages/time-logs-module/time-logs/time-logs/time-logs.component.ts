@@ -71,6 +71,7 @@ export class TimeLogsComponent implements OnInit {
       this.getUserData(1, 100);
       this.getTimeLogData(1, this.pageSize, undefined, undefined);
     } else {
+      this.getProjectDataEmployee();
       this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
     }
   }
@@ -87,13 +88,16 @@ export class TimeLogsComponent implements OnInit {
         this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
       }
     } else {
+      console.log(this.selectedResults)
       this.selectedResultsWithTitles = this.selectedResults.map(timeLog => {
         const project = this.selectedProjects.find(project => project.id === timeLog.project_id);
+        console.log(timeLog)
         return {
           ...timeLog,
           projectTitle: project ? project.title : undefined,
           formattedInTime: moment(timeLog.in_time).format('YYYY-MM-DD HH:mm:ss'),
-          formattedOutTime: timeLog.out_time ? moment(timeLog.out_time).format('YYYY-MM-DD HH:mm:ss') : ''
+          formattedOutTime: timeLog.out_time ? moment(timeLog.out_time).format('YYYY-MM-DD HH:mm:ss') : '',
+          logStatus: this.getLogStatus(timeLog.status)
         };
       });
     }
@@ -207,6 +211,8 @@ export class TimeLogsComponent implements OnInit {
   }
 
   getUserData(pageIndex: number, pageSize: number) {
+    const r = this.employee_service.getProfile();
+    console.log(r)
     this.employee_service.getEmployees(pageIndex, pageSize).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
@@ -240,5 +246,59 @@ export class TimeLogsComponent implements OnInit {
     this.loading = true;
     this.employeeId = event
     this.getTimeLogData(1, this.pageSize, event, this.projectId );
+  }
+
+  checkStatus(status: string) {
+    if (status.toString() == '0') {
+      return '#B2BABB';
+    } else if (status.toString() == '1') {
+      return '#F1948A';
+    } else if (status.toString() == '2') {
+      return '#82E0AA';
+    } else {
+      return '#B2BABB';
+    }
+  }
+
+  getLogStatus(status: number) {
+    if (status == 0) {
+      return'Initial'
+    } else if (status == 1) {
+      return 'Checked-In'
+    } else if (status == 2) {
+      return 'Checked-Out'
+    } else {
+      return ''
+    }
+  }
+
+  setProjectDataEmployee(content: any) {
+    this.selectedProjects = content;
+    console.log(this.selectedProjects)
+    if (this.selectedProjects?.length == 0) {
+      this.snackBar.open('No Projects found', '', {
+        duration: 2000,
+      });
+    }
+  }
+
+  getProjectDataEmployee() {
+    this.project_service.getProjectsByUser(this.authService.getUserId()).pipe(
+      catchError((error) => {
+        this.snackBar.open(error.error.detail || 'An error occurred', '', {
+          duration: 2000,
+        });
+        return throwError(error);
+      })
+    )
+      .subscribe((res: Page<any>) => {
+        if (res && res.items && res.items.length > 0) {
+          this.setProjectDataEmployee(res.items);
+        } else {
+          this.snackBar.open('No Projects found', '', {
+            duration: 2000,
+          });
+        }
+      });
   }
 }

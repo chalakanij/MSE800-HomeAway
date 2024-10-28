@@ -120,7 +120,7 @@ export class AddTimeLogsComponent implements OnInit {
   }
 
   getProjectsByUser() {
-    this.project_service.getProjects(1, 100).pipe(
+    this.project_service.getProjectsByUser(this.auth_service.getUserId()).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
           duration: 2000,

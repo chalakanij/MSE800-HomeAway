@@ -5,6 +5,7 @@ import { catchError } from 'rxjs/operators';
 import { CreateEmployeeData } from 'src/app/interface/employer.interface';
 import { Page } from 'src/app/interface/paginator/page';
 import { CreateProjectData } from 'src/app/interface/project.interface';
+import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { EmployeeService } from 'src/app/services/employee-service/employee.service';
 import { ProjectService } from 'src/app/services/project-service/project.service';
 
@@ -26,15 +27,12 @@ export class SearchBarComponent implements OnInit {
   @Input() employeeList : CreateEmployeeData[] = [];
   selectedEmployees!: CreateEmployeeData[];
   page!: Page<any>;
+  userId!: Number;
 
-  constructor(private project_service: ProjectService, private snackBar: MatSnackBar,
-    private employee_service: EmployeeService
-  ) { }
+  constructor(private auth_service: AuthService) { }
 
   ngOnInit(): void {
-    // this.project_service.getProjects(1,100)
-    // this.employee_service.getEmployees(1,100)
-    console.log(this.role)
+    this.userId = this.auth_service.getUserId();
   }
 
   create() {
