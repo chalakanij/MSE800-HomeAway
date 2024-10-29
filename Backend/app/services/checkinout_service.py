@@ -79,12 +79,13 @@ class CheckInOutService:
             if checkin_request.in_time is not None:
                 checkin.in_time = checkin_request.in_time
             if checkin_request.out_time is not None:
+                self._validate_checkout(checkin.in_time, checkin_request.out_time)
                 checkin.out_time = checkin_request.out_time
+                checkin.status = CheckInOutStatus.CHECKOUT
             if checkin_request.description is not None:
                 checkin.description = checkin_request.description
             if checkin_request.project_id is not None:
                 checkin.project_id = checkin_request.project_id
-            self._validate_checkout(checkin.in_time, checkin.out_time)
             self.db.commit()
             self.db.refresh(checkin)
             return checkin
