@@ -30,6 +30,8 @@ export class AddTimeLogsComponent implements OnInit {
   isInvalidForm!: boolean;
   projects!: CreateProjectData[];
   maxDate: Date = new Date();
+  timeLogData!: CreateTimeLogData;
+  selectedProject: any;
 
   constructor(
     private time_log_service: TimeLogService,
@@ -51,10 +53,15 @@ export class AddTimeLogsComponent implements OnInit {
       out_time: new FormControl(['']),
       out_date: new FormControl(['']),
     });
-    if (this.data.type === 'CREATE_TIMELOG') {
-      this.title = "Create Time Log";
-    }
-    this.getProjectsByUser();
+    this.getProjectsByUser().then(() => {
+      if (this.data.type === 'CREATE_TIMELOG') {
+        this.title = "Create Time Log";
+      } else if (this.data.type === 'EDIT_TIMELOG') {
+        this.title = "Update Time Log";
+        this.timeLogData = this.data.data;
+        this.setEditTimeLogData();
+      }
+    });
   }
 
   onSubmit() {
@@ -75,11 +82,9 @@ export class AddTimeLogsComponent implements OnInit {
 
       const inTimeISO = inDate && inTime ? this.parseDate(inDate, inTime) : null;
       const outTimeISO = outDate && outTime ? this.parseDate(outDate, outTime) : null;
-      console.log(outTimeISO)
-      console.log(inTimeISO)
-
+  
       let request: any = {
-        project_id: this.timeLogDetailsGroup.value.project.id,
+        project_id: this.timeLogDetailsGroup.value.project? this.timeLogDetailsGroup.value.project.id : this.selectedProject.id,
         description: this.timeLogDetailsGroup.value.description,
         in_time: inTimeISO,
       };
@@ -87,11 +92,6 @@ export class AddTimeLogsComponent implements OnInit {
       if (outTimeISO) {
         request.out_time = outTimeISO;
       }
-      console.log(this.timeLogDetailsGroup.value.out_time)
-      console.log(this.timeLogDetailsGroup.value.out_date)
-      console.log(this.timeLogDetailsGroup.value.in_time)
-      console.log(this.timeLogDetailsGroup.value.in_date)
-    
       if (this.data.type === 'CREATE_TIMELOG') {
         this.time_log_service.createTimeLogCheckin(request).subscribe(
           (response) => {
@@ -116,33 +116,65 @@ export class AddTimeLogsComponent implements OnInit {
             });
           }
         );
+      } else if (this.data.type === 'EDIT_TIMELOG') {
+        request.id = this.timeLogData.id
+        this.time_log_service.updateTimeLog(request).subscribe(
+          (response) => {
+            console.log(response)
+            if (response.error != true) {
+              this.dialogRef.close(true);
+              this.snackBar.open('Time log updated to .', '', {
+                duration: 2000,
+              });
+            } else {
+              this.dialogRef.close(false);
+              this.snackBar.open('Time log not updated.', '', {
+                duration: 2000,
+              });
+            }
+          },
+          (error) => {
+            console.log(error)
+            this.dialogRef.close(false);
+            this.snackBar.open('Time log not updated: ' + error.error.detail, '', {
+              duration: 2000,
+            });
+          }
+        );
       }
     }
   }
 
-  getProjectsByUser() {
-    this.project_service.getProjects(1, 100).pipe(
-      catchError((error) => {
-        this.snackBar.open(error.error.detail || 'An error occurred', '', {
-          duration: 2000,
-        });
-        return throwError(error);
-      })
-    )
+  getProjectsByUser(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.project_service.getProjects(1, 100).pipe(
+        catchError((error) => {
+          this.snackBar.open(error.error.detail || 'An error occurred', '', {
+            duration: 2000,
+          });
+          reject(error); // Reject the promise if there is an error
+          return throwError(error);
+        })
+      )
       .subscribe((res: Page<any>) => {
         if (res && res.items && res.items.length > 0) {
           this.page = res;
           this.setProjectData(this.page.items);
+          resolve(); // Resolve the promise after setting data
         } else {
           this.snackBar.open('No Projects found', '', {
             duration: 2000,
           });
+          resolve(); // Resolve the promise even if no projects are found
         }
       });
+    });
   }
+  
 
   setProjectData(content: any) {
     this.projects = content;
+    console.log(this.projects)
     if (this.projects?.length == 0) {
       this.snackBar.open('No Projects found', '', {
         duration: 2000,
@@ -164,6 +196,27 @@ export class AddTimeLogsComponent implements OnInit {
 
     // Return the formatted date without converting to UTC
     return combinedDateTime.format('YYYY-MM-DDTHH:mm:ss.SSS'); // This will keep it in local time
+  }
+
+  setEditTimeLogData(): void {
+    // Extract and format date and time parts from timeLogData
+    const inDate = this.timeLogData.in_time ? moment(this.timeLogData.in_time).toDate() : null;
+    const inTime = this.timeLogData.in_time ? moment(this.timeLogData.in_time).format('HH:mm') : null;
+    const outDate = this.timeLogData.out_time ? moment(this.timeLogData.out_time).toDate() : null;
+    const outTime = this.timeLogData.out_time ? moment(this.timeLogData.out_time).format('HH:mm') : null;
+    
+    this.selectedProject = this.projects.find(p => p.id === this.timeLogData.project_id);
+    // Patch form values
+    this.timeLogDetailsGroup.patchValue({
+      project: this.projects.find(p => p.id === this.timeLogData.project_id), 
+      description: this.timeLogData.description,
+      in_date: inDate,
+      in_time: inTime,
+      out_date: outDate,
+      out_time: outTime,
+    });
+ 
+    this.timeLogDetailsGroup.get('project')?.disable();
   }
 }
 

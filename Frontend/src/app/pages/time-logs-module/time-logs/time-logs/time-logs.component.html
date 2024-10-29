@@ -1,7 +1,7 @@
 <div class="page-layout page-layout--module-all-center">
     <div style="width: 90%;">
         <app-search-bar [item]="timeLogs" [role]="isEmployer" [projectList]="selectedProjects" [employeeList]="selectedEmployees" 
-        (createEvent)="openCreateDialog()" (employeeEvent)="onSearchEmployees($event)" (projectEvent)="onSearchProjects($event)"></app-search-bar>
+        (createEvent)="openCreateDialog()" [status]="isCheckinStatus" (employeeEvent)="onSearchEmployees($event)" (projectEvent)="onSearchProjects($event)"></app-search-bar>
     </div>
     <div style="width: 90%;">
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
@@ -90,21 +90,10 @@
 
                 <!-- Action Row -->
                 <mat-action-row style="padding:0px; padding-right: 15px;">
-                  <!-- <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
-                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickViewEmployeeDialog(element)">
-                      <mat-icon style="font-size: 30px;">groups</mat-icon>
-                  </button>
-                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
-                  [matRippleCentered]="true" [matRippleRadius]="15" (click)="onClickAssignDialog(element)">
-                      <mat-icon style="font-size: 30px;">person_add</mat-icon>
-                  </button>
-                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple 
+                  <button mat-icon-button class="pm-btn--expansion-action--asset" matRipple *ngIf="element.user_id == currentUserId"
                   [matRippleCentered]="true" [matRippleRadius]="15" (click)="onEditDialog(element)">
                       <mat-icon style="font-size: 30px;">edit</mat-icon>
-                  </button> -->
-                    <!-- <button mat-icon-button (click)="openDeleteDialog(element)" class="pm-btn--expansion-action--delete">
-                        <mat-icon>delete</mat-icon>
-                    </button> -->
+                  </button> 
                 </mat-action-row>
             </mat-expansion-panel>
         </mat-accordion>

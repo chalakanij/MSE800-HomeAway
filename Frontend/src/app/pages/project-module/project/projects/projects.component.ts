@@ -58,7 +58,7 @@ export class ProjectsComponent implements OnInit {
     });
     this.loading = true;
     this.pageSize = 10;
-    this.getProjectData(this.searchKey, 1, this.pageSize);
+    this.getProjectData(1, this.pageSize);
   }
 
   setProjectData(content: any) {
@@ -67,11 +67,11 @@ export class ProjectsComponent implements OnInit {
       this.snackBar.open('No Projects found', '', {
         duration: 2000,
       });
-      this.getProjectData("", 1, this.pageSize);
+      this.getProjectData(1, this.pageSize);
     }
   }
 
-  getProjectData(searchKey: String, pageIndex: number, pageSize: number) {
+  getProjectData(pageIndex: number, pageSize: number) {
     this.project_service.getProjects(pageIndex, pageSize).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
@@ -107,7 +107,7 @@ export class ProjectsComponent implements OnInit {
       if (confirmed) {
         this.loading = true;
         this.pageSize = 10;
-        this.getProjectData(this.searchKey, 1, this.pageSize);
+        this.getProjectData(1, this.pageSize);
       }
     });
   }
@@ -124,7 +124,7 @@ export class ProjectsComponent implements OnInit {
       if (confirmed) {
         this.loading = true;
         this.pageSize = 10;
-        this.getProjectData(this.searchKey, 1, this.pageSize);
+        this.getProjectData(1, this.pageSize);
       }
     });
   }
@@ -149,7 +149,7 @@ export class ProjectsComponent implements OnInit {
             });
             this.loading = true;
             this.pageSize = 10;
-            this.getProjectData(this.searchKey, 1, this.pageSize);
+            this.getProjectData(1, this.pageSize);
           }
         });
       }
@@ -184,7 +184,7 @@ export class ProjectsComponent implements OnInit {
             });
             this.loading = true;
             this.pageSize = 10;
-            this.getProjectData(this.searchKey, 1, this.pageSize);
+            this.getProjectData(1, this.pageSize);
             this.selection.clear();
           }
         });
@@ -195,7 +195,7 @@ export class ProjectsComponent implements OnInit {
   onSearch(searchKey: String) {
     this.searchKey = searchKey;
     this.loading = true;
-    this.getProjectData(this.searchKey, 1, this.pageSize);
+    this.getProjectData(1, this.pageSize);
   }
 
   isAllSelected() {
@@ -223,7 +223,7 @@ export class ProjectsComponent implements OnInit {
     if (pageEvent) {
       this.loading = true
     }
-    this.getProjectData(this.searchKey, pageEvent.pageIndex + 1, pageEvent.pageSize);
+    this.getProjectData(pageEvent.pageIndex + 1, pageEvent.pageSize);
     return pageEvent;
   }
 
@@ -248,7 +248,7 @@ export class ProjectsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       this.loading = true;
       this.pageSize = 10;
-      this.getProjectData(this.searchKey, 1, this.pageSize);
+      this.getProjectData(1, this.pageSize);
     });
   }
 
@@ -263,7 +263,7 @@ export class ProjectsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       this.loading = true;
       this.pageSize = 10;
-      this.getProjectData(this.searchKey, 1, this.pageSize);
+      this.getProjectData(1, this.pageSize);
     });
   }
 }

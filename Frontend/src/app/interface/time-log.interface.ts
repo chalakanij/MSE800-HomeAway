@@ -8,5 +8,16 @@ export interface CreateTimeLogData {
     status: number;
     project_name?: string;
   }
+
+  export interface TimeLogStatus {
+    id: number;
+    user_id: number;
+    status: number;
+    in_time: string;   
+    out_time: string | null; 
+    description: string;
+    project_id: number;
+  }
+  
   
 

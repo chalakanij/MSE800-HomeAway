@@ -60,14 +60,4 @@ export class ProjectService {
         };
         return this.http.get(endpointUrl, httpOptions);
     }
-
-    getProjectsByUser(id: any): Observable<any> {
-        const endpointUrl = `${environment.apiUrl}/user_projects`;
-        httpOptions.params = {
-            user_id: id
-        };
-        console.log()
-        return this.http.get(endpointUrl, httpOptions);
-    }
-
 }

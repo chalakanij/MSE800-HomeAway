@@ -23,8 +23,8 @@
         </mat-form-field>
     </div>
 
-    <button class="search--icon-width" *ngIf="(item == 'projects' && 
-    (role == 'employer' || role == 'admin')) || (item == 'timeLogs')" 
+    <button class="search--icon-width" *ngIf="(item == 'projects' &&
+    (role == 'employer' || role == 'admin')) || (item == 'timeLogs')" [disabled]="status == 'false'"
     mat-icon-button style="color: #4286D2; background-color: transparent; margin-left: 10px;margin-bottom: 20px;" (click)="create()">
         <mat-icon style="font-size: 35px;">add_circle</mat-icon>
     </button>

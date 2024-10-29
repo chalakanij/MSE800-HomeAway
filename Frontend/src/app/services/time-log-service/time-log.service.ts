@@ -60,16 +60,16 @@ export class TimeLogService {
         return this.http.get(endpointUrl, httpOptions);
     }
 
-    // /delete user
-    deleteTimeLog(data: Number[]): Observable<any> {
-        const endpointUrl = `${environment.apiUrl}/project/delete`;
-        return this.http.put(endpointUrl, data, httpOptions);
-    }
-
     updateTimeLog(data: any): Observable<any> {
         const endpointUrl = `${environment.apiUrl}/checkinout` ;
         console.log(endpointUrl)
         return this.http.put(endpointUrl, data);
+    }
+
+    getCheckinStatus(): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/checkin_status`;
+        console.log()
+        return this.http.get(endpointUrl, httpOptions);
     }
 
 }

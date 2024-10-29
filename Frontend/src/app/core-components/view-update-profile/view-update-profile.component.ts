@@ -35,7 +35,6 @@ export class ViewUpdateProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProfile();
-    console.log(this.profileForm.controls['company_name'].value)
   }
 
   loadProfile(): void {

@@ -21,6 +21,7 @@ export class SearchBarComponent implements OnInit {
   @Output() employeeEvent = new EventEmitter<String>();
   @Output() projectEvent = new EventEmitter<String>();
   @Input() item : String = '';
+  @Input() status: string = '';
   @Input() role : String = '';
   @Input() projectList : CreateProjectData[] = [];
   selectedResults!: CreateProjectData[];

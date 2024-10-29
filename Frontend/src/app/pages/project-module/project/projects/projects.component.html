@@ -30,11 +30,6 @@
                     <div class="col-1 col-md-1">
                       <mat-panel-title>
                         <div class="expansion-detail">
-                          <mat-checkbox (click)="$event.stopPropagation()"
-                                        (change)="$event ? selection.toggle(element) : null"
-                                        [checked]="selection.isSelected(element)"
-                                        [aria-label]="checkboxLabel(element)">
-                          </mat-checkbox>
                         </div>
                       </mat-panel-title>
                     </div>
@@ -106,15 +101,6 @@
             <mat-toolbar-row class="row pm-toolbar">
                 <div class="col-5" style="margin-left: 7px;">
                     <div class="row">
-                    <mat-checkbox (change)="$event ? masterToggle() : null" class="col-1"
-                        [checked]="selection.hasValue() && isAllSelected()"
-                        [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()"
-                        style="margin-right: 30px;">
-                    </mat-checkbox>
-                    <button matRipple *ngIf="selection.hasValue() || isAllSelected()"
-                        (click)="openBulkDeleteDialog()" class="col-6 pm-toolbar--action--delete">
-                        Delete
-                    </button>
                 </div>
                 </div>
                 <div class="col-6">

@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Page } from 'src/app/interface/paginator/page';
-import { CreateTimeLogData } from 'src/app/interface/time-log.interface';
+import { CreateTimeLogData, TimeLogStatus } from 'src/app/interface/time-log.interface';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { StateService } from 'src/app/services/common-service/state-service';
 import { TimeLogService } from 'src/app/services/time-log-service/time-log.service';
@@ -44,6 +44,8 @@ export class TimeLogsComponent implements OnInit {
   projectId = undefined;
   employeeId = undefined;
   selectedResultsWithTitles!: any;
+  isCheckinStatus: string = 'false';
+  currentUserId!: Number;
 
   selection = new SelectionModel<CreateTimeLogData>(true, []);
 
@@ -59,6 +61,7 @@ export class TimeLogsComponent implements OnInit {
 
   ngOnInit(): void {
     this.isEmployerRole();
+    this.currentUserId = this.authService.getUserId();
     this.data.changeTitle("Time Logs");
     this.timeLogs = 'timeLogs';
     this.searchForm = new FormGroup({
@@ -66,13 +69,13 @@ export class TimeLogsComponent implements OnInit {
     });
     this.loading = true;
     this.pageSize = 10;
-    if (this.isEmployer == 'employer') {
-      this.getProjectData(1, 100);
+    this.getProjectData(1, 100);
+    if (this.isEmployer == 'employer') { 
       this.getUserData(1, 100);
       this.getTimeLogData(1, this.pageSize, undefined, undefined);
     } else {
-      this.getProjectDataEmployee();
       this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
+      this.getCheckingStatus();
     }
   }
 
@@ -142,8 +145,33 @@ export class TimeLogsComponent implements OnInit {
         this.selectedResultsWithTitles = [];
         if (this.isEmployer == 'employer') {
           this.getTimeLogData(1, this.pageSize, undefined, undefined);
+          this.getCheckingStatus()
         } else {
           this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
+          this.getCheckingStatus()
+        }
+      }
+    });
+  }
+
+  onEditDialog(timeLog: CreateTimeLogData) {
+    const dialogRef = this.dialog.open(AddTimeLogsComponent, {
+      data: {
+        data: timeLog,
+        type: 'EDIT_TIMELOG'
+      }
+    });
+    dialogRef.afterClosed().subscribe((confirmed) => {
+      if (confirmed) {
+        this.loading = true;
+        this.pageSize = 10;
+        this.selectedResultsWithTitles = [];
+        if (this.isEmployer == 'employer') {
+          this.getTimeLogData(1, this.pageSize, undefined, undefined);
+          this.getCheckingStatus()
+        } else {
+          this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
+          this.getCheckingStatus()
         }
       }
     });
@@ -282,8 +310,8 @@ export class TimeLogsComponent implements OnInit {
     }
   }
 
-  getProjectDataEmployee() {
-    this.project_service.getProjectsByUser(this.authService.getUserId()).pipe(
+  getCheckingStatus() {
+    this.time_log_service.getCheckinStatus().pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
           duration: 2000,
@@ -291,13 +319,13 @@ export class TimeLogsComponent implements OnInit {
         return throwError(error);
       })
     )
-      .subscribe((res: Page<any>) => {
-        if (res && res.items && res.items.length > 0) {
-          this.setProjectDataEmployee(res.items);
-        } else {
-          this.snackBar.open('No Projects found', '', {
-            duration: 2000,
-          });
+      .subscribe((res: TimeLogStatus) => {
+        if (res && res.id) {
+          console.log(res)
+          this.isCheckinStatus = 'false';
+        } else if (res == null) {
+          console.log(res)
+          this.isCheckinStatus = 'true';
         }
       });
   }
