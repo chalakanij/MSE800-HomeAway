@@ -13,7 +13,7 @@ class DashboardService:
             Project.id.in_(select(UserProject.project_id).filter(UserProject.employee_id == user.id))
         ).group_by(
             Project.status
-        ).order_by(Project.id).all()
+        ).order_by(Project.status).all()
         project_status_counts = [ProjectStatusCount(status=project.status, count=project.count) for project in projects]
 
         last_checkin = self.db.query(CheckInOut).filter(CheckInOut.user_id == user.id).order_by(desc(CheckInOut.id)).first()
@@ -42,7 +42,7 @@ class DashboardService:
             Project.user_id == user.id
         ).group_by(
             Project.status
-        ).order_by(Project.status).order_by(Project.id).all()
+        ).order_by(Project.status).all()
         project_status_counts = [ProjectStatusCount(status=project.status, count=project.count) for project in projects]
 
         employer_projects = self.db.query(Project).filter(Project.user_id == user.id).all()
@@ -58,16 +58,16 @@ class DashboardService:
     def get_admin_dashboard(self, user:User):
         employers = self.db.query(User.active, func.count(User.id).label("count")).filter(
             User.role == UserRole.EMPLOYER
-        ).group_by(User.active).all()
+        ).group_by(User.active).order_by(User.active).all()
         employer_status_count = [ProjectStatusCount(status=str(employer.active), count=employer.count) for employer in employers]
 
-        employees = self.db.query(User.active, func.count(User.id).label('count')).group_by(User.active).all()
+        employees = self.db.query(User.active, func.count(User.id).label('count')).group_by(User.active).order_by(User.active).all()
         user_status_counts = [ProjectStatusCount(status=str(employees.active), count=employees.count) for employees in
                               employees]
 
         projects = self.db.query(Project.status, func.count(Project.id).label("count")).group_by(
             Project.status
-        ).all()
+        ).order_by(Project.status).all()
         project_status_counts = [ProjectStatusCount(status=project.status, count=project.count) for project in projects]
 
         return {"employers": employer_status_count, "projects": project_status_counts,
