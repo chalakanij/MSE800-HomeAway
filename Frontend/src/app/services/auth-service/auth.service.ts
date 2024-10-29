@@ -21,12 +21,14 @@ export class AuthService {
     private email!: String;
     private name!: String;
     private token!: String;
-    private roles!: String;
-    private companyCode!: String;
+    private roles!: string;
+    private companyCode!: string;
     private userId!: Number;
     private authStatusListener = new Subject<boolean>();
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.autoAuthUser();
+     }
 
     // login a user
     loginUser(data: LoginUserData): Observable<any> {
@@ -79,7 +81,12 @@ export class AuthService {
             this.userId = decodeToken.user_id;
             this.isAuthenticated = true;
             this.authStatusListener.next(true);
-            console.log(this.userId)
+
+
+            localStorage.setItem('companyCode', this.companyCode);
+            localStorage.setItem('roles', this.roles);
+            localStorage.setItem('userId', this.userId.toString());
+
             if (this.token === token) {
                 resolve('Token saved');
             } else {
@@ -87,11 +94,6 @@ export class AuthService {
             }
             console.log("222")
         });
-    }
-
-    // save login token and the uuid in the local storage
-    private saveAuthLocal(token: string) {
-        localStorage.setItem('token', token);
     }
 
     // get the login token and the uui stored in the local storage
@@ -105,11 +107,15 @@ export class AuthService {
         }
     }
 
-    // get the locally stored login token and uuid and save it in the app
+    // Get the locally stored auth details and save them in instance variables
     autoAuthUser() {
         const authData = this.getAuthLocal();
         if (authData) {
             this.token = authData.token;
+            this.companyCode = localStorage.getItem('companyCode') || '';
+            this.roles = localStorage.getItem('roles') || '';
+            this.userId = Number(localStorage.getItem('userId'));
+            this.isAuthenticated = true;
             this.authStatusListener.next(true);
         }
     }
@@ -142,11 +148,17 @@ export class AuthService {
         return this.companyCode;
     }
 
-    // clear local storage
-    private clearAuthLocal() {
-        localStorage.removeItem('token');
+    private saveAuthLocal(token: string) {
+        localStorage.setItem('token', token);
     }
 
+    // Clear all auth-related local storage
+    private clearAuthLocal() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('companyCode');
+        localStorage.removeItem('roles');
+        localStorage.removeItem('userId');
+    }
     // get the authenticated status of the user
     getIsAuthenticated() {
         this.autoAuthUser()

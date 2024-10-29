@@ -38,6 +38,7 @@ export class ViewProjectEmployeeComponent implements OnInit {
   displayedColumns: string[] = ['name', 'email'];
   selection = new SelectionModel<any>(true, []);
   filteredResults: Object[] = [];
+  assignedEmployees: Object[] = [];
   originalResults: CreateEmployeeData[] = [];
   searchControl: FormControl = new FormControl('');
   pageSizeOptions: number[] = [5, 10, 15, 20];
@@ -49,8 +50,7 @@ export class ViewProjectEmployeeComponent implements OnInit {
     private snackBar: MatSnackBar,
     private employee_service: EmployeeService,
     private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
-  ) { }
+    private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     if (this.data && this.data.data) {
@@ -62,7 +62,8 @@ export class ViewProjectEmployeeComponent implements OnInit {
         id: this.data.data.id
       });
     }
-    this.getEmployeeData("", 1, this.pageSize);
+    this.getEmployeeData(1, 100)
+    console.log("sss")
     this.getEmployeeByProjectData(1, this.pageSize);
     this.searchControl.valueChanges.subscribe(searchKey => {
       this.onSearch(searchKey);
@@ -93,15 +94,16 @@ export class ViewProjectEmployeeComponent implements OnInit {
       this.loading = false;
   
       if (res && res.length > 0) {
-        const employees = this.pageEmployee?.items as CreateEmployeeData[] || [];
+        const employees = this.filteredResults as CreateEmployeeData[] ;
         const filteredEmployees: CreateEmployeeData[] = employees
           .filter((employee: CreateEmployeeData) => 
             res.some((item: EmployeeByProjectData) => item.employee_id === employee.id)
           );
         
+          console.log(filteredEmployees)
         if (filteredEmployees.length > 0) {
           this.originalResults = filteredEmployees;
-          this.filteredResults = filteredEmployees;
+          this.assignedEmployees = filteredEmployees;
         } else {
           this.snackBar.open('No matching employees found for this project', '', {
             duration: 2000,
@@ -144,7 +146,7 @@ export class ViewProjectEmployeeComponent implements OnInit {
     return this.selection.selected.length > 0 && !this.isAllSelected();
   }
 
-  getEmployeeData(searchKey: String, pageIndex: number, pageSize: number) {
+  getEmployeeData(pageIndex: number, pageSize: number) {
     this.employee_service.getEmployees(pageIndex, pageSize).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {

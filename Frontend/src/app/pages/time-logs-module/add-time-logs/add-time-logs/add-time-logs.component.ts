@@ -109,8 +109,9 @@ export class AddTimeLogsComponent implements OnInit {
             }
           },
           (error) => {
+            console.log(error)
             this.dialogRef.close(false);
-            this.snackBar.open('Time log not added.', '', {
+            this.snackBar.open('Time log not added: ' + error.error.detail, '', {
               duration: 2000,
             });
           }
@@ -120,7 +121,7 @@ export class AddTimeLogsComponent implements OnInit {
   }
 
   getProjectsByUser() {
-    this.project_service.getProjectsByUser(this.auth_service.getUserId()).pipe(
+    this.project_service.getProjects(1, 100).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
           duration: 2000,

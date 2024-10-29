@@ -8,7 +8,7 @@
             </div>
             <div class="form-layout--all-center" style="padding-top: 10px;">
                 <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
-                <table mat-table [dataSource]="filteredResults" class="col-12 mat-elevation-z8">
+                <table mat-table [dataSource]="assignedEmployees" class="col-12 mat-elevation-z8">
                     <!-- Name Column -->
                     <ng-container matColumnDef="name">
                         <th mat-header-cell *matHeaderCellDef> Name </th>
