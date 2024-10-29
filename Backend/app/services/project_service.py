@@ -56,7 +56,7 @@ class ProjectService:
         )
 
         result = self.db.execute(users_data).scalars().all()
-        return [ProjectEmployeeOutput.from_orm(user_project) for user_project in result]
+        return [ProjectEmployeeOutput(**user_project.__dict__) for user_project in result]
 
 
     def update_status(self, update_request, user):
