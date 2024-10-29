@@ -22,7 +22,7 @@ class DashboardService:
         else:
             last_checkin_time = last_checkin.in_time
         # if out_time is available, then last_checkout is this record
-        if last_checkin.out_time is not None:
+        if last_checkin is not None:
             last_checkout_time = last_checkin.out_time
         else:
             # otherwise need to get the record with last out_time
