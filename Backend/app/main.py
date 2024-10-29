@@ -3,6 +3,8 @@ from app.api import routes
 from app.db import init_db
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import APP_NAME
+from contextlib import asynccontextmanager
+
 
 app = FastAPI(
     title=APP_NAME,
@@ -23,9 +25,12 @@ origins = [ "http://localhost:4200" ], # Angular app
 
 
 
-@app.on_event("startup")
-def on_startup():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
     init_db()
+    yield
+
+app.router.lifespan_context = lifespan
 
 app.include_router(routes.user_routes.router)
 app.include_router(routes.project_routes.router)
