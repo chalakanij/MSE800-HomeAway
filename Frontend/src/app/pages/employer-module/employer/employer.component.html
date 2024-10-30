@@ -1,0 +1,103 @@
+<div class="page-layout page-layout--module-all-center">
+    <div style="width: 90%;padding-top: 60px;">
+        <app-search-bar (searchEvent)="onSearch($event)"></app-search-bar>
+    </div>
+    <div style="width: 90%;">
+        <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+        <mat-accordion style="width: 98%;">
+            <mat-expansion-panel hideToggle disabled class="expansion-header">
+                <mat-expansion-panel-header>
+                  <mat-panel-title class="row">
+                    <div class="col-1 expansion-header--column">
+                      <!-- action -->
+                    </div>
+                    <div class="col-3 expansion-header--column">Name</div>
+                    <div class="col-8 expansion-header--column">
+                      <div class="row">
+                        <div class="col-4 expansion-header--column">Email</div>
+                        <div class="col-4 expansion-header--column">Mobile Number</div>
+                        <div class="col-4 expansion-header--column">Role</div>
+                      </div>
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+              </mat-expansion-panel>
+
+            <!-- Detail Rows -->
+            <mat-expansion-panel #panel *ngFor="let element of selectedResults">
+                <mat-expansion-panel-header>
+                  <div class="row" style="width: 100% !important;">
+                    <div class="col-1 col-md-1">
+                      <mat-panel-title>
+                        <div class="expansion-detail">
+                          <!-- <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(element) : null"
+                                        [checked]="selection.isSelected(element)"
+                                        [aria-label]="checkboxLabel(element)">
+                          </mat-checkbox> -->
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                    <div class="col-3 col-md-3">
+                      <mat-panel-title>
+                        <div class="expansion-detail">
+                          <label>{{ element.title }} {{ element.first_name }} {{ element.last_name }}</label>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                    <div class="col-8 col-md-8">
+                      <mat-panel-title class="row" style="width: 100%;" *ngIf="!panel.expanded">
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.email }}</label>
+                        </div>
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.phone_number }}</label>
+                        </div>
+                        <div class="col-4 expansion-detail">
+                          <label>{{ element.role }}</label>
+                        </div>
+                      </mat-panel-title>
+                    </div>
+                  </div>
+                </mat-expansion-panel-header>
+
+                <!-- Expansion Row Web-->
+                <div class="no-show">
+                    <div class="row">
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Email: </label>
+                            <label class="expansion-detail--label--value">{{element.email}} </label>
+                        </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Mobile Number: </label>
+                            <label class="expansion-detail--label--value">{{element.phone_number}} </label>
+                        </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Email: </label>
+                            <label class="expansion-detail--label--value">{{element.email}} </label>
+                        </div>
+                        <div class="col-3 expansion-detail" style="text-align: left;">
+                            <label class="expansion-detail--label">Designation: </label>
+                            <label class="expansion-detail--label--value">{{element.role}} </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Action Row -->
+                <mat-action-row style="padding:0px; padding-right: 15px;">
+                </mat-action-row>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <!-- Paginator/Delete -->
+        <mat-toolbar>
+            <mat-toolbar-row class="row pm-toolbar">
+                <div class="col-6">
+                <mat-paginator #paginator class="pm-toolbar--action--paginator" [length]="dataLength" (page)="pageEvent($event)"
+                    [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"></mat-paginator>
+                </div>
+            </mat-toolbar-row>
+        </mat-toolbar>
+    </div>
+</div>

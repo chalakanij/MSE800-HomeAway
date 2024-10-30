@@ -79,9 +79,7 @@ export class SignupEmployeeComponent {
               });
               this.signupForm.reset();
             } else {
-              this.auth_service.setToken(response.token).then((res) => {
                 this.router.navigate(['/login']);
-              });
             }
           }
         );

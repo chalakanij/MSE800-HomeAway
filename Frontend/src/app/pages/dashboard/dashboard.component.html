@@ -1,87 +1,135 @@
-<!-- <div class="page-layout page-layout--module-all-center">
-    <div style="width: 90%;"> -->
-        <!-- For all users -->
-        <!-- <div class="row justify-content-around" style="margin-top: 35px;">
-            <mat-card class="col-3">
-                <mat-card-title-group class="row">
-                    <div class="col-6">
-                        <img mat-card-sm-image src="../../../assets/png/user.png">
-                    </div>
-                    <div class="col-6">
-                        <mat-card-title style="text-align: right;">Users</mat-card-title>
-                        <mat-card-subtitle style="text-align: right;font-size: 20px;">{{initialDetails.active_users_count}}/{{initialDetails.all_users_count}}
-                        </mat-card-subtitle>
-                    </div>
-                </mat-card-title-group>
-            </mat-card>
-            <mat-card class="col-3">
-                <mat-card-title-group class="row">
-                    <div class="col-6">
-                        <img mat-card-sm-image src="../../../assets/png/responsive.png">
-                    </div>
-                    <div class="col-6">
-                        <mat-card-title style="text-align: right;">Assets</mat-card-title>
-                        <mat-card-subtitle style="text-align: right; font-size: 20px;">{{initialDetails.active_assets_count}}/{{initialDetails.all_assets_count}}
-                        </mat-card-subtitle>
-                    </div>
-                </mat-card-title-group>
-            </mat-card>
+<div class="page-layout page-layout--module-all-center">
+        <div style="width: 90%; padding-top: 20px;">
 
-            <mat-card class="col-3">
-                <mat-card-title-group class="row">
-                    <div class="col-6">
-                        <img mat-card-sm-image src="../../../assets/png/branch.png">
-                    </div>
-                    <div class="col-6">
-                        <mat-card-title style="text-align: right;">Units</mat-card-title>
-                        <mat-card-subtitle style="text-align: right;font-size: 20px;">{{initialDetails.active_units_count}}/{{initialDetails.all_units_count}}
-                        </mat-card-subtitle>
-                    </div>
-                </mat-card-title-group>
-            </mat-card>
+                <div class="row justify-content-around" style="margin-top: 35px;" *ngIf="role == 'ADMIN'">
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Total
+                                                        Employers</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="adminEmployerChartData" [type]="'bar'"
+                                                                [options]="barChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Total
+                                                        Employees</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="adminEmployeeChartData" [type]="'bar'"
+                                                                [options]="barChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Projects
+                                                        Status</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="adminProjectChartData" [type]="'pie'"
+                                                                [options]="pieChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                </div>
+
+                <div class="row justify-content-around" style="margin-top: 35px;" *ngIf="role == 'EMPLOYER'">
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Project
+                                                        Status</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="employerProjectChartData"
+                                                                [type]="'pie'" [options]="pieChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Employee
+                                                        Counts</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="employerEmployeeChartData"
+                                                                [type]="'bar'" [options]="barChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Project
+                                                        Hours</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="projectStatusPieChartData"
+                                                                [type]="'pie'" [options]="pieChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                </div>
+
+                <div class="row justify-content-around" style="margin-top: 35px;" *ngIf="role == 'EMPLOYEE'">
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Projects
+                                                        Status</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="employeeProjectChartData"
+                                                                [type]="'pie'" [options]="pieChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Last Time-Log
+                                                        Status</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <div *ngIf="!isCheckedOut" style="padding-top: 20px;">
+                                                                <span>Last Checkin Time: </span>
+                                                                <mat-chip-list>
+                                                                        <mat-chip>
+                                                                                <mat-icon
+                                                                                        matChipAvatar style="color: #4286d2;">timelapse</mat-icon>
+                                                                                {{employeeCheckinTime}}
+                                                                        </mat-chip>
+                                                                </mat-chip-list>
+                                                        </div>
+                                                        <div *ngIf="isCheckedOut" style="padding-top: 20px;">
+                                                                <span>Last Checkout Time: </span>
+                                                                <mat-chip-list>
+                                                                        <mat-chip>
+                                                                                <mat-icon
+                                                                                        matChipAvatar style="color: #4286d2;">timelapse</mat-icon>
+                                                                                {{employeeCheckoutTime}}
+                                                                        </mat-chip>
+                                                                </mat-chip-list>
+                                                        </div>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                </div>
+
         </div>
-
-        <mat-divider style="margin-bottom: 35px;margin-top: 35px;border-top-width: 1px;height: 25px;"></mat-divider> -->
-
-        <!-- For admin and unit head -->
-        <!-- <div class="row justify-content-around" style="margin-top: 25px;">
-            <mat-card class="col-3">
-                <mat-card-title-group style="margin-bottom:30px">
-                    <mat-card-title>My Transfer Requests</mat-card-title>
-                </mat-card-title-group>
-                <p>Pending : {{initialDetails.pending_asset_transfer_requests_user}}</p>
-                <p>Approved : {{initialDetails.accepted_asset_transfer_requests_user}}</p>
-                <p>Cancel : {{initialDetails.canceled_asset_transfer_requests_user}}</p>
-                <p>Rejected : {{initialDetails.rejected_asset_transfer_requests_user}}</p>
-                <p>All : {{initialDetails.all_asset_transfer_requests_user}}</p>
-                <mat-card-content>
-                </mat-card-content>
-            </mat-card>
-            <mat-card class="col-3" *ngIf="isUnit">
-                <mat-card-title-group style="margin-bottom:30px">
-                    <mat-card-title>All Transfer Requests-Unit</mat-card-title>
-                </mat-card-title-group>
-                <mat-card-content>
-                    <p>Pending : {{initialDetails.pending_asset_transfer_requests_unit}}</p>
-                    <p>Approved : {{initialDetails.accepted_asset_transfer_requests_unit}}</p>
-                    <p>Cancel : {{initialDetails.canceled_asset_transfer_requests_unit}}</p>
-                    <p>Rejected : {{initialDetails.rejected_asset_transfer_requests_unit}}</p>
-                    <p>All : {{initialDetails.all_asset_transfer_requests_unit}}</p>
-                </mat-card-content>
-            </mat-card>
-
-            <mat-card class="col-3" *ngIf="isAdmin">
-                <mat-card-title-group style="margin-bottom:30px">
-                    <mat-card-title>All Transfer Requests</mat-card-title>
-                </mat-card-title-group>
-                <mat-card-content>
-                    <p>Pending : {{initialDetails.pending_asset_transfer_requests_admin}}</p>
-                    <p>Approved : {{initialDetails.accepted_asset_transfer_requests_admin}}</p>
-                    <p>Cancel : {{initialDetails.canceled_asset_transfer_requests_admin}}</p>
-                    <p>Rejected : {{initialDetails.rejected_asset_transfer_requests_admin}}</p>
-                    <p>All : {{initialDetails.all_asset_transfer_requests_admin}}</p>
-                </mat-card-content>
-            </mat-card>
-        </div>
-    </div>
-</div> -->
+</div>

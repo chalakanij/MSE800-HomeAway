@@ -12,12 +12,12 @@ import { AuthService } from 'src/app/services/auth-service/auth.service';
   })
 export class SideMenuComponent {
 
-  // expanded = false;
   showSubmenu: boolean = false;
   isShowing = false;
   isDisabledEmployer!: boolean;
   isDisabledEmployee!: boolean;
   @Input() item!: NavItem;
+  role!:string;
 
   navItems: NavItem[] = [
     {
@@ -43,21 +43,9 @@ export class SideMenuComponent {
     {
       displayName: 'Employees',
       iconName: 'engineering',
-      route: 'employers',
+      route: 'employees',
     },
   ];
-
-  // mouseenter() {
-  //   if (!this.expanded) {
-  //     this.isShowing = true;
-  //   }
-  // }
-
-  // mouseleave() {
-  //   if (!this.expanded) {
-  //     this.isShowing = false;
-  //   }
-  // }
 
   ngOnInit(): void {
     this.checkRole();
@@ -76,17 +64,13 @@ export class SideMenuComponent {
   }
 
   checkRole() {
-    this.isDisabledEmployer = false;
-    this.isDisabledEmployee = false
     if (this.auth_service.getRoles().includes('EMPLOYER')) {
-      this.isDisabledEmployer = true;
+      this.role = 'Employer'
     } else if (this.auth_service.getRoles().includes('EMPLOYEE')){
-      this.isDisabledEmployee = true
-      this.isDisabledEmployer = true;
-    } else {
-      this.isDisabledEmployer = false;
-      this.isDisabledEmployee = false
-    }
+      this.role = 'Employee'
+    } if (this.auth_service.getRoles().includes('ADMIN')){
+      this.role = 'Admin'
+    } 
   }
 
 }

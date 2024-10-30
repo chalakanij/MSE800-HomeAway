@@ -11,9 +11,16 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { ViewUpdateProfileComponent } from './view-update-profile/view-update-profile.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSelectModule } from '@angular/material/select';
+import { ViewEmployeeLinkComponent } from './Employee-Link/view-employee-link/view-employee-link.component';
 
 @NgModule({
-  declarations: [HeaderComponent, LoadingSpinnerComponent, SideMenuComponent],
+  declarations: [HeaderComponent, LoadingSpinnerComponent, SideMenuComponent, ViewUpdateProfileComponent,
+    ViewEmployeeLinkComponent
+  ],
   imports: [
     CommonModule,
     MatCardModule,
@@ -22,8 +29,12 @@ import { MatButtonModule } from '@angular/material/button';
     MatToolbarModule,
     MatMenuModule,
     MatButtonModule,
-    MatListModule
+    MatListModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSnackBarModule,
+    MatSelectModule
   ],
-  exports: [HeaderComponent, LoadingSpinnerComponent, SideMenuComponent]
+  exports: [HeaderComponent, LoadingSpinnerComponent, SideMenuComponent, ViewUpdateProfileComponent, ViewEmployeeLinkComponent]
 })
 export class CoreComponentsModule { }

@@ -10,6 +10,8 @@ import {MatDividerModule} from '@angular/material/divider';
 import { DeleteDialogComponent } from "./delete-dialog/delete-dialog.component";
 import { MatDialogModule } from "@angular/material/dialog";
 import { SearchBarComponent } from "./search-bar/search-bar.component";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
     declarations: [FooterComponent,DeleteDialogComponent, SearchBarComponent],
@@ -22,7 +24,9 @@ import { SearchBarComponent } from "./search-bar/search-bar.component";
     MatDividerModule,
     MatIconModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSnackBarModule,
+    MatSelectModule
     ],
     exports: [FooterComponent, SearchBarComponent],
   })
