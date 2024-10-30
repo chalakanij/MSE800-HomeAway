@@ -28,8 +28,7 @@ export class AddProjectComponent implements OnInit {
     private project_service: ProjectService,
     @Inject(MAT_DIALOG_DATA) private data: any,
     private dialogRef: MatDialogRef<AddProjectComponent>,
-    private snackBar: MatSnackBar,
-    private auth_service: AuthService
+    private snackBar: MatSnackBar
 
   ) { }
 
@@ -43,12 +42,6 @@ export class AddProjectComponent implements OnInit {
       this.title = "Create Project";
     }
   }
-
-  
-
-  // displayWith(obj?: any): string {
-  //   return obj ? obj.name : undefined;
-  // }
 
   onSubmit(){
 

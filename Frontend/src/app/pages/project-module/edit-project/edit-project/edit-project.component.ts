@@ -45,7 +45,6 @@ export class EditProjectComponent implements OnInit {
     if (this.data.type === 'EDIT_PROJECT') {
       this.title = "Edit Project";
     }
-    console.log(typeof this.data.data.title); 
     this.projectDetailsGroup = new FormGroup({
       title: new FormControl({ value: '', disabled: true }, Validators.required),
     description: new FormControl('',),
@@ -60,14 +59,12 @@ export class EditProjectComponent implements OnInit {
       this.projectDetailsGroup.markAllAsTouched();
     } else {
       const request = {
-        id: this.data.data.id,
-        description: this.projectDetailsGroup.value.description,
+        project_id: this.data.data.id,
         status: this.projectDetailsGroup.value.status
       }
       if (this.data.type === 'EDIT_PROJECT') {
         this.project_service.updateProject(request).subscribe(
           (response) => {
-            console.log(response)
             if (response.error != true) {
               this.dialogRef.close(true);
               this.snackBar.open(this.data.data.title + ' project edited.', '', {
@@ -82,7 +79,7 @@ export class EditProjectComponent implements OnInit {
           },
           (error) => {
             this.dialogRef.close(false);
-            this.snackBar.open(this.data.title + ' project not created.', '', {
+            this.snackBar.open(this.data.data.title + ' project is not edited.', '', {
               duration: 2000,
             });
           }
