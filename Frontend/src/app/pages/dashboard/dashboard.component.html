@@ -1,42 +1,135 @@
-<div class="charts-container" *ngIf="employerProjectChartData && employerProjectChartData.datasets[0].data.length">
-    
-    <div style="display: block; width: 400px;">
-      <h3>Employer Project Status</h3>
-      <div class="row">
-      <canvas baseChart class="col-6"
-              [data]="employerProjectChartData"
-              [type]="'pie'"
-              [options]="pieChartOptions">
-      </canvas>
-      </div>
-    </div>
-</div>
+<div class="page-layout page-layout--module-all-center">
+        <div style="width: 90%; padding-top: 20px;">
 
-    <div class="charts-container" *ngIf="employerEmployeeChartData && employerEmployeeChartData.datasets[0].data.length">
-        <div style="display: block; width: 400px;">
-          <h3>Employee Stats</h3>
-          <div class="row">
-          <canvas baseChart class="col-6"
-                  [data]="employerEmployeeChartData"
-                  [type]="'pie'"
-                  [options]="pieChartOptions">
-          </canvas>
-          </div>
-        </div>
-    </div>
-
-        <div class="charts-container" *ngIf="employerProjectHoursChartData && employerProjectHoursChartData.datasets[0].data.length">
-                <div style="display: block; width: 400px;">
-                  <h3>Employer Project Hours</h3>
-                  <div class="row">
-                  <canvas baseChart class="col-6"
-                          [data]="employerProjectHoursChartData"
-                          [type]="'pie'"
-                          [options]="pieChartOptions">
-                  </canvas>
-                  </div>
+                <div class="row justify-content-around" style="margin-top: 35px;" *ngIf="role == 'ADMIN'">
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Total
+                                                        Employers</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="adminEmployerChartData" [type]="'bar'"
+                                                                [options]="barChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Total
+                                                        Employees</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="adminEmployeeChartData" [type]="'bar'"
+                                                                [options]="barChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Projects
+                                                        Status</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="adminProjectChartData" [type]="'pie'"
+                                                                [options]="pieChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
                 </div>
+
+                <div class="row justify-content-around" style="margin-top: 35px;" *ngIf="role == 'EMPLOYER'">
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Project
+                                                        Status</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="employerProjectChartData"
+                                                                [type]="'pie'" [options]="pieChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Employee
+                                                        Counts</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="employerEmployeeChartData"
+                                                                [type]="'bar'" [options]="barChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Project
+                                                        Hours</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="projectStatusPieChartData"
+                                                                [type]="'pie'" [options]="pieChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                </div>
+
+                <div class="row justify-content-around" style="margin-top: 35px;" *ngIf="role == 'EMPLOYEE'">
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Projects
+                                                        Status</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <canvas baseChart [data]="employeeProjectChartData"
+                                                                [type]="'pie'" [options]="pieChartOptions">
+                                                        </canvas>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                        <mat-card class="col-3">
+                                <mat-card-title-group class="row">
+                                        <div class="col-12">
+                                                <mat-card-title style="text-align: center;">Last Time-Log
+                                                        Status</mat-card-title>
+                                                <mat-card-content class="page-layout--module-all-center">
+                                                        <div *ngIf="!isCheckedOut" style="padding-top: 20px;">
+                                                                <span>Last Checkin Time: </span>
+                                                                <mat-chip-list>
+                                                                        <mat-chip>
+                                                                                <mat-icon
+                                                                                        matChipAvatar style="color: #4286d2;">timelapse</mat-icon>
+                                                                                {{employeeCheckinTime}}
+                                                                        </mat-chip>
+                                                                </mat-chip-list>
+                                                        </div>
+                                                        <div *ngIf="isCheckedOut" style="padding-top: 20px;">
+                                                                <span>Last Checkout Time: </span>
+                                                                <mat-chip-list>
+                                                                        <mat-chip>
+                                                                                <mat-icon
+                                                                                        matChipAvatar style="color: #4286d2;">timelapse</mat-icon>
+                                                                                {{employeeCheckoutTime}}
+                                                                        </mat-chip>
+                                                                </mat-chip-list>
+                                                        </div>
+                                                </mat-card-content>
+                                        </div>
+                                </mat-card-title-group>
+                        </mat-card>
+                </div>
+
         </div>
-    
- 
-  
+</div>

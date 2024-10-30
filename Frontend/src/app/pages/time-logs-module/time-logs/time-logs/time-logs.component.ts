@@ -4,8 +4,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Page } from 'src/app/interface/paginator/page';
 import { CreateTimeLogData, TimeLogStatus } from 'src/app/interface/time-log.interface';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
@@ -69,14 +69,16 @@ export class TimeLogsComponent implements OnInit {
     });
     this.loading = true;
     this.pageSize = 10;
-    this.getProjectData(1, 100);
-    if (this.isEmployer == 'employer') { 
-      this.getUserData(1, 100);
-      this.getTimeLogData(1, this.pageSize, undefined, undefined);
-    } else {
-      this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
-      this.getCheckingStatus();
-    }
+    this.getProjectData(1, 100).subscribe((projects) => {
+      if (this.isEmployer === 'employer') {
+        this.getUserData(1, 100);
+        this.getTimeLogData(1, this.pageSize, undefined, undefined);
+      } else {
+        this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
+      }
+    });
+    
+    this.getCheckinStatus();
   }
 
   setTimeLogData(content: any) {
@@ -91,7 +93,6 @@ export class TimeLogsComponent implements OnInit {
         this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
       }
     } else {
-      console.log(this.selectedResults)
       this.selectedResultsWithTitles = this.selectedResults.map(timeLog => {
         const project = this.selectedProjects.find(project => project.id === timeLog.project_id);
         console.log(timeLog)
@@ -144,11 +145,11 @@ export class TimeLogsComponent implements OnInit {
         this.pageSize = 10;
         this.selectedResultsWithTitles = [];
         if (this.isEmployer == 'employer') {
-          this.getTimeLogData(1, this.pageSize, undefined, undefined);
-          this.getCheckingStatus()
+          this.getTimeLogData(1, this.pageSize, this.employeeId, this.projectId);
+          this.getCheckinStatus()
         } else {
-          this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
-          this.getCheckingStatus()
+          this.getTimeLogData(1, this.pageSize, this.employeeId, this.projectId);
+          this.getCheckinStatus()
         }
       }
     });
@@ -167,11 +168,11 @@ export class TimeLogsComponent implements OnInit {
         this.pageSize = 10;
         this.selectedResultsWithTitles = [];
         if (this.isEmployer == 'employer') {
-          this.getTimeLogData(1, this.pageSize, undefined, undefined);
-          this.getCheckingStatus()
+          this.getTimeLogData(1, this.pageSize, this.employeeId, this.projectId);
+          this.getCheckinStatus()
         } else {
-          this.getTimeLogData(1, this.pageSize, this.authService.getUserId(), undefined);
-          this.getCheckingStatus()
+          this.getTimeLogData(1, this.pageSize, this.employeeId, this.projectId);
+          this.getCheckinStatus()
         }
       }
     });
@@ -199,40 +200,39 @@ export class TimeLogsComponent implements OnInit {
     }
   }
 
-  setProjectData(content: any) {
+  setProjectData(content: any[]) {
     this.selectedProjects = content;
-    console.log(this.selectedProjects)
-    if (this.selectedProjects?.length == 0) {
+    console.log(this.selectedProjects);
+    if (this.selectedProjects?.length === 0) {
       this.snackBar.open('No Projects found', '', {
         duration: 2000,
       });
     }
   }
 
-  getProjectData(pageIndex: number, pageSize: number) {
-    this.project_service.getProjects(pageIndex, pageSize).pipe(
-      catchError((error) => {
-        this.snackBar.open(error.error.detail || 'An error occurred', '', {
-          duration: 2000,
-        });
-        return throwError(error);
-      })
-    )
-      .subscribe((res: Page<any>) => {
-        if (res && res.items && res.items.length > 0) {
-          this.setProjectData(res.items);
-        } else {
-          this.snackBar.open('No Projects found', '', {
-            duration: 2000,
-          });
-        }
-      });
-  }
+getProjectData(pageIndex: number, pageSize: number): Observable<any[]> {
+  return this.project_service.getProjects(pageIndex, pageSize).pipe(
+    tap((res: Page<CreateProjectData>) => {
+      if (res && res.items && res.items.length > 0) {
+        this.setProjectData(res.items); // Update local data with results
+      } else {
+        this.snackBar.open('No Projects found', '', { duration: 2000 });
+      }
+    }),
+    catchError((error) => {
+      this.snackBar.open(error.error.detail || 'An error occurred', '', { duration: 2000 });
+      return throwError(error);
+    }),
+    map((res: Page<CreateProjectData>) => res.items || []) // Extracts items or an empty array if none found
+  );
+}
 
+  
+  
   setUserData(content: any) {
     this.selectedEmployees = content;
     if (this.selectedEmployees?.length == 0) {
-      this.snackBar.open('No User found', '', {
+      this.snackBar.open('No Employees found', '', {
         duration: 2000,
       });
     }
@@ -257,7 +257,7 @@ export class TimeLogsComponent implements OnInit {
       if (res && res.items && res.items.length > 0) {
         this.setUserData(res.items);
       } else {
-        this.snackBar.open('No Users found', '', {
+        this.snackBar.open('No Employees found', '', {
           duration: 2000,
         });
       }
@@ -300,17 +300,7 @@ export class TimeLogsComponent implements OnInit {
     }
   }
 
-  setProjectDataEmployee(content: any) {
-    this.selectedProjects = content;
-    console.log(this.selectedProjects)
-    if (this.selectedProjects?.length == 0) {
-      this.snackBar.open('No Projects found', '', {
-        duration: 2000,
-      });
-    }
-  }
-
-  getCheckingStatus() {
+  getCheckinStatus() {
     this.time_log_service.getCheckinStatus().pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {

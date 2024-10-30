@@ -29,6 +29,7 @@ export class SearchBarComponent implements OnInit {
   selectedEmployees!: CreateEmployeeData[];
   page!: Page<any>;
   userId!: Number;
+  all!: string;
 
   constructor(private auth_service: AuthService) { }
 
@@ -45,10 +46,16 @@ export class SearchBarComponent implements OnInit {
   }
 
   onSelectEmployee(event: any) {
+    if (event.value == 'all') {
+      event.value = undefined
+    }
     this.employeeEvent.emit(event.value);
   }
 
   onSelectProject(event: any) {
+    if (event.value == 'all') {
+      event.value = undefined
+    }
     this.projectEvent.emit(event.value);
   }
 }

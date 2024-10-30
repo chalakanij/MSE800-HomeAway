@@ -5,7 +5,7 @@
             <mat-label>Select the User</mat-label>
             <mat-select style="color: #4286D2;"
                         (selectionChange)="onSelectEmployee($event)">
-                        <mat-option [value]="undefined">All</mat-option>
+                        <mat-option [value]="'all'">All</mat-option>
                         <mat-option [value]="userId">Me</mat-option>
                 <mat-option *ngFor="let option of employeeList" [value]="option.id">{{ option.first_name + " " + option.last_name }}</mat-option>
             </mat-select>
@@ -17,7 +17,7 @@
             <mat-label>Select the Project</mat-label>
             <mat-select style="color: #4286D2;"
                         (selectionChange)="onSelectProject($event)">
-                        <mat-option [value]="undefined">All</mat-option>
+                        <mat-option [value]="'all'">All</mat-option>
                 <mat-option *ngFor="let option of projectList" [value]="option.id">{{ option.title }}</mat-option>
             </mat-select>
         </mat-form-field>

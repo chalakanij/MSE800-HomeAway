@@ -22,10 +22,10 @@ def init_db():
             hashed_password = hash_password("admin")
             admin_user = User(
                 email="admin@admin.com",
-                title="Mr",
+                title="Mr.",
                 first_name="Admin",
                 last_name="User",
-                phone_number="",
+                phone_number="0724282292",
                 role=UserRole.ADMIN,
                 hashed_password=hashed_password
             )

@@ -33,7 +33,7 @@
             <div class="form-layout--all-center" style="padding-top: 10px;">
                 <label class="col-4 form-layout--label">In Time: </label>
                 <input class="custom-time-input col-8 form-layout--form" type="time" formControlName="in_time" placeholder="Select Time">
-            </div>
+                </div>
 
              <!-- Out Date Picker -->
              <div class="form-layout--all-center">
@@ -50,12 +50,15 @@
             <div class="form-layout--all-center" style="padding-top: 10px;">
                 <label class="col-4 form-layout--label">Out Time: </label>
                 <input class="custom-time-input col-8 form-layout--form" type="time" formControlName="out_time" placeholder="Select Time">
-            </div>
+                </div>
            </form>
         <div class="row">
-            <div class="col-4"></div>
+            <div class="col-4">
+            </div>
             <div class="col-8" style="display: flex; justify-content: flex-end;">
-                <span class="pm-error" *ngIf="isInvalidForm" style="bottom: 0px;">Please fill all the Details</span>
+                <!-- <span class="pm-error" *ngIf="isInvalidForm" style="bottom: 0px;">Please fill all the Details</span> -->
+                <span class="pm-error" style="bottom: 0px;" *ngIf="timeLogDetailsGroup.errors?.dateAndTimeRequired">{{ getErrorMessage('out_time', 'dateAndTimeRequired') }}</span>
+                <span class="pm-error" style="bottom: 0px;" *ngIf="timeLogDetailsGroup.errors?.inTimeAfterOutTime">{{ getErrorMessage('in_time', 'inTimeAfterOutTime') }}</span> 
             <button mat-button style="background-color: #4286D2; color: white; width: 80px;"
                 (click)="onSubmit();">Submit</button>
         </div>

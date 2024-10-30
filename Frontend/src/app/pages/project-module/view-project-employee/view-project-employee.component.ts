@@ -1,11 +1,11 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { ChangeDetectorRef, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { CreateEmployeeData } from 'src/app/interface/employer.interface';
 import { Page } from 'src/app/interface/paginator/page';
 import { CreateProjectData, EmployeeByProjectData } from 'src/app/interface/project.interface';
@@ -62,9 +62,7 @@ export class ViewProjectEmployeeComponent implements OnInit {
         id: this.data.data.id
       });
     }
-    this.getEmployeeData(1, 100)
-    console.log("sss")
-    this.getEmployeeByProjectData(1, this.pageSize);
+    this.loadEmployeeDataWithProjectFilter();
     this.searchControl.valueChanges.subscribe(searchKey => {
       this.onSearch(searchKey);
     });
@@ -74,52 +72,37 @@ export class ViewProjectEmployeeComponent implements OnInit {
     if (this.data.type === 'VIEW_PROJECT_EMPLOYEE') {
       this.title = this.data.data.title + " Employee List";
     }
-    console.log(this.data.data); 
     this.projectDetailsGroup = this.fb.group({
       title: ['']
     });
   }
 
-  getEmployeeByProjectData(pageIndex: number, pageSize: number) {
-    this.project_service.getEmployeeByProjects(this.data.data.id, pageIndex, pageSize).pipe(
+  getEmployeeByProjectData(pageIndex: number, pageSize: number): Observable<CreateEmployeeData[]> {
+    return this.project_service.getEmployeeByProjects(this.data.data.id, pageIndex, pageSize).pipe(
+      map((res: EmployeeByProjectData[]) => { 
+        if (res && res.length > 0) {
+          const filteredEmployees: CreateEmployeeData[] = (this.filteredResults as CreateEmployeeData[])
+            .filter((employee: CreateEmployeeData) => 
+              res.some((item: EmployeeByProjectData) => item.employee_id === employee.id)
+            );
+          return filteredEmployees;
+        } else {
+          this.snackBar.open('No Employees found for this project', '', { duration: 2000 });
+          return [];
+        }
+      }),
       catchError((error) => {
-        this.snackBar.open(error.error.detail || 'An error occurred', '', {
-          duration: 2000,
-        });
-        this.loading = false;
+        this.snackBar.open(error.error.detail || 'An error occurred', '', { duration: 2000 });
         return throwError(error);
       })
-    )
-    .subscribe((res: EmployeeByProjectData[]) => { 
-      this.loading = false;
-  
-      if (res && res.length > 0) {
-        const employees = this.filteredResults as CreateEmployeeData[] ;
-        const filteredEmployees: CreateEmployeeData[] = employees
-          .filter((employee: CreateEmployeeData) => 
-            res.some((item: EmployeeByProjectData) => item.employee_id === employee.id)
-          );
-        
-          console.log(filteredEmployees)
-        if (filteredEmployees.length > 0) {
-          this.originalResults = filteredEmployees;
-          this.assignedEmployees = filteredEmployees;
-        } else {
-          this.snackBar.open('No matching employees found for this project', '', {
-            duration: 2000,
-          });
-        }
-      } else {
-        this.snackBar.open('No Employees found for this project', '', {
-          duration: 2000,
-        });
-      }
-    });
+    );
   }
+
   
   onSearch(searchKey: string) {
+    console.log(searchKey)
     const searchKeyLower = searchKey.toLowerCase();
-    this.filteredResults = this.originalResults.filter(
+    this.assignedEmployees = this.originalResults.filter(
       item =>
         item.email.toLowerCase().includes(searchKeyLower) ||
         (item.title + ' ' + item.first_name + ' ' + item.last_name).toLowerCase().includes(searchKeyLower)
@@ -146,31 +129,24 @@ export class ViewProjectEmployeeComponent implements OnInit {
     return this.selection.selected.length > 0 && !this.isAllSelected();
   }
 
-  getEmployeeData(pageIndex: number, pageSize: number) {
-    this.employee_service.getEmployees(pageIndex, pageSize).pipe(
+  getEmployeeData(pageIndex: number, pageSize: number): Observable<Page<any>> {
+    return this.employee_service.getEmployees(pageIndex, pageSize).pipe(
+      tap((res: Page<any>) => { 
+        if (res && res.items && res.items.length > 0) {
+          this.pageEmployee = res;
+          this.filteredResults = res.items;
+          this.dataLength = this.pageEmployee.total;
+          this.cdr.detectChanges();
+        } else {
+          this.snackBar.open('No Employees found', '', { duration: 2000 });
+        }
+      }),
       catchError((error) => {
-        this.snackBar.open(error.error.detail || 'An error occurred', '', {
-          duration: 2000,
-        });
-        this.loading = true;
+        this.snackBar.open(error.error.detail || 'An error occurred', '', { duration: 2000 });
         return throwError(error);
       })
-    )
-    .subscribe((res: Page<any>) => { 
-      this.loading = true; 
-      if (res && res.items && res.items.length > 0) {
-        this.pageEmployee = res;
-        this.filteredResults = res.items;
-        this.dataLength = this.pageEmployee.total;
-        this.cdr.detectChanges();
-        this.loading = false;
-      } else {
-        this.snackBar.open('No Employees found', '', {
-          duration: 2000,
-        });
-      }
-    });
-  }
+    );
+}
 
   pageEvent(pageEvent: PageEvent) {
     if (pageEvent) {
@@ -178,6 +154,24 @@ export class ViewProjectEmployeeComponent implements OnInit {
     }
     this.getEmployeeByProjectData( pageEvent.pageIndex + 1, pageEvent.pageSize);
     return pageEvent;
+  }
+
+  loadEmployeeDataWithProjectFilter() {
+    this.getEmployeeData(1, 100)
+      .pipe(
+        switchMap(() => this.getEmployeeByProjectData(1, this.pageSize))
+      )
+      .subscribe({
+        next: (filteredEmployees) => {
+          if (filteredEmployees && filteredEmployees.length > 0) {
+            this.originalResults = filteredEmployees;
+            this.assignedEmployees = filteredEmployees;
+          } else {
+            this.snackBar.open('No matching employees found for this project', '', { duration: 2000 });
+          }
+        },
+        error: (error) => console.error('Error loading data:', error),
+      });
   }
 
 }

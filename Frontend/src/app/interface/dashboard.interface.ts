@@ -12,11 +12,14 @@ export interface EmployeeStatus {
     project_id: number;
     work_hours: number;
     calculated: number;
+    project_title: any,
+    project_status: any,
+           
   }
   
-  export interface DashboardData {
+  export interface EmployerDashboardData {
     employees: EmployeeStatus[];
-    project_status: ProjectStatus[];
+    projects: ProjectStatus[];
     project_hours: ProjectHours[];
   }
 
@@ -25,8 +28,19 @@ export interface EmployeeStatus {
     count: number;
   }
   
-  export interface EventData {
+  export interface EmployeeDashboardData {
     projects: ProjectStatus[];
     last_checkin: string;   
     last_checkout: string; 
+  }
+
+  export interface CountByStatus {
+    status: string;
+    count: number;
+  }
+  
+  export interface AdminDashboardData {
+    employees: CountByStatus[];
+    employers: CountByStatus[];
+    projects: CountByStatus[];
   }

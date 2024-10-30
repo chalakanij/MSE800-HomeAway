@@ -26,4 +26,9 @@ export class DashboardService {
         const endpointUrl = `${environment.apiUrl}/employee_dashboard`;
         return this.http.get(endpointUrl, httpOptions);
     }
+
+    getAdminStats(): Observable<any> {
+        const endpointUrl = `${environment.apiUrl}/admin_dashboard`;
+        return this.http.get(endpointUrl, httpOptions);
+    }
 }

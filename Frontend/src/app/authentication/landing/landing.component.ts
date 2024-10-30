@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
 
@@ -39,14 +39,6 @@ export class LandingComponent implements OnInit {
       queryParamsHandling: 'merge',
     });
   }
-
-  // showSignupEmployee() {
-  //   this.router.navigate([], {
-  //     relativeTo: this.route,
-  //     queryParams: { form: 'signupEmployee', employerCode: this.employerCode },
-  //     queryParamsHandling: 'merge',
-  //   });
-  // }
 
   showSignin() {
     this.router.navigate([], {
