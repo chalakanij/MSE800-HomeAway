@@ -49,13 +49,6 @@ export class EmployeeService {
         return this.http.get(endpointUrl, httpOptions);
     }
 
-    //edit user
-    // editUser(data: CreateEmployerData): Observable<any> {
-    //     httpOptions.params = {}
-    //     const endpointUrl = `${environment.apiUrl}/v1/employees`;
-    //     return this.http.put(endpointUrl, data, httpOptions);
-    // }
-
     getProfile(): Observable<any> {
         const endpointUrl = `${environment.apiUrl}/profile`
         return this.http.get<any>(endpointUrl, httpOptions);

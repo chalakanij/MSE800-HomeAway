@@ -15,9 +15,12 @@ import { ViewUpdateProfileComponent } from './view-update-profile/view-update-pr
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
+import { ViewEmployeeLinkComponent } from './Employee-Link/view-employee-link/view-employee-link.component';
 
 @NgModule({
-  declarations: [HeaderComponent, LoadingSpinnerComponent, SideMenuComponent, ViewUpdateProfileComponent],
+  declarations: [HeaderComponent, LoadingSpinnerComponent, SideMenuComponent, ViewUpdateProfileComponent,
+    ViewEmployeeLinkComponent
+  ],
   imports: [
     CommonModule,
     MatCardModule,
@@ -32,6 +35,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatSnackBarModule,
     MatSelectModule
   ],
-  exports: [HeaderComponent, LoadingSpinnerComponent, SideMenuComponent, ViewUpdateProfileComponent]
+  exports: [HeaderComponent, LoadingSpinnerComponent, SideMenuComponent, ViewUpdateProfileComponent, ViewEmployeeLinkComponent]
 })
 export class CoreComponentsModule { }

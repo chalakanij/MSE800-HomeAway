@@ -34,7 +34,7 @@
         <label class="col-4 form-layout--label" style="max-width: none;">Phone Number</label>
         <div class="col-8 form-layout--form-wrapper">
           <input class="form-layout--form" required [ngClass]="{ 'editable': isEditing }" formControlName="phone_number" />
-          <mat-error *ngIf="profileForm.get('phone_number')?.hasError('required')">
+          <mat-error *ngIf="profileForm.get('phone_number')?.hasError('required') && role != 'ADMIN'">
             Phone Number is required
           </mat-error>
         </div>

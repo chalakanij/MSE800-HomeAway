@@ -10,6 +10,7 @@ from app.utils.hashing import hash_password, verify_password
 from fastapi import HTTPException
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
+from starlette.status import HTTP_409_CONFLICT
 
 
 class UserService:
@@ -24,13 +25,18 @@ class UserService:
             first, second = company_name.upper().rsplit(maxsplit=1)
             code = first[0:3] + second[0:3]
         else:
-            code = company_name[0:5]
+            code = company_name[0:5].upper()
 
         code = code + datetime.now().strftime("%M%S%f")
 
         return code[:COMPANY_CODE_LENGTH]
 
+    def _check_user_exist(self, email):
+        if self.db.query(User).filter(User.email == email).first() is not None:
+            raise HTTPException(status_code=HTTP_409_CONFLICT, detail="User already exist!")
+
     def create_employer(self, user: EmployerCreate):
+        self._check_user_exist(user.email)
         hashed_password = hash_password(user.password)
         user_input = user.dict()
         del user_input['password']
@@ -93,6 +99,7 @@ class UserService:
             select(User, ParentUser.company_name)
             .join(ParentUser, User.parent_user_id == ParentUser.id)
             .filter(User.parent_user_id == current_user.id)
+            .filter(User.active == 1)
             .order_by(User.id)
         )
 

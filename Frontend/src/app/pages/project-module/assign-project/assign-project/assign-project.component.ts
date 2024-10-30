@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { throwError } from 'rxjs';
@@ -53,7 +53,7 @@ export class AssignProjectComponent implements OnInit {
         status: this.data.data.status
       });
     }
-    this.getUserData("", 1, this.pageSize);
+    this.getUserData(1, this.pageSize);
     this.searchControl.valueChanges.subscribe(searchKey => {
       this.onSearch(searchKey);
     });
@@ -105,7 +105,7 @@ export class AssignProjectComponent implements OnInit {
     }
   }
 
-  getUserData(searchKey: String, pageIndex: number, pageSize: number) {
+  getUserData(pageIndex: number, pageSize: number) {
     this.employee_service.getEmployees(pageIndex, pageSize).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
@@ -135,11 +135,11 @@ export class AssignProjectComponent implements OnInit {
 
   setUserData(content: any) {
     this.selectedResults = content;
-    if (this.selectedResults?.length == 0 && this.searchKey != "") {
+    if (this.selectedResults?.length == 0) {
       this.snackBar.open('No Employees found', '', {
         duration: 2000,
       });
-      this.getUserData("", 1, this.pageSize);
+      this.getUserData(1, this.pageSize);
     }
   }
 

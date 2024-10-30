@@ -1,6 +1,6 @@
 <div class="page-layout page-layout--module-all-center">
-    <div style="width: 90%;">
-        <app-search-bar (searchEvent)="onSearch($event)" (createEvent)="openCreateDialog()"></app-search-bar>
+    <div style="width: 90%;padding-top: 60px;">
+        <app-search-bar></app-search-bar>
     </div>
     <div style="width: 90%;">
         <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>

@@ -7,7 +7,6 @@ import { Page } from 'src/app/interface/paginator/page';
 import { DeleteDialogComponent } from 'src/app/shared-components/delete-dialog/delete-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StateService } from 'src/app/services/common-service/state-service';
-import { AuthService } from 'src/app/services/auth-service/auth.service';
 import { CreateEmployeeData } from 'src/app/interface/employer.interface';
 import { EmployeeService } from 'src/app/services/employee-service/employee.service';
 import { catchError } from 'rxjs/operators';
@@ -29,7 +28,6 @@ export class EmployeeComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 15, 20];
   searchForm!: FormGroup;
   selectedResults!: CreateEmployeeData[];
-  searchKey: String = "";
   page!: Page<any>;
   loading: boolean = false;
   transfer!: 'no';
@@ -41,32 +39,30 @@ export class EmployeeComponent implements OnInit {
     public dialog: MatDialog,
     private employee_service: EmployeeService,
     private snackBar: MatSnackBar,
-    private data: StateService,
-    private authService: AuthService
+    private data: StateService
   ) { }
 
   ngOnInit(): void {
-    // this.isAdminRole();
     this.data.changeTitle("Employees");
     this.searchForm = new FormGroup({
       searchBy: new FormControl(null, [Validators.required]),
     });
     this.loading = true;
     this.pageSize = 10;
-    this.getUserData(this.searchKey, 1, this.pageSize);
+    this.getUserData(1, this.pageSize);
   }
 
   setUserData(content: any) {
     this.selectedResults = content;
-    if (this.selectedResults?.length == 0 && this.searchKey != "") {
-      this.snackBar.open('No User found', '', {
+    if (this.selectedResults?.length == 0) {
+      this.snackBar.open('No Employees found', '', {
         duration: 2000,
       });
-      this.getUserData("", 1, this.pageSize);
+      this.getUserData(1, this.pageSize);
     }
   }
 
-  getUserData(searchKey: String, pageIndex: number, pageSize: number) {
+  getUserData(pageIndex: number, pageSize: number) {
     this.employee_service.getEmployees(pageIndex, pageSize).pipe(
       catchError((error) => {
         this.snackBar.open(error.error.detail || 'An error occurred', '', {
@@ -85,7 +81,7 @@ export class EmployeeComponent implements OnInit {
         this.setUserData(this.page.items);
         this.dataLength = this.page.total;
       } else {
-        this.snackBar.open('No Users found', '', {
+        this.snackBar.open('No Employees found', '', {
           duration: 2000,
         });
       }
@@ -93,40 +89,11 @@ export class EmployeeComponent implements OnInit {
   }
 
   openCreateDialog() {
-    // const dialogRef = this.dialog.open(CreateUserComponent, {
-    //   data: {
-    //     type: UserDialogBoxEnum.CREATE_USER,
-    //   }
-    // });
-    // dialogRef.afterClosed().subscribe((confirmed) => {
-    //   if (confirmed) {
-    //     this.loading = true;
-    //     this.pageSize = 10;
-    //     this.getUserData(this.searchKey, 0, this.pageSize);
-    //   }
-    // });
   }
-
-  // onEditDialog(user: CreateEmployerData) {
-  //   const dialogRef = this.dialog.open(CreateUserComponent, {
-  //     data: {
-  //       type: UserDialogBoxEnum.EDIT_USER,
-  //       message: "",
-  //       data: user
-  //     }
-  //   });
-  //   dialogRef.afterClosed().subscribe((confirmed) => {
-  //     if (confirmed) {
-  //       this.loading = true;
-  //       this.pageSize = 10;
-  //       this.getUserData(this.searchKey, 0, this.pageSize);
-  //     }
-  //   });
-  // }
 
   openDeleteDialog(user: CreateEmployeeData) {
     const delete_data = {
-      user_id: [user.id] // Wrap the ID in an array as expected by the API
+      user_id: [user.id]
   };
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       data: {
@@ -147,7 +114,7 @@ export class EmployeeComponent implements OnInit {
             });
             this.loading = true;
             this.pageSize = 10;
-            this.getUserData(this.searchKey, 1, this.pageSize);
+            this.getUserData(1, this.pageSize);
           }
         });
       }
@@ -187,18 +154,12 @@ export class EmployeeComponent implements OnInit {
             });
             this.loading = true;
             this.pageSize = 10;
-            this.getUserData(this.searchKey, 1, this.pageSize);
+            this.getUserData(1, this.pageSize);
             this.selection.clear();
           }
         });
       }
     });
-  }
-
-  onSearch(searchKey: String) {
-    this.searchKey = searchKey;
-    this.loading = true;
-    this.getUserData(this.searchKey, 1, this.pageSize);
   }
 
   isAllSelected() {
@@ -226,15 +187,7 @@ export class EmployeeComponent implements OnInit {
     if (pageEvent) {
       this.loading = true
     }
-    this.getUserData(this.searchKey, pageEvent.pageIndex, pageEvent.pageSize);
+    this.getUserData(pageEvent.pageIndex + 1, pageEvent.pageSize);
     return pageEvent;
   }
-
-  // isAdminRole() {
-  //   if (this.authService.getRoles().includes('ROLE_ADMIN')) {
-  //     this.isAdmin = 'admin';
-  //   } else {
-  //     this.isAdmin = 'user';
-  //   }
-  // }
 }

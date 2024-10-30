@@ -19,7 +19,7 @@ class Project(BaseModel):
     status: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ProjectOutput(Project):
@@ -31,7 +31,7 @@ class ProjectEmployeeCreate(BaseModel):
     employee_id: List[int]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ProjectEmployeeOutput(BaseModel):
@@ -39,7 +39,6 @@ class ProjectEmployeeOutput(BaseModel):
     project_id: int
 
     class Config:
-        orm_mode = True
         from_attributes = True
 
 

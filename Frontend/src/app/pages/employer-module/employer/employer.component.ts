@@ -4,7 +4,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Page } from 'src/app/interface/paginator/page';
-import { DeleteDialogComponent } from 'src/app/shared-components/delete-dialog/delete-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StateService } from 'src/app/services/common-service/state-service';
 import { AuthService } from 'src/app/services/auth-service/auth.service';
@@ -46,7 +45,6 @@ export class EmployerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.isAdminRole();
     this.data.changeTitle("Employers");
     this.searchForm = new FormGroup({
       searchBy: new FormControl(null, [Validators.required]),
@@ -59,7 +57,7 @@ export class EmployerComponent implements OnInit {
   setUserData(content: any) {
     this.selectedResults = content;
     if (this.selectedResults?.length == 0 && this.searchKey != "") {
-      this.snackBar.open('No User found', '', {
+      this.snackBar.open('No Employers found', '', {
         duration: 2000,
       });
       this.getUserData("", 1, this.pageSize);
@@ -85,7 +83,7 @@ export class EmployerComponent implements OnInit {
         this.setUserData(this.page.items);
         this.dataLength = this.page.total;
       } else {
-        this.snackBar.open('No Users found', '', {
+        this.snackBar.open('No Employers found', '', {
           duration: 2000,
         });
       }
@@ -123,15 +121,7 @@ export class EmployerComponent implements OnInit {
     if (pageEvent) {
       this.loading = true
     }
-    this.getUserData(this.searchKey, pageEvent.pageIndex, pageEvent.pageSize);
+    this.getUserData(this.searchKey, pageEvent.pageIndex + 1, pageEvent.pageSize);
     return pageEvent;
   }
-
-  // isAdminRole() {
-  //   if (this.authService.getRoles().includes('ROLE_ADMIN')) {
-  //     this.isAdmin = 'admin';
-  //   } else {
-  //     this.isAdmin = 'user';
-  //   }
-  // }
 }
