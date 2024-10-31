@@ -35,3 +35,4 @@ packaging~=24.1
 platformdirs~=4.3.2
 PyMySQL~=1.1.1
 python-dotenv~=0.19.2
+fastapi_pagination
