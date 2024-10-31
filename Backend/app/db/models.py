@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Enum, DateTime, Text, ForeignKey
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import declarative_base
 from enum import Enum as BaseEnum
 import datetime
 
@@ -30,8 +30,8 @@ class User(Base):
     title = Column(String(10))
     first_name = Column(String(50))
     last_name = Column(String(50))
-    company_name = Column(String(100))
-    employer_code = Column(String(40))
+    company_name = Column(String(100), nullable=True, default="")
+    employer_code = Column(String(40), default="")
     email = Column(String(100), unique=True)
     phone_number = Column(String(20))
     hashed_password = Column(String(200))

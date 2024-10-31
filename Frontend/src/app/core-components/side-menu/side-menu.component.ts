@@ -12,7 +12,6 @@ import { AuthService } from 'src/app/services/auth-service/auth.service';
   })
 export class SideMenuComponent {
 
-  // expanded = false;
   showSubmenu: boolean = false;
   isShowing = false;
   isDisabledEmployer!: boolean;
@@ -47,18 +46,6 @@ export class SideMenuComponent {
       route: 'employees',
     },
   ];
-
-  // mouseenter() {
-  //   if (!this.expanded) {
-  //     this.isShowing = true;
-  //   }
-  // }
-
-  // mouseleave() {
-  //   if (!this.expanded) {
-  //     this.isShowing = false;
-  //   }
-  // }
 
   ngOnInit(): void {
     this.checkRole();

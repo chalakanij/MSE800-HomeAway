@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UpdateTimeLogsComponent } from './update-time-logs.component';
+import { ViewEmployeeLinkComponent } from './view-employee-link.component';
 
-describe('UpdateTimeLogsComponent', () => {
-  let component: UpdateTimeLogsComponent;
-  let fixture: ComponentFixture<UpdateTimeLogsComponent>;
+describe('ViewEmployeeLinkComponent', () => {
+  let component: ViewEmployeeLinkComponent;
+  let fixture: ComponentFixture<ViewEmployeeLinkComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UpdateTimeLogsComponent ]
+      declarations: [ ViewEmployeeLinkComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UpdateTimeLogsComponent);
+    fixture = TestBed.createComponent(ViewEmployeeLinkComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

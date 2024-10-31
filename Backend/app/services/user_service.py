@@ -10,6 +10,7 @@ from app.utils.hashing import hash_password, verify_password
 from fastapi import HTTPException
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
+from starlette.status import HTTP_409_CONFLICT
 
 
 class UserService:
@@ -24,13 +25,18 @@ class UserService:
             first, second = company_name.upper().rsplit(maxsplit=1)
             code = first[0:3] + second[0:3]
         else:
-            code = company_name[0:5]
+            code = company_name[0:5].upper()
 
         code = code + datetime.now().strftime("%M%S%f")
 
         return code[:COMPANY_CODE_LENGTH]
 
+    def _check_user_exist(self, email):
+        if self.db.query(User).filter(User.email == email).first() is not None:
+            raise HTTPException(status_code=HTTP_409_CONFLICT, detail="User already exist!")
+
     def create_employer(self, user: EmployerCreate):
+        self._check_user_exist(user.email)
         hashed_password = hash_password(user.password)
         user_input = user.dict()
         del user_input['password']
@@ -124,7 +130,7 @@ class UserService:
         }
 
     def get_employers(self, current_user, params):
-        return paginate(self.db, select(User).filter(User.role == UserRole.EMPLOYER).filter(User.Active == 1), params)
+        return paginate(self.db, select(User).filter(User.role == UserRole.EMPLOYER).filter(User.active == 1), params)
 
     def deactivate_users(self, users: UserDeactivateRequest):
         affected_rows = self.db.query(User).filter(User.id.in_(users.user_id)).update({"active": 0},

@@ -1,18 +1,32 @@
 <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 20px;">
-    <input matInput placeholder="Search here" style="color: #4286D2; width: 200px; height: 40px;
-    font-size: 17px; border: 1px solid #4286D2 ; border-radius: 4px;" #searchField (keyup.enter)="search(searchField.value)">
-    <button class="search--icon-width" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="search(searchField.value)">
-        <mat-icon style="font-size: 35px;">search</mat-icon>
-    </button>
-    <button class="search--icon-width" *ngIf="(item == 'projects' || item == 'time-log') && 
-    (role == 'employer' || role == 'admin')" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="create()">
+
+    <div style="display: flex; align-items: center;">
+        <mat-form-field appearance="outline" *ngIf="item == 'timeLogs' && role == 'employer'">
+            <mat-label>Select the User</mat-label>
+            <mat-select style="color: #4286D2;"
+                        (selectionChange)="onSelectEmployee($event)">
+                        <mat-option [value]="'all'">All</mat-option>
+                        <mat-option [value]="userId">Me</mat-option>
+                <mat-option *ngFor="let option of employeeList" [value]="option.id">{{ option.first_name + " " + option.last_name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div style="display: flex; align-items: center;margin-left: 10px">
+        <mat-form-field appearance="outline" *ngIf="item == 'timeLogs' && role == 'employer'">
+            <mat-label>Select the Project</mat-label>
+            <mat-select style="color: #4286D2;"
+                        (selectionChange)="onSelectProject($event)">
+                        <mat-option [value]="'all'">All</mat-option>
+                <mat-option *ngFor="let option of projectList" [value]="option.id">{{ option.title }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <button class="search--icon-width" *ngIf="(item == 'projects' &&
+    (role == 'employer' || role == 'admin')) || (item == 'timeLogs')" [disabled]="status == 'false'"
+    mat-icon-button style="color: #4286D2; background-color: transparent; margin-left: 10px;margin-bottom: 20px;" (click)="create()">
         <mat-icon style="font-size: 35px;">add_circle</mat-icon>
     </button>
-    <!-- <button class="search--icon-width" *ngIf="item == 'request-history' && role == 'admin'" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="showNotification('request-history')">
-        <mat-icon style="font-size: 35px;">notifications</mat-icon>
-    </button>
-    <button class="search--icon-width" *ngIf="item == 'transfer-req' && role == 'admin'" mat-icon-button style="color: #4286D2; background-color: transparent;" (click)="showRequest('transfer-req')">
-        <mat-icon style="font-size: 35px;">social_distance</mat-icon>
-    </button> -->
 </div>
 <mat-divider style="margin-top: 15px; margin-bottom: 25px; border-top-width: 1px"></mat-divider>

@@ -23,18 +23,18 @@
                 <mat-icon style="font-size: 50px;">account_circle</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="viewUpdateprofile()">
+                    <mat-icon>account_box</mat-icon>
+                    <span>View/Update Profile</span>
+                </button>
+                <button mat-menu-item (click)="joinEmployee()" *ngIf="isEmployer">
+                    <mat-icon>link</mat-icon>
+                    <span>Employee Register Link</span>
+                </button>
                 <button mat-menu-item (click)="logout()">
-                    <!-- <mat-icon>dialpad</mat-icon> -->
+                    <mat-icon>logout</mat-icon>
                     <span>Logout</span>
                 </button>
-                <!-- <button mat-menu-item> -->
-                <!-- <mat-icon>voicemail</mat-icon> -->
-                <!-- <span>Check voice mail</span> -->
-                <!-- </button> -->
-                <!-- <button mat-menu-item> -->
-                <!-- <mat-icon>notifications_off</mat-icon> -->
-                <!-- <span>Disable alerts</span> -->
-                <!-- </button> -->
             </mat-menu>
         </div>
     </div>

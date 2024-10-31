@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CreateProjectData } from 'src/app/interface/project.interface';
 import { environment } from 'src/environments/environment';
 
 const httpOptions = {
@@ -41,9 +40,9 @@ export class ProjectService {
     }
 
     updateProject(data: any): Observable<any> {
-        const endpointUrl = `${environment.apiUrl}/projects/`+ `${data.id}` ;
+        const endpointUrl = `${environment.apiUrl}/projects/update_status` ;
         console.log(endpointUrl)
-        return this.http.put(endpointUrl, data);
+        return this.http.post(endpointUrl, data);
     }
 
     assignProject(data: any, id: any): Observable<any> {
@@ -60,5 +59,4 @@ export class ProjectService {
         };
         return this.http.get(endpointUrl, httpOptions);
     }
-
 }
