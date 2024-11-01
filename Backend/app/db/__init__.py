@@ -9,11 +9,12 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def init_db():
-    Base.metadata.create_all(bind=engine)
-
     # Open a session
     db = SessionLocal()
+
     try:
+        Base.metadata.create_all(bind=engine)
+
         # Check if admin user already exists
         admin_user = db.query(User).filter(User.role == UserRole.ADMIN).first()
         if not admin_user:
