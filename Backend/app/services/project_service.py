@@ -16,7 +16,7 @@ class ProjectService:
     def __init__(self, db:Session):
         self.db = db
 
-    def create_project(self, project: ProjectCreate, current_user: User):
+    def create_project(self, project: ProjectCreate, current_user: User) -> Project:
         user_input = project.dict()
         user_input['user_id'] = current_user.id
         db_project = Project(**user_input)
@@ -37,7 +37,8 @@ class ProjectService:
         return paginate(self.db, project_data, param)
 
 
-    def assign_employees(self, project_id, project_employee: ProjectEmployeeCreate, current_user: User):
+    def assign_employees(self, project_id:int, project_employee: ProjectEmployeeCreate, current_user: User) \
+            -> List[ProjectEmployeeOutput]:
         assigned_users = self.get_assigned_projects(project_id)
         assigned_employee_ids = {user.employee_id for user in assigned_users}
 
@@ -59,7 +60,7 @@ class ProjectService:
         return [ProjectEmployeeOutput(**user_project.__dict__) for user_project in result]
 
 
-    def update_status(self, update_request, user):
+    def update_status(self, update_request, user: User) -> Project:
         project = self.db.query(Project).filter(Project.id == update_request.project_id).first()
         project.status = update_request.status
         self.db.commit()
