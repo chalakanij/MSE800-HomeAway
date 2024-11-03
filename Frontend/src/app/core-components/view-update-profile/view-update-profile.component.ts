@@ -25,7 +25,7 @@ export class ViewUpdateProfileComponent implements OnInit {
       title: [{ value: '', disabled: true }, Validators.required],
       first_name: [{ value: '', disabled: true }, Validators.required],
       last_name: [{ value: '', disabled: true }, Validators.required],
-      phone_number: [{ value: '', disabled: true }, Validators.required],
+      phone_number: [{ value: '', disabled: true }, [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       company_name: [{ value: '', disabled: true }, Validators.required], 
       email: [{ value: '', disabled: true }, [Validators.required, Validators.email]], 
       role: [{ value: '', disabled: true }, Validators.required],

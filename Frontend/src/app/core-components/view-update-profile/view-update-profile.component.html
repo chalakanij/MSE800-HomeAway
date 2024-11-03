@@ -37,6 +37,9 @@
           <mat-error *ngIf="profileForm.get('phone_number')?.hasError('required') && role != 'ADMIN'">
             Phone Number is required
           </mat-error>
+          <mat-error *ngIf="profileForm.get('phone_number')?.hasError('pattern')">
+            Phone number must be 10 digits
+          </mat-error>
         </div>
       </div>
   

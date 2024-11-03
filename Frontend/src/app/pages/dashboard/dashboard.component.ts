@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit {
   };
 
   public employerEmployeeChartData: ChartData<'bar'> = {
-    labels: ['Employees'],
+    labels: ['Active Employees', 'Inactive Employees'],
     datasets: [{ data: [],
      }]
   };
@@ -215,10 +215,10 @@ public employeeProjectChartData: ChartData<'pie'> = {
     const data = employeeStatus.map(item => item.count);
   
     this.employerEmployeeChartData = {
-      labels: ['Employees'],
+      labels: ['Inactive Employees', 'Active Employees'],
       datasets: [{
         data: data,
-        label: "Number of Employees",
+        label: 'Employees',
         backgroundColor: 'rgba(54, 162, 235, 1)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 2
