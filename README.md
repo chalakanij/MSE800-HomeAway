@@ -33,3 +33,32 @@ ng version
 2. npm i
 3. ng serve
 
+##  Backed of the project management system.
+
+to run the project, 
+1. install the recruitments.txt
+2. change the .env file MySQL url configuration
+3. to start the service uvicorn app.main:app --reload
+
+you can see the docs on the localhost:8000/docs url.
+
+JWT token updated with below object
+{
+  "email": "employee@example.com",
+  "first_name": "string",
+  "title": "string",
+  "last_name": "string",
+  "role": "EMPLOYER",
+  "exp": 1728611624
+}
+
+Employer code field is used for create employee
+
+Project endpoint created
+Get Projects
+Assign project to employees
+Get project employees
+
+
+Check in/out endpoints added
+note: checkinout table need to be drop before start
