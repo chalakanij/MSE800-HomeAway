@@ -8,7 +8,7 @@ class DashboardService:
     def __init__(self, db:Session):
         self.db = db
 
-    def get_employee_dashboard(self, user):
+    def get_employee_dashboard(self, user: User):
         projects = self.db.query(Project.status, func.count(Project.id).label("count")).filter(
             Project.id.in_(select(UserProject.project_id).filter(UserProject.employee_id == user.id))
         ).group_by(
@@ -34,7 +34,7 @@ class DashboardService:
                 last_checkout_time = last_checkout.out_time
         return {"projects": project_status_counts, "last_checkin": last_checkin_time, "last_checkout": last_checkout_time}
 
-    def get_employer_dashboard(self, user):
+    def get_employer_dashboard(self, user: User):
         employees = (self.db.query(User.active, func.count(User.id).label('count')).filter(User.parent_user_id == user.id).
                      group_by(User.active)).all()
         user_status_counts = [ProjectStatusCount(status=str(employees.active), count=employees.count) for employees in employees]

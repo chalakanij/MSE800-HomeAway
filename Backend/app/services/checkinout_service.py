@@ -4,19 +4,18 @@ import re
 from sqlalchemy.orm import Session
 from sqlalchemy import select, desc, or_
 from app.db.models import User, Project, ProjectStatus, UserProject, CheckInOut, CheckInOutStatus, UserRole
-from app.schemas.checkinout import CheckinUpdateRequest
+from app.schemas.checkinout import CheckinUpdateRequest, CheckInRequest
 from fastapi import HTTPException
-from fastapi_pagination import Page
+from typing import Optional, List
 from fastapi_pagination.ext.sqlalchemy import paginate
 from starlette.status import HTTP_404_NOT_FOUND, HTTP_400_BAD_REQUEST
-
 
 
 class CheckInOutService:
     def __init__(self, db: Session):
         self.db = db
 
-    def create_checkin(self , user, checkin_request):
+    def create_checkin(self , user: User, checkin_request: CheckinUpdateRequest) -> CheckInOut:
         user_input = checkin_request.dict()
         user_input['status'] = CheckInOutStatus.CHECKIN
         if checkin_request.out_time is not None:
@@ -43,13 +42,13 @@ class CheckInOutService:
         if in_time > out_time:
             raise HTTPException(status_code=HTTP_400_BAD_REQUEST, detail=f"check out date must be after {out_time}")
 
-    def get_current_checkin(self, user):
+    def get_current_checkin(self, user: User) -> Optional[CheckInOut]:
         checkinout = self.db.query(CheckInOut).filter(CheckInOut.user_id == user.id).order_by(desc(CheckInOut.id)).first()
         if checkinout is not None:
             if checkinout.status == CheckInOutStatus.CHECKIN:
                 return checkinout
 
-    def create_checkout(self , user, checkout_request):
+    def create_checkout(self , user: User, checkout_request: CheckInRequest) -> CheckInOut:
         current_chekinout = self.get_current_checkin(user)
         if current_chekinout is None:
             raise HTTPException(status_code=404, detail="No checkin found!")
@@ -73,7 +72,7 @@ class CheckInOutService:
             checkinouts = checkinouts.filter(CheckInOut.user_id == user_id)
         return paginate(self.db, checkinouts, params)
 
-    def update_checkin(self, user, checkin_request: CheckinUpdateRequest):
+    def update_checkin(self, user, checkin_request: CheckinUpdateRequest) -> CheckInOut:
         checkin = self.db.query(CheckInOut).filter(CheckInOut.id == checkin_request.id).first()
         if checkin is not None:
             if checkin_request.in_time is not None:
@@ -94,7 +93,7 @@ class CheckInOutService:
 
     # calculate working hours based on criteria
     def calculate_hours(self, employee_id:int| None=None, project_id: int| None=None,
-                        from_date:datetime | None=None, to_date:datetime | None=None):
+                        from_date:datetime | None=None, to_date:datetime | None=None) -> float:
         query = select(CheckInOut)
         if employee_id is not None:
             query = query.filter(CheckInOut.user_id == employee_id)
@@ -105,7 +104,7 @@ class CheckInOutService:
         if to_date is not None:
             query = query.filter(CheckInOut.out_time <= to_date)
         result = self.db.execute(query).scalars().all()
-        total_seconds = 0
+        total_seconds = 0.0
         for row in result:
             if row.out_time is not None:
                 time_difference = row.out_time - row.in_time
