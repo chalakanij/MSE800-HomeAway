@@ -8,8 +8,9 @@ from app.schemas.user import (EmployerCreate, EmployeeCreate, AdminCreate, Emplo
                               ProfileInput, UserDeactivateRequest)
 from app.utils.hashing import hash_password, verify_password
 from fastapi import HTTPException
-from fastapi_pagination import Page
+from typing import Optional
 from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi_pagination import Params
 from starlette.status import HTTP_409_CONFLICT
 
 
@@ -19,7 +20,7 @@ class UserService:
 
     # this function will generate a company code using the name,
     # this is an internal function
-    def _generate_company_code(self, company_name):
+    def _generate_company_code(self, company_name) -> str:
         COMPANY_CODE_LENGTH = 8
         if re.search(r"\s", company_name):
             first, second = company_name.upper().rsplit(maxsplit=1)
@@ -35,7 +36,7 @@ class UserService:
         if self.db.query(User).filter(User.email == email).first() is not None:
             raise HTTPException(status_code=HTTP_409_CONFLICT, detail="User already exist!")
 
-    def create_employer(self, user: EmployerCreate):
+    def create_employer(self, user: EmployerCreate) -> User:
         self._check_user_exist(user.email)
         hashed_password = hash_password(user.password)
         user_input = user.dict()
@@ -50,7 +51,7 @@ class UserService:
         return db_user
 
     # check the employer code
-    def _get_employer_by_code(self, code):
+    def _get_employer_by_code(self, code) -> Optional[User]:
         user = self.db.query(User).filter(User.employer_code == code).first()
         if user:
             return user
@@ -72,7 +73,7 @@ class UserService:
         self.db.refresh(db_user)
         return db_user
 
-    def create_admin(self, user: AdminCreate):
+    def create_admin(self, user: AdminCreate) -> User:
         hashed_password = hash_password(user.password)
         user_input = user.dict()
         del user_input['password']
@@ -86,13 +87,13 @@ class UserService:
         self.db.refresh(db_user)
         return db_user
 
-    def authenticate_user(self, email: str, password: str):
+    def authenticate_user(self, email: str, password: str) -> Optional[User]:
         user = self.db.query(User).filter(User.email == email).first()
         if user and verify_password(password, user.hashed_password):
             return user
         return None
 
-    def get_employees(self, current_user, params):
+    def get_employees(self, current_user: User, params:Params):
         #due to get the company_name from parent record, table need to join and get correct fields only
         ParentUser = aliased(User)
         users_query = (
@@ -129,7 +130,7 @@ class UserService:
             "size": paginated_data.size
         }
 
-    def get_employers(self, current_user, params):
+    def get_employers(self, current_user: User, params: Params):
         return paginate(self.db, select(User).filter(User.role == UserRole.EMPLOYER).filter(User.active == 1), params)
 
     def deactivate_users(self, users: UserDeactivateRequest):
@@ -139,7 +140,7 @@ class UserService:
         return {"message": f"Updated {affected_rows} users."}
 
 
-    def update_profile(self, current_user: User, profile_update: ProfileInput):
+    def update_profile(self, current_user: User, profile_update: ProfileInput) -> User:
         user = self.db.query(User).filter(User.id == current_user.id).first()
 
         if profile_update.title is not None:
